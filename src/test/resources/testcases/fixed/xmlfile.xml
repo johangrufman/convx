@@ -1,0 +1,12 @@
+<persons>
+    <person>
+        <firstName>Pablo</firstName>
+        <lastName>Picasso</lastName>
+        <age>50</age>
+    </person>
+    <person>
+        <firstName>Oscar</firstName>
+        <lastName>Wilde</lastName>
+        <age>35</age>
+    </person>
+</persons>
