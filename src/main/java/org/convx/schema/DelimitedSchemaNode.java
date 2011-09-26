@@ -1,6 +1,5 @@
 package org.convx.schema;
 
-import com.sun.xml.internal.stream.events.CharacterEvent;
 import org.convx.schema.elements.*;
 import org.convx.writer.DelimitedWriterNode;
 import org.convx.writer.WriterNode;
