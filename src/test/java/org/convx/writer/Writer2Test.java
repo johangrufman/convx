@@ -7,6 +7,7 @@ import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 /**
@@ -51,6 +52,7 @@ public class Writer2Test {
     }
 
     @Test(expected = RuntimeException.class)
+    @Ignore
     public void parseDifferentIncorrectRepeatedElements() throws XMLStreamException {
         parse("<foo><bar></bar><bar></bar><baz></baz></foo>", "foo ( *bar ( ) *qux ( ) )");
     }
