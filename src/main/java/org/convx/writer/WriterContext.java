@@ -30,6 +30,9 @@ public class WriterContext {
             throw new IllegalStateException("Parser stack is empty");
         }
         stack.pop();
+        if (!stack.empty()) {
+            currentNodeState().moveOn();
+        }
     }
 
     public void consumeStartElement(StartElement startElement) {

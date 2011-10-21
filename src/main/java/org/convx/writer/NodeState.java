@@ -26,4 +26,8 @@ public class NodeState {
     public void consumeCharacters(Characters characters, WriterContext writerContext) {
         writerNode.consumeCharacters(characters, writerContext, this);
     }
+
+    public void moveOn() {
+
+    }
 }

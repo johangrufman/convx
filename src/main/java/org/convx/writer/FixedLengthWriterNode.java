@@ -5,7 +5,6 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 
 import org.apache.commons.lang3.StringUtils;
-import org.convx.schema.elements.WritingNodeState;
 
 /**
  * @author johan

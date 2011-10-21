@@ -23,6 +23,7 @@ import org.convx.schema.SequenceSchemaNode;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
@@ -47,7 +48,10 @@ public class MultiLineRecordTest {
         xmlFile = new File(url.getFile());
 
         SchemaNode eol = new ConstantSchemaNode("\n");
-        SchemaNode firstName = new NamedSchemaNode("firstName", new SequenceSchemaNode(new ConstantSchemaNode("firstName:"), new DelimitedSchemaNode('\n', '\r'), eol));
+        SchemaNode firstName = new NamedSchemaNode("firstName", new SequenceSchemaNode(
+                new ConstantSchemaNode("firstName:"),
+                new DelimitedSchemaNode('\n', '\r'),
+                eol));
         SchemaNode lastName = new NamedSchemaNode("lastName", new SequenceSchemaNode(new ConstantSchemaNode("lastName:"), new DelimitedSchemaNode('\n', '\r'), eol));
         SchemaNode age = new NamedSchemaNode("age", new SequenceSchemaNode(new ConstantSchemaNode("age:"), new DelimitedSchemaNode('\n', '\r'), eol));
         SchemaNode personHeader = new ConstantSchemaNode("[person]\n");

@@ -22,7 +22,7 @@ public class SequenceWriterNode implements WriterNode {
             if (currentSubNode(sequenceNodeState).startsWith(startElement)) {
                 currentSubNode(sequenceNodeState).init(context);
                 context.consumeStartElement(startElement);
-                sequenceNodeState.increaseIndex();
+//                sequenceNodeState.increaseIndex();
                 return;
             } else if (!currentSubNode(sequenceNodeState).isOptional()) {
                 throw new RuntimeException("Mandatory element");
@@ -38,7 +38,10 @@ public class SequenceWriterNode implements WriterNode {
 
     public void consumeEndElement(EndElement endElement, WriterContext context, NodeState state) {
         SequenceNodeState sequenceNodeState = (SequenceNodeState) state;
-//        handleNodesNotTriggeredByEvents(context, sequenceNodeState);
+//        if (currentSubNode(sequenceNodeState).isSatisfied()) {
+//            sequenceNodeState.increaseIndex();
+//        }
+        handleNodesNotTriggeredByEvents(context, sequenceNodeState);
         if (isSatisfied((SequenceNodeState) state)) {
             context.pop();
             context.consumeEndElement(endElement);
@@ -78,7 +81,6 @@ public class SequenceWriterNode implements WriterNode {
 
     public boolean startsWith(StartElement startElement) {
         throw new UnsupportedOperationException();
-//        return startElement.getName().getLocalPart().equals(name);
     }
 
     public boolean isOptional() {
@@ -100,8 +102,6 @@ public class SequenceWriterNode implements WriterNode {
     static class SequenceNodeState extends NodeState {
         private int index = 0;
 
-        private boolean isStartElementConsumed = false;
-
         SequenceNodeState(WriterNode writerNode) {
             super(writerNode);
         }
@@ -114,12 +114,9 @@ public class SequenceWriterNode implements WriterNode {
             index++;
         }
 
-        public boolean isStartElementConsumed() {
-            return isStartElementConsumed;
-        }
-
-        public void setStartElementConsumed(boolean startElementConsumed) {
-            isStartElementConsumed = startElementConsumed;
+        @Override
+        public void moveOn() {
+            increaseIndex();
         }
     }
 }
