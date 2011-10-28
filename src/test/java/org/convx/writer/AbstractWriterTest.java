@@ -27,7 +27,11 @@ public class AbstractWriterTest {
     }
 
     protected void pushStartElement(String localName) {
-        context.consumeStartElement(xmlEventFactory.createStartElement(new QName(localName), null, null));
+        context.consumeStartElement(createStartElement(localName));
+    }
+
+    protected StartElement createStartElement(String localName) {
+        return xmlEventFactory.createStartElement(new QName(localName), null, null);
     }
 
     protected void pushEndElement(String localName) {

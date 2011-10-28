@@ -37,9 +37,10 @@ public class CsvTest {
         url = this.getClass().getResource("/testcases/csv/xmlfile.xml");
         xmlFile = new File(url.getFile());
 
-        SchemaNode firstName = new NamedSchemaNode("firstName", new DelimitedSchemaNode(',', '\n', '\r'));
-        SchemaNode lastName = new NamedSchemaNode("lastName", new DelimitedSchemaNode(',', '\n', '\r'));
-        SchemaNode age = new NamedSchemaNode("age", new DelimitedSchemaNode(',', '\n', '\r'));
+        DelimitedSchemaNode field = new DelimitedSchemaNode(',', '\n', '\r');
+        SchemaNode firstName = new NamedSchemaNode("firstName", field);
+        SchemaNode lastName = new NamedSchemaNode("lastName", field);
+        SchemaNode age = new NamedSchemaNode("age", field);
         SchemaNode comma = new ConstantSchemaNode(",");
         SchemaNode eol = new ConstantSchemaNode("\n");
         SchemaNode person = new NamedSchemaNode("person", new SequenceSchemaNode(firstName, comma, lastName, comma, age, eol));

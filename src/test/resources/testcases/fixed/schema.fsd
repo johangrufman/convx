@@ -1,13 +1,21 @@
-<?xml version="1.0" encoding="MacRoman"?>
+<schema>
 
-<!--
-    Document   : newXMLDocument.xml
-    Created on : den 18 januari 2011, 22:02
-    Author     : johan
-    Description:
-        Purpose of the document follows.
--->
+    <root name="persons">
+        <element name="person" maxOccurs="unbounded">
+            <sequence>
+                <element name="firstName">
+                    <fixedLengthField length="15"/>
+                </element>
+                <element name="lastName">
+                    <fixedLengthField length="15"/>
+                </element>
+                <element name="age">
+                    <fixedLengthField length="2"/>
+                </element>
+                <element ref="eol"/>
+            </sequence>
+        </element>
+    </root>
 
-<root>
-
-</root>
+    <constant name="eol" value="\r"/>
+</schema>

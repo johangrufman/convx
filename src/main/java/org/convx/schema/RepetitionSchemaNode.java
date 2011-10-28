@@ -19,7 +19,7 @@ public class RepetitionSchemaNode extends SchemaNode {
     private SchemaNode schemaNode;
     private int minOccurs;
     private int maxOccurs;
-    public static final int UNBOUNDED = -1;
+    public static final int UNBOUNDED = Integer.MAX_VALUE;
 
     public RepetitionSchemaNode(SchemaNode schemaNode, int minOccurs, int maxOccurs) {
         this.schemaNode = schemaNode;
@@ -57,7 +57,7 @@ public class RepetitionSchemaNode extends SchemaNode {
 
     @Override
     public WriterNode asWriterNode() {
-        return new RepeatedWriterNode(schemaNode.asWriterNode());
+        return new RepeatedWriterNode(schemaNode.asWriterNode(), minOccurs, maxOccurs);
     }
 
     private boolean isUnbounded() {

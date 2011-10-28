@@ -9,7 +9,7 @@ import javax.xml.stream.events.StartElement;
  * @since 2011-09-17
  */
 public class NodeState {
-    private WriterNode writerNode;
+    protected WriterNode writerNode;
 
     public NodeState(WriterNode writerNode) {
         this.writerNode = writerNode;
@@ -27,7 +27,7 @@ public class NodeState {
         writerNode.consumeCharacters(characters, writerContext, this);
     }
 
-    public void moveOn() {
-
+    public boolean moveOn() {
+        return false;
     }
 }

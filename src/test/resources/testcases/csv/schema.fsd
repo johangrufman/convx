@@ -1,13 +1,23 @@
-<?xml version="1.0" encoding="MacRoman"?>
+<schema>
 
-<!--
-    Document   : newXMLDocument.xml
-    Created on : den 18 januari 2011, 22:02
-    Author     : johan
-    Description:
-        Purpose of the document follows.
--->
+    <root name="persons">
+        <element name="person" maxOccurs="unbounded">
+            <sequence>
+                <element name="firstName" ref="field"/>
+                <element ref="comma"/>
+                <element name="lastName" ref="field"/>
+                <element ref="comma"/>
+                <element name="age" ref="field"/>
+                <element ref="eol"/>
+            </sequence>
+        </element>
+    </root>
 
-<root>
-
-</root>
+    <delimitedField name="field" delimiter=",">
+        <exception character="\n"/>
+        <exception character="\r"/>
+    </delimitedField>
+    
+    <constant name="comma" value=","/>
+    <constant name="eol" value="\r"/>
+</schema>

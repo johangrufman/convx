@@ -22,7 +22,6 @@ public class SequenceWriterNode implements WriterNode {
             if (currentSubNode(sequenceNodeState).startsWith(startElement)) {
                 currentSubNode(sequenceNodeState).init(context);
                 context.consumeStartElement(startElement);
-//                sequenceNodeState.increaseIndex();
                 return;
             } else if (!currentSubNode(sequenceNodeState).isOptional()) {
                 throw new RuntimeException("Mandatory element");
@@ -80,7 +79,14 @@ public class SequenceWriterNode implements WriterNode {
     }
 
     public boolean startsWith(StartElement startElement) {
-        throw new UnsupportedOperationException();
+        for (WriterNode subWriterNode : subWriterNodes) {
+            if (subWriterNode.startsWith(startElement)) {
+                return true;
+            } else if (!subWriterNode.isOptional()) {
+                return false;
+            }
+        }
+        return false;
     }
 
     public boolean isOptional() {
@@ -115,8 +121,9 @@ public class SequenceWriterNode implements WriterNode {
         }
 
         @Override
-        public void moveOn() {
+        public boolean moveOn() {
             increaseIndex();
+            return index() >= ((SequenceWriterNode) writerNode).subWriterNodes.size();
         }
     }
 }

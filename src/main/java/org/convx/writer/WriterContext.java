@@ -31,7 +31,10 @@ public class WriterContext {
         }
         stack.pop();
         if (!stack.empty()) {
-            currentNodeState().moveOn();
+            boolean currentNodeStateComplete = currentNodeState().moveOn();
+            if (currentNodeStateComplete) {
+                pop();
+            }
         }
     }
 

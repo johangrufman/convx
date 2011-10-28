@@ -10,11 +10,25 @@ import javax.xml.stream.events.StartElement;
 */
 public class RepeatedWriterNode implements WriterNode {
     private WriterNode subWriterNode;
-    private long minOccurs = 0;
-    private long maxOccurs = Long.MAX_VALUE;
+    private int minOccurs;
+    private int maxOccurs;
 
-    public RepeatedWriterNode(WriterNode subWriterNode) {
+    public RepeatedWriterNode(WriterNode subWriterNode, int minOccurs, int maxOccurs) {
         this.subWriterNode = subWriterNode;
+        this.minOccurs = minOccurs;
+        this.maxOccurs = maxOccurs;
+    }
+
+    public static RepeatedWriterNode zeroOrOne(WriterNode writerNode) {
+        return new RepeatedWriterNode(writerNode, 0, 1);
+    }
+
+    public static RepeatedWriterNode zeroToMany(WriterNode writerNode) {
+        return new RepeatedWriterNode(writerNode, 0, Integer.MAX_VALUE);
+    }
+
+    public static RepeatedWriterNode oneToMany(WriterNode writerNode) {
+        return new RepeatedWriterNode(writerNode, 1, Integer.MAX_VALUE);
     }
 
     public void consumeStartElement(StartElement startElement, WriterContext context, NodeState state) {
