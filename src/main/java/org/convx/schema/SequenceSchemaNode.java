@@ -5,9 +5,10 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.convx.reader.PrefixMatcher;
+import org.convx.reader.ConstantReaderNode;
 import org.convx.reader.ReaderNode;
 import org.convx.reader.SequenceReaderNode;
+import org.convx.writer.ConstantWriterNode;
 import org.convx.writer.SequenceWriterNode;
 import org.convx.writer.WriterNode;
 
@@ -17,20 +18,30 @@ import org.convx.writer.WriterNode;
  */
 public class SequenceSchemaNode extends SchemaNode {
     private LinkedList<SchemaNode> subSchemaNodes;
+    private Character separator = null;
 
-    private PrefixMatcher prefixMatcher;
+    private SequenceSchemaNode(SchemaNode... schemaNodes) {
+        this.subSchemaNodes = new LinkedList<SchemaNode>(Arrays.asList(schemaNodes));
+    }
 
-    private boolean isOptional;
-
-    public SequenceSchemaNode(SchemaNode... subSchemaNodes) {
-        this.subSchemaNodes = new LinkedList<SchemaNode>(Arrays.asList(subSchemaNodes));
+    public static Builder sequence(SchemaNode... schemaNodes) {
+        return new Builder(schemaNodes);
     }
 
     @Override
     public ReaderNode asReaderNode() {
         List<ReaderNode> subNodes = new ArrayList<ReaderNode>();
+        boolean first = true;
         for (SchemaNode subSchemaNode : subSchemaNodes) {
-            subNodes.add(subSchemaNode.asReaderNode());
+            ReaderNode subReaderNode = subSchemaNode.asReaderNode();
+            if (separator != null) {
+                if (!first) {
+                    subNodes.add(new ConstantReaderNode(separator));
+                }
+                subReaderNode.remove(separator);
+            }
+            subNodes.add(subReaderNode);
+            first = false;
         }
         return new SequenceReaderNode(subNodes.toArray(new ReaderNode[subNodes.size()]));
     }
@@ -38,9 +49,36 @@ public class SequenceSchemaNode extends SchemaNode {
     @Override
     public WriterNode asWriterNode() {
         SequenceWriterNode sequenceWriterNode = new SequenceWriterNode();
+        boolean first = true;
         for (SchemaNode subSchemaNode : subSchemaNodes) {
+            if (!first && separator != null) {
+                sequenceWriterNode.addSubNode(new ConstantWriterNode(separator));
+            }
             sequenceWriterNode.addSubNode(subSchemaNode.asWriterNode());
+            first = false;
         }
         return sequenceWriterNode;
+    }
+
+    public static class Builder {
+        private SequenceSchemaNode instance;
+
+        private Builder(SchemaNode... schemaNodes) {
+            instance = new SequenceSchemaNode(schemaNodes);
+        }
+
+        public Builder add(SchemaNode node) {
+            instance.subSchemaNodes.add(node);
+            return this;
+        }
+
+        public SequenceSchemaNode build() {
+            return instance;
+        }
+
+        public Builder separatedBy(Character separator) {
+            instance.separator = separator;
+            return this;
+        }
     }
 }

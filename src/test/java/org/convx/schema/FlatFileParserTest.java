@@ -43,7 +43,7 @@ public class FlatFileParserTest {
         String elementName = "foo";
         DelimitedSchemaNode delimitedNode = new DelimitedSchemaNode('*');
         ConstantSchemaNode constantNode = new ConstantSchemaNode("*");
-        SchemaNode root = new NamedSchemaNode("baz", new SequenceSchemaNode(new NamedSchemaNode(elementName, delimitedNode), constantNode));
+        SchemaNode root = new NamedSchemaNode("baz", SequenceSchemaNode.sequence().add(new NamedSchemaNode(elementName, delimitedNode)).add(constantNode).build());
         Schema schema = new Schema(root);
         FlatFileParser flatFileParser = schema.parser(new StringReader("bar*"));
 

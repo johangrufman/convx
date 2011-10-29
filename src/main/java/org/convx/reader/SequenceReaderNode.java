@@ -67,6 +67,12 @@ public class SequenceReaderNode implements ReaderNode {
         return isOptional;
     }
 
+    public void remove(Character character) {
+        for (ReaderNode subReaderNode : subReaderNodes) {
+            subReaderNode.remove(character);
+        }
+    }
+
     private Iterable<ReaderNode> reverseOrder(final LinkedList<ReaderNode> readerNodes) {
         return new Iterable<ReaderNode>() {
             public Iterator<ReaderNode> iterator() {

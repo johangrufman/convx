@@ -15,6 +15,10 @@ public class ConstantWriterNode implements WriterNode {
         this.constant = constant;
     }
 
+    public ConstantWriterNode(Character character) {
+        this.constant = String.valueOf(character);
+    }
+
     public void consumeStartElement(StartElement startElement, WriterContext context, NodeState state) {
 
     }

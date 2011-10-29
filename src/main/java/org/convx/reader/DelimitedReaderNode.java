@@ -49,7 +49,7 @@ public class DelimitedReaderNode implements ReaderNode {
         return false;
     }
 
-    public WriterNode asWriterNode() {
-        return new DelimitedWriterNode();
+    public void remove(Character character) {
+        exceptions.add(character);
     }
 }

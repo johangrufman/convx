@@ -49,6 +49,9 @@ public class RepetitionReaderNode implements ReaderNode {
         return minOccurs == 0;
     }
 
+    public void remove(Character character) {
+        readerNode.remove(character);
+    }
 
     private boolean isUnbounded() {
         return maxOccurs == UNBOUNDED;

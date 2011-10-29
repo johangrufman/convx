@@ -17,4 +17,6 @@ public interface ReaderNode {
     public PrefixMatcher prefixes();
 
     public boolean isOptional();
+
+    void remove(Character character);
 }

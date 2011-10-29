@@ -43,4 +43,7 @@ public class NamedReaderNode implements ReaderNode {
         return readerNode.isOptional();
     }
 
+    public void remove(Character character) {
+        readerNode.remove(character);
+    }
 }

@@ -4,8 +4,6 @@ import java.util.Stack;
 
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.ParsingNodeState;
-import org.convx.writer.ConstantWriterNode;
-import org.convx.writer.WriterNode;
 
 /**
  * @author johan
@@ -18,6 +16,10 @@ public class ConstantReaderNode implements ReaderNode {
         this.constant = constant;
     }
 
+    public ConstantReaderNode(Character character) {
+        this.constant = String.valueOf(character);
+    }
+
     public int lookAhead() {
         return constant.length();
     }
@@ -27,7 +29,8 @@ public class ConstantReaderNode implements ReaderNode {
             context.advance(constant.length());
             return true;
         } else {
-            return false;
+            throw new RuntimeException("Unexpected input: " + context.nextCharacters());
+//            return false;
         }
     }
 
@@ -39,7 +42,9 @@ public class ConstantReaderNode implements ReaderNode {
         return false;
     }
 
-    public WriterNode asWriterNode() {
-        return new ConstantWriterNode(constant);
+    public void remove(Character character) {
+        if (constant.indexOf(character) >= 0) {
+            throw new RuntimeException("Cannot remove character " + character + " from constant " + constant);
+        }
     }
 }

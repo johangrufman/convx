@@ -50,7 +50,7 @@ public class FixedLengthReaderNode implements ReaderNode {
         return false;
     }
 
-    public WriterNode asWriterNode() {
-        return new FixedLengthWriterNode(length);
+    public void remove(Character character) {
+        throw new UnsupportedOperationException();
     }
 }

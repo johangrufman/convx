@@ -14,7 +14,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.convx.schema.ConstantSchemaNode;
 import org.convx.schema.DelimitedSchemaNode;
-import org.convx.schema.FixedLengthSchemaNode;
 import org.convx.schema.NamedSchemaNode;
 import org.convx.schema.RepetitionSchemaNode;
 import org.convx.schema.Schema;
@@ -23,7 +22,6 @@ import org.convx.schema.SequenceSchemaNode;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
@@ -48,16 +46,18 @@ public class MultiLineRecordTest {
         xmlFile = new File(url.getFile());
 
         SchemaNode eol = new ConstantSchemaNode("\n");
-        SchemaNode firstName = new NamedSchemaNode("firstName", new SequenceSchemaNode(
-                new ConstantSchemaNode("firstName:"),
-                new DelimitedSchemaNode('\n', '\r'),
-                eol));
-        SchemaNode lastName = new NamedSchemaNode("lastName", new SequenceSchemaNode(new ConstantSchemaNode("lastName:"), new DelimitedSchemaNode('\n', '\r'), eol));
-        SchemaNode age = new NamedSchemaNode("age", new SequenceSchemaNode(new ConstantSchemaNode("age:"), new DelimitedSchemaNode('\n', '\r'), eol));
+        DelimitedSchemaNode delimitedField = new DelimitedSchemaNode('\n', '\r');
+        SchemaNode firstName = new NamedSchemaNode("firstName", SequenceSchemaNode.sequence().add(
+                new ConstantSchemaNode("firstName:")).add(
+                delimitedField).add(
+                eol).build());
+        SchemaNode lastName = new NamedSchemaNode("lastName", SequenceSchemaNode.sequence().add(new ConstantSchemaNode("lastName:")).add(
+                delimitedField).add(eol).build());
+        SchemaNode age = new NamedSchemaNode("age", SequenceSchemaNode.sequence().add(new ConstantSchemaNode("age:")).add(delimitedField).add(eol).build());
         SchemaNode personHeader = new ConstantSchemaNode("[person]\n");
-        SchemaNode person = new NamedSchemaNode("person", new SequenceSchemaNode(personHeader, firstName, lastName, age));
+        SchemaNode person = new NamedSchemaNode("person", SequenceSchemaNode.sequence().add(personHeader).add(firstName).add(lastName).add(age).build());
         SchemaNode repeatedPerson = new RepetitionSchemaNode(person, 1, RepetitionSchemaNode.UNBOUNDED);
-        SchemaNode root = new NamedSchemaNode("persons", new SequenceSchemaNode(repeatedPerson));
+        SchemaNode root = new NamedSchemaNode("persons", SequenceSchemaNode.sequence().add(repeatedPerson).build());
         fixedLengthSchema = new Schema(root);
     }
 

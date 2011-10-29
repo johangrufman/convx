@@ -1,33 +1,44 @@
 package org.convx.acceptance;
 
 
-import com.sun.org.apache.xml.internal.serialize.OutputFormat;
-import com.sun.org.apache.xml.internal.serialize.XMLSerializer;
-import org.convx.schema.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.net.URL;
+
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLInputFactory;
+import javax.xml.stream.XMLStreamException;
+
+import org.convx.schema.ConstantSchemaNode;
+import org.convx.schema.DelimitedSchemaNode;
+import org.convx.schema.NamedSchemaNode;
+import org.convx.schema.RepetitionSchemaNode;
+import org.convx.schema.Schema;
+import org.convx.schema.SchemaNode;
+import org.convx.schema.SequenceSchemaNode;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.custommonkey.xmlunit.XMLUnit;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
 
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import java.io.*;
-import java.net.URL;
-
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 
 /**
  * Acceptance test for CSV-files.
+ *
  * @author johan
  * @since 2011-05-21
  */
 public class CsvTest {
     private org.convx.schema.Schema csvSchema;
+
     private File flatFile;
+
     private File xmlFile;
 
     @Before
@@ -43,9 +54,11 @@ public class CsvTest {
         SchemaNode age = new NamedSchemaNode("age", field);
         SchemaNode comma = new ConstantSchemaNode(",");
         SchemaNode eol = new ConstantSchemaNode("\n");
-        SchemaNode person = new NamedSchemaNode("person", new SequenceSchemaNode(firstName, comma, lastName, comma, age, eol));
+        SequenceSchemaNode personSequence = SequenceSchemaNode.sequence(firstName, lastName, age).separatedBy(',').build();
+        SchemaNode person = new NamedSchemaNode("person",
+                SequenceSchemaNode.sequence(personSequence, eol).build());
         SchemaNode repeatedPerson = new RepetitionSchemaNode(person, 1, RepetitionSchemaNode.UNBOUNDED);
-        SchemaNode root = new NamedSchemaNode("persons", new SequenceSchemaNode(repeatedPerson));
+        SchemaNode root = new NamedSchemaNode("persons", SequenceSchemaNode.sequence().add(repeatedPerson).build());
         csvSchema = new Schema(root);
     }
 
@@ -60,7 +73,7 @@ public class CsvTest {
         XMLUnit.setIgnoreWhitespace(true);
         XMLAssert.assertXMLEqual(xmlFileDoc, flatFileDoc);
     }
-    
+
     @Test
     public void convertXmlToFlatFile() throws IOException, XMLStreamException {
         XMLEventReader xmlFileReader = XMLInputFactory.newFactory().createXMLEventReader(new FileInputStream(xmlFile));
