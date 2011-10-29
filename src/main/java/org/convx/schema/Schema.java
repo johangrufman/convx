@@ -3,6 +3,7 @@ package org.convx.schema;
 import java.io.Reader;
 import java.io.Writer;
 
+import org.convx.reader.FlatFileParser;
 import org.convx.writer.FlatFileWriter;
 
 /**
@@ -22,10 +23,6 @@ public class Schema {
 
     public FlatFileWriter writer(Writer writer) {
         return new FlatFileWriter(this, writer);
-    }
-
-    public int lookAhead() {
-        return root.lookAhead();
     }
 
     public SchemaNode root() {

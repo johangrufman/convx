@@ -1,5 +1,6 @@
-package org.convx.schema;
+package org.convx.reader;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -9,11 +10,13 @@ import java.util.Set;
  */
 public class PrefixMatcher {
     public static final PrefixMatcher NONE = new PrefixMatcher();
+
     public static final PrefixMatcher ALL = new AllMatcher();
 
     private Set<String> prefixes = new HashSet<String>();
 
-    protected PrefixMatcher() {}
+    protected PrefixMatcher() {
+    }
 
     private PrefixMatcher(Set<String> prefixSet1, Set<String> prefixSet2) {
         this.prefixes.addAll(prefixSet1);
@@ -21,9 +24,7 @@ public class PrefixMatcher {
     }
 
     public PrefixMatcher(String... prefixes) {
-        for (String prefix : prefixes) {
-            this.prefixes.add(prefix);
-        }
+        Collections.addAll(this.prefixes, prefixes);
     }
 
     public boolean matches(String nextCharacters) {

@@ -22,13 +22,13 @@ public class FixedLengthWriterNode implements WriterNode {
     }
 
     public void consumeEndElement(EndElement endElement, WriterContext context, NodeState state) {
-        context.write(((FixedLengthWriterNodeState)state).stringOfLength(length));
+        context.write(((FixedLengthWriterNodeState) state).stringOfLength(length));
         context.pop();
         context.consumeEndElement(endElement);
     }
 
     public void consumeCharacters(Characters characters, WriterContext context, NodeState state) {
-        ((FixedLengthWriterNodeState)state).append(characters.getData());
+        ((FixedLengthWriterNodeState) state).append(characters.getData());
     }
 
     public boolean startsWith(StartElement startElement) {
@@ -59,7 +59,7 @@ public class FixedLengthWriterNode implements WriterNode {
         }
 
         public CharSequence stringOfLength(int length) {
-            return StringUtils.rightPad(stringBuilder.toString(), length, ' ') ;
+            return StringUtils.rightPad(stringBuilder.toString(), length, ' ');
         }
     }
 }

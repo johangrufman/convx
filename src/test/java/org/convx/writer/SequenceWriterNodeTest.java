@@ -115,7 +115,7 @@ public class SequenceWriterNodeTest extends AbstractWriterTest {
     }
 
     @Test
-    public void startsWithShouldReturnFalseIfSecondSubNodeStartsWithAndFirstIsMandatory() {
+    public void startsWithShouldReturnFalseIfSecondSubNodeStartsWithButFirstIsMandatory() {
         SequenceWriterNode sequenceWriterNode = new SequenceWriterNode();
         NamedWriterNode foo = new NamedWriterNode("foo", new ConstantWriterNode("foo"));
         NamedWriterNode bar = new NamedWriterNode("bar", new ConstantWriterNode("bar"));

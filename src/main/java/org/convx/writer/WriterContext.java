@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Stack;
 
-import javax.xml.soap.Node;
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
@@ -15,6 +14,7 @@ import javax.xml.stream.events.StartElement;
  */
 public class WriterContext {
     private Stack<NodeState> stack = new Stack<NodeState>();
+
     private Writer writer;
 
     public WriterContext(Writer writer) {

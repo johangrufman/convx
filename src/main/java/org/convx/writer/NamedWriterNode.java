@@ -10,6 +10,7 @@ import javax.xml.stream.events.StartElement;
  */
 public class NamedWriterNode implements WriterNode {
     private String name;
+
     private WriterNode node;
 
     public NamedWriterNode(String name, WriterNode node) {

@@ -1,7 +1,13 @@
-package org.convx.schema;
+package org.convx.reader;
 
-import org.convx.schema.elements.Element;
-import org.convx.schema.elements.NodeElement;
+import org.convx.reader.ConstantReaderNode;
+import org.convx.reader.ParserContext;
+import org.convx.reader.ReaderNode;
+import org.convx.reader.elements.Element;
+import org.convx.reader.elements.NodeElement;
+import org.convx.schema.ConstantSchemaNode;
+import org.convx.schema.RepetitionSchemaNode;
+import org.convx.schema.SchemaNode;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,7 +20,7 @@ import static org.junit.Assert.assertTrue;
  * @author johan
  * @since 2011-06-27
  */
-public class RepetitionNodeTest {
+public class RepetitionReaderNodeTest {
 
     @Before
     public void setup() {
@@ -25,9 +31,9 @@ public class RepetitionNodeTest {
     public void testParseOfNodeRepeatedExactlyOnce() throws Exception {
         Stack<Element> parserStack = new Stack<Element>();
         ParserContext context = new ParserContext(new StringReader("*"), 1);
-        SchemaNode mock = new ConstantSchemaNode("*");
+        ReaderNode mock = new ConstantReaderNode("*");
 
-        RepetitionSchemaNode repetitionNode = new RepetitionSchemaNode(mock, 1, 1);
+        RepetitionReaderNode repetitionNode = new RepetitionReaderNode(mock, 1, 1);
         repetitionNode.parse(parserStack, context, null);
 
         assertTrue(((NodeElement) parserStack.pop()).node().equals(mock));
@@ -38,9 +44,9 @@ public class RepetitionNodeTest {
     public void testParseOfNodeRepeatedTwice() throws Exception {
         Stack<Element> parserStack = new Stack<Element>();
         ParserContext context = new ParserContext(new StringReader("**"), 1);
-        SchemaNode mock = new ConstantSchemaNode("*");
+        ReaderNode mock = new ConstantReaderNode("*");
 
-        RepetitionSchemaNode repetitionNode = new RepetitionSchemaNode(mock, 1, 2);
+        RepetitionReaderNode repetitionNode = new RepetitionReaderNode(mock, 1, 2);
         repetitionNode.parse(parserStack, context, null);
 
         assertTrue(((NodeElement) parserStack.pop()).node().equals(mock));
@@ -53,9 +59,9 @@ public class RepetitionNodeTest {
     public void testParseOfOptionalNode() throws Exception {
         Stack<Element> parserStack = new Stack<Element>();
         ParserContext context = new ParserContext(new StringReader("#"), 1);
-        SchemaNode mock = new ConstantSchemaNode("*");
+        ReaderNode mock = new ConstantReaderNode("*");
 
-        RepetitionSchemaNode repetitionNode = new RepetitionSchemaNode(mock, 0, 1);
+        RepetitionReaderNode repetitionNode = new RepetitionReaderNode(mock, 0, 1);
         repetitionNode.parse(parserStack, context, null);
 
         assertTrue(parserStack.isEmpty());

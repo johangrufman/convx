@@ -1,15 +1,17 @@
-package org.convx.schema;
+package org.convx.reader;
 
-import org.convx.schema.elements.Element;
-import org.convx.schema.elements.MarkupElement;
-import org.convx.schema.elements.NodeElement;
+import java.io.Reader;
+import java.util.NoSuchElementException;
+import java.util.Stack;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-import java.io.*;
-import java.util.NoSuchElementException;
-import java.util.Stack;
+
+import org.convx.reader.elements.Element;
+import org.convx.reader.elements.MarkupElement;
+import org.convx.reader.elements.NodeElement;
+import org.convx.schema.Schema;
 
 /**
  * @author johan
@@ -17,16 +19,20 @@ import java.util.Stack;
  */
 public class FlatFileParser implements XMLEventReader {
     private ParserContext context;
+
     private Stack<Element> parserStack = new Stack<Element>();
 
+    ReaderNode rootReaderNode;
+
     public FlatFileParser(Schema schema, Reader reader) {
-        context = new ParserContext(reader, schema.lookAhead());
-        init(schema);
+        rootReaderNode = schema.root().asReaderNode();
+        context = new ParserContext(reader, rootReaderNode.lookAhead());
+        init();
     }
 
-    private void init(Schema schema) {
+    private void init() {
         parserStack.push(MarkupElement.endDocument());
-        parserStack.push(new NodeElement(schema.root()));
+        parserStack.push(new NodeElement(rootReaderNode));
         parserStack.push(MarkupElement.startDocument());
     }
 
@@ -36,9 +42,9 @@ public class FlatFileParser implements XMLEventReader {
         }
         Element element = parserStack.pop();
         if (element instanceof MarkupElement) {
-            return ((MarkupElement)element).event();
+            return ((MarkupElement) element).event();
         }
-        ((NodeElement)element).parse(parserStack, context);
+        ((NodeElement) element).parse(parserStack, context);
         return nextEvent();
     }
 

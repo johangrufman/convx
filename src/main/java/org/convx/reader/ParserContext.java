@@ -1,4 +1,4 @@
-package org.convx.schema;
+package org.convx.reader;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -10,14 +10,19 @@ import java.nio.CharBuffer;
  */
 public class ParserContext {
     private static final int BUFFER_SIZE = 1024;
+
     private Reader reader;
+
     private CharBuffer buffer;
+
     private int lookAhead;
+
     private int position = 0;
 
     public ParserContext(Reader reader, int lookAhead) {
         this(reader, lookAhead, BUFFER_SIZE);
     }
+
     public ParserContext(Reader reader, int lookAhead, int bufferSize) {
         if (bufferSize < lookAhead) {
             throw new IllegalArgumentException("Buffer size must be greater than or equal to look ahead.");

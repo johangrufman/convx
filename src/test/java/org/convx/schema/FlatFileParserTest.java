@@ -1,5 +1,6 @@
 package org.convx.schema;
 
+import org.convx.reader.FlatFileParser;
 import org.junit.Test;
 
 import javax.xml.stream.events.*;

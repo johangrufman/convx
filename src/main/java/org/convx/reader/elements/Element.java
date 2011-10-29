@@ -1,4 +1,4 @@
-package org.convx.schema.elements;
+package org.convx.reader.elements;
 
 /**
  * @author johan

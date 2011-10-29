@@ -5,12 +5,14 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 
 /**
-* @author johan
-* @since 2011-09-17
-*/
+ * @author johan
+ * @since 2011-09-17
+ */
 public class RepeatedWriterNode implements WriterNode {
     private WriterNode subWriterNode;
+
     private int minOccurs;
+
     private int maxOccurs;
 
     public RepeatedWriterNode(WriterNode subWriterNode, int minOccurs, int maxOccurs) {
@@ -75,7 +77,9 @@ public class RepeatedWriterNode implements WriterNode {
 
     static class RepeatedNodeState extends NodeState {
         private long counter = 0;
+
         private long minOccurs;
+
         private long maxOccurs;
 
         RepeatedNodeState(RepeatedWriterNode node) {

@@ -37,9 +37,6 @@ public class SequenceWriterNode implements WriterNode {
 
     public void consumeEndElement(EndElement endElement, WriterContext context, NodeState state) {
         SequenceNodeState sequenceNodeState = (SequenceNodeState) state;
-//        if (currentSubNode(sequenceNodeState).isSatisfied()) {
-//            sequenceNodeState.increaseIndex();
-//        }
         handleNodesNotTriggeredByEvents(context, sequenceNodeState);
         if (isSatisfied((SequenceNodeState) state)) {
             context.pop();

@@ -1,4 +1,4 @@
-package org.convx.schema.elements;
+package org.convx.reader.elements;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventFactory;
