@@ -48,13 +48,13 @@ public class CsvTest {
         url = this.getClass().getResource("/testcases/csv/xmlfile.xml");
         xmlFile = new File(url.getFile());
 
-        DelimitedSchemaNode field = new DelimitedSchemaNode(',', '\n', '\r');
+        char comma = ',';
+        DelimitedSchemaNode field = new DelimitedSchemaNode(comma, '\n', '\r');
         SchemaNode firstName = new NamedSchemaNode("firstName", field);
         SchemaNode lastName = new NamedSchemaNode("lastName", field);
         SchemaNode age = new NamedSchemaNode("age", field);
-        SchemaNode comma = new ConstantSchemaNode(",");
         SchemaNode eol = new ConstantSchemaNode("\n");
-        SequenceSchemaNode personSequence = SequenceSchemaNode.sequence(firstName, lastName, age).separatedBy(',').build();
+        SequenceSchemaNode personSequence = SequenceSchemaNode.sequence(firstName, lastName, age).separatedBy(comma).build();
         SchemaNode person = new NamedSchemaNode("person",
                 SequenceSchemaNode.sequence(personSequence, eol).build());
         SchemaNode repeatedPerson = new RepetitionSchemaNode(person, 1, RepetitionSchemaNode.UNBOUNDED);
