@@ -30,9 +30,9 @@ public abstract class AbstractAcceptanceTest {
 
     @Before
     public void setup() {
-        URL url = this.getClass().getResource("/testcases/" + name() + "/flatfile.txt");
+        URL url = this.getClass().getResource("/testcases/" + name() + "/" + name() + ".txt");
         flatFile = new File(url.getFile());
-        url = this.getClass().getResource("/testcases/" + name() + "/xmlfile.xml");
+        url = this.getClass().getResource("/testcases/" + name() + "/" + name() + ".xml");
         xmlFile = new File(url.getFile());
 
     }
