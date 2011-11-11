@@ -27,10 +27,12 @@ public class RepetitionSchemaNode extends SchemaNode {
     @Override
     public ReaderNode asReaderNode() {
         return new RepetitionReaderNode(schemaNode.asReaderNode(), minOccurs, maxOccurs);
+
     }
 
     @Override
     public WriterNode asWriterNode() {
         return new RepeatedWriterNode(schemaNode.asWriterNode(), minOccurs, maxOccurs);
+
     }
 }

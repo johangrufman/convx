@@ -1,13 +1,13 @@
 package org.convx.reader;
 
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Stack;
 
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.NodeElement;
 import org.convx.reader.elements.ParsingNodeState;
+import org.convx.util.CollectionUtil;
 
 /**
  * @author johan
@@ -51,7 +51,7 @@ public class SequenceReaderNode implements ReaderNode {
     }
 
     public boolean parse(Stack<Element> parserStack, ParserContext context, ParsingNodeState state) {
-        for (ReaderNode subSchemaNode : reverseOrder(subReaderNodes)) {
+        for (ReaderNode subSchemaNode : CollectionUtil.reverseOrder(subReaderNodes)) {
             parserStack.push(new NodeElement(subSchemaNode));
         }
         return true;
@@ -73,11 +73,4 @@ public class SequenceReaderNode implements ReaderNode {
         }
     }
 
-    private Iterable<ReaderNode> reverseOrder(final LinkedList<ReaderNode> readerNodes) {
-        return new Iterable<ReaderNode>() {
-            public Iterator<ReaderNode> iterator() {
-                return readerNodes.descendingIterator();
-            }
-        };
-    }
 }

@@ -33,18 +33,15 @@ import static junit.framework.Assert.assertEquals;
  * @author johan
  * @since 2011-05-21
  */
-public class FixedLengthTest {
-    private Schema fixedLengthSchema;
-    private File flatFile;
-    private File xmlFile;
+public class FixedLengthTest extends AbstractAcceptanceTest {
 
-    @Before
-    public void setup() {
-        URL url = this.getClass().getResource("/testcases/fixed/flatfile.txt");
-        flatFile = new File(url.getFile());
-        url = this.getClass().getResource("/testcases/fixed/xmlfile.xml");
-        xmlFile = new File(url.getFile());
+    @Override
+    protected String name() {
+        return "fixed";
+    }
 
+    @Override
+    protected Schema schema() {
         SchemaNode firstName = new NamedSchemaNode("firstName", new FixedLengthSchemaNode(15));
         SchemaNode lastName = new NamedSchemaNode("lastName", new FixedLengthSchemaNode(15));
         SchemaNode age = new NamedSchemaNode("age", new FixedLengthSchemaNode(2));
@@ -52,30 +49,7 @@ public class FixedLengthTest {
         SchemaNode person = new NamedSchemaNode("person", SequenceSchemaNode.sequence().add(firstName).add(lastName).add(age).add(eol).build());
         SchemaNode repeatedPerson = new RepetitionSchemaNode(person, 1, RepetitionSchemaNode.UNBOUNDED);
         SchemaNode root = new NamedSchemaNode("persons", SequenceSchemaNode.sequence().add(repeatedPerson).build());
-        fixedLengthSchema = new Schema(root);
-    }
-
-    @Test
-    public void convertFlatFileToXml() throws IOException, XMLStreamException {
-        XMLEventReader flatFileReader = fixedLengthSchema.parser(new FileReader(flatFile));
-        XMLEventReader xmlFileReader = XMLInputFactory.newFactory().createXMLEventReader(new FileInputStream(xmlFile));
-        Document xmlFileDoc = TestUtil.buildDom(xmlFileReader);
-        Document flatFileDoc = TestUtil.buildDom(flatFileReader);
-//        new XMLSerializer(System.out, new OutputFormat((String)null, null, true)).serialize(flatFileDoc);
-//        new XMLSerializer(System.out, new OutputFormat((String)null, null, true)).serialize(xmlFileDoc);
-        XMLUnit.setIgnoreWhitespace(true);
-        XMLAssert.assertXMLEqual(xmlFileDoc, flatFileDoc);
-    }
-    
-    @Test
-    public void convertXmlToFlatFile() throws IOException, XMLStreamException {
-        XMLEventReader xmlFileReader = XMLInputFactory.newFactory().createXMLEventReader(new FileInputStream(xmlFile));
-        StringWriter flatFileWriter = new StringWriter();
-        fixedLengthSchema.writer(flatFileWriter).add(xmlFileReader);
-        flatFileWriter.flush();
-        String actualFlatFileContent = flatFileWriter.toString();
-        String expectedFlatFileContent = TestUtil.readFile(flatFile);
-        assertEquals(expectedFlatFileContent, actualFlatFileContent);
+        return new Schema(root);
     }
 
 }
