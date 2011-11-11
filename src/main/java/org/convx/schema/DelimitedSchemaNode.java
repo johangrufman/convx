@@ -1,5 +1,6 @@
 package org.convx.schema;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,21 +14,16 @@ import org.convx.writer.WriterNode;
  * @since 2011-06-06
  */
 public class DelimitedSchemaNode extends SchemaNode {
-    private char delimiter;
 
     private Set<Character> exceptions = new HashSet<Character>();
 
-    public DelimitedSchemaNode(char delimiter, char... exceptions) {
-        this.delimiter = delimiter;
-        this.exceptions.add(delimiter);
-        for (char c : exceptions) {
-            this.exceptions.add(c);
-        }
+    public DelimitedSchemaNode(Character... exceptions) {
+        this.exceptions.addAll(Arrays.asList(exceptions));
     }
 
     @Override
     public ReaderNode asReaderNode() {
-        return new DelimitedReaderNode(delimiter, exceptions);
+        return new DelimitedReaderNode(exceptions);
     }
 
     @Override

@@ -17,8 +17,7 @@ import org.convx.writer.WriterNode;
 public class DelimitedReaderNode implements ReaderNode {
     Set<Character> exceptions = new HashSet<Character>();
 
-    public DelimitedReaderNode(char delimiter, Set<Character> exceptions) {
-        this.exceptions.add(delimiter);
+    public DelimitedReaderNode(Set<Character> exceptions) {
         this.exceptions.addAll(exceptions);
     }
 
