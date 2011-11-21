@@ -1,21 +1,16 @@
-<schema>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.convx.org/schemas/1.0/fsd ../../../../main/resources/xsd/fsd.xsd"
+    xmlns="http://www.convx.org/schemas/1.0/fsd">
 
     <root name="persons">
         <element name="person" maxOccurs="unbounded">
             <sequence>
-                <element name="firstName">
-                    <fixedLengthField length="15"/>
-                </element>
-                <element name="lastName">
-                    <fixedLengthField length="15"/>
-                </element>
-                <element name="age">
-                    <fixedLengthField length="2"/>
-                </element>
-                <element ref="eol"/>
+                <fixedLengthElement name="firstName" length="15"/>
+                <fixedLengthElement name="lastName" length="15"/>
+                <fixedLengthElement name="age" length="2"/>
+                <constantElement value="\n"/>
             </sequence>
         </element>
     </root>
 
-    <constant name="eol" value="\r"/>
 </schema>

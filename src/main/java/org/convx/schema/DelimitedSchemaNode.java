@@ -1,11 +1,16 @@
 package org.convx.schema;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang3.StringUtils;
 import org.convx.reader.DelimitedReaderNode;
 import org.convx.reader.ReaderNode;
+import org.convx.util.CharacterUtil;
+import org.convx.util.IndentationWriter;
 import org.convx.writer.DelimitedWriterNode;
 import org.convx.writer.WriterNode;
 
@@ -29,5 +34,14 @@ public class DelimitedSchemaNode extends SchemaNode {
     @Override
     public WriterNode asWriterNode() {
         return new DelimitedWriterNode();
+    }
+
+    @Override
+    protected void describe(IndentationWriter writer) {
+        List<String> exceptionStrings = new ArrayList<String>();
+        for (Character exception : exceptions) {
+            exceptionStrings.add(CharacterUtil.escapeCharacter(exception));
+        }
+        writer.writeLine("DelimitedNode. " + StringUtils.join(exceptionStrings, ", "));
     }
 }

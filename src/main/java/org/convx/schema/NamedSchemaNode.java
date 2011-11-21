@@ -2,6 +2,7 @@ package org.convx.schema;
 
 import org.convx.reader.NamedReaderNode;
 import org.convx.reader.ReaderNode;
+import org.convx.util.IndentationWriter;
 import org.convx.writer.NamedWriterNode;
 import org.convx.writer.WriterNode;
 
@@ -27,5 +28,12 @@ public class NamedSchemaNode extends SchemaNode {
     @Override
     public WriterNode asWriterNode() {
         return new NamedWriterNode(name, schemaNode.asWriterNode());
+    }
+
+    @Override
+    protected void describe(IndentationWriter writer) {
+        writer.writeLine("NamedNode " + name + " {");
+        schemaNode.describe(writer);
+        writer.writeLine("}");
     }
 }

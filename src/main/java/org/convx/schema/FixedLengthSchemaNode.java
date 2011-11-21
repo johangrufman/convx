@@ -2,6 +2,7 @@ package org.convx.schema;
 
 import org.convx.reader.FixedLengthReaderNode;
 import org.convx.reader.ReaderNode;
+import org.convx.util.IndentationWriter;
 import org.convx.writer.FixedLengthWriterNode;
 import org.convx.writer.WriterNode;
 
@@ -24,5 +25,10 @@ public class FixedLengthSchemaNode extends SchemaNode {
     @Override
     public WriterNode asWriterNode() {
         return new FixedLengthWriterNode(length);
+    }
+
+    @Override
+    protected void describe(IndentationWriter writer) {
+        writer.writeLine("FixedLengthNode: " + length);
     }
 }

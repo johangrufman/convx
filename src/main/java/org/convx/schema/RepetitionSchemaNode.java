@@ -2,6 +2,7 @@ package org.convx.schema;
 
 import org.convx.reader.ReaderNode;
 import org.convx.reader.RepetitionReaderNode;
+import org.convx.util.IndentationWriter;
 import org.convx.writer.RepeatedWriterNode;
 import org.convx.writer.WriterNode;
 
@@ -34,5 +35,13 @@ public class RepetitionSchemaNode extends SchemaNode {
     public WriterNode asWriterNode() {
         return new RepeatedWriterNode(schemaNode.asWriterNode(), minOccurs, maxOccurs);
 
+    }
+
+    @Override
+    protected void describe(IndentationWriter writer) {
+        String maxOccursString = maxOccurs == UNBOUNDED ? "unbounded" : String.valueOf(maxOccurs);
+        writer.writeLine("RepetitionNode [" + minOccurs + ", " + maxOccursString + "] {");
+        schemaNode.describe(writer);
+        writer.writeLine("}");
     }
 }

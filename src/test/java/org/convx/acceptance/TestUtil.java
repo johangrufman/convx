@@ -1,17 +1,20 @@
 package org.convx.acceptance;
 
-import org.custommonkey.xmlunit.XMLAssert;
-import org.w3c.dom.Document;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.StringWriter;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.stream.*;
-import javax.xml.stream.events.XMLEvent;
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLEventWriter;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
 import javax.xml.transform.dom.DOMResult;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+
+import org.w3c.dom.Document;
 
 /**
  * @author johan
@@ -41,11 +44,24 @@ public class TestUtil {
 
     public static String readFile(File file) throws IOException {
         FileReader reader = new FileReader(file);
-        StringBuilder flatFileContent = new StringBuilder();
+        StringBuilder fileContent = new StringBuilder();
         int ch;
         while ((ch = reader.read()) >= 0) {
-            flatFileContent.append((char)ch);
+            fileContent.append((char) ch);
         }
-        return flatFileContent.toString();
+        return fileContent.toString();
+    }
+
+    @SuppressWarnings("deprecation")
+    public static String serialize(XMLEventReader flatFileReader) throws XMLStreamException, IOException {
+        Document flatFileDoc = buildDom(flatFileReader);
+        StringWriter flatFileXml = new StringWriter();
+        new org.apache.xml.serialize.XMLSerializer(flatFileXml,
+                new org.apache.xml.serialize.OutputFormat((String) null, null, true)).serialize(flatFileDoc);
+        return flatFileXml.toString();
+    }
+
+    public static String getTestResource(String resource) {
+        return TestUtil.class.getResource(resource).getFile();
     }
 }

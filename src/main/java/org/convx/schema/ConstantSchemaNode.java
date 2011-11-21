@@ -2,6 +2,8 @@ package org.convx.schema;
 
 import org.convx.reader.ConstantReaderNode;
 import org.convx.reader.ReaderNode;
+import org.convx.util.CharacterUtil;
+import org.convx.util.IndentationWriter;
 import org.convx.writer.ConstantWriterNode;
 import org.convx.writer.WriterNode;
 
@@ -24,5 +26,10 @@ public class ConstantSchemaNode extends SchemaNode {
     @Override
     public WriterNode asWriterNode() {
         return new ConstantWriterNode(constant);
+    }
+
+    @Override
+    protected void describe(IndentationWriter writer) {
+        writer.writeLine("ConstantNode: " + CharacterUtil.escapeCharacters(constant));
     }
 }

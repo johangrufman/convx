@@ -1,4 +1,6 @@
-<schema>
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.convx.org/schemas/1.0/fsd ../../../../main/resources/xsd/fsd.xsd"
+    xmlns="http://www.convx.org/schemas/1.0/fsd">
 
     <root name="persons">
         <element name="person" maxOccurs="unbounded">
@@ -29,12 +31,11 @@
         </element>
     </root>
 
-    <delimitedField name="field" delimiter="\n">
-        <exception character="\r"/>
-    </delimitedField>
-    
-    <constant name="firstNamePrefix" value="firstName:"/>
-    <constant name="lastNamePrefix" value="lastName:"/>
-    <constant name="agePrefix" value="age:"/>
-    <constant name="eol" value="\r"/>
+    <delimitedElement id="field" exceptions="\r\n"/>
+
+    <constantElement id="personHeader" value="[person]\n"/>
+    <constantElement id="firstNamePrefix" value="firstName:"/>
+    <constantElement id="lastNamePrefix" value="lastName:"/>
+    <constantElement id="agePrefix" value="age:"/>
+    <constantElement id="eol" value="\n"/>
 </schema>

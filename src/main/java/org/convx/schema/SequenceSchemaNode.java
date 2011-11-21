@@ -8,6 +8,7 @@ import java.util.List;
 import org.convx.reader.ConstantReaderNode;
 import org.convx.reader.ReaderNode;
 import org.convx.reader.SequenceReaderNode;
+import org.convx.util.IndentationWriter;
 import org.convx.writer.ConstantWriterNode;
 import org.convx.writer.SequenceWriterNode;
 import org.convx.writer.WriterNode;
@@ -60,10 +61,19 @@ public class SequenceSchemaNode extends SchemaNode {
         return sequenceWriterNode;
     }
 
+    @Override
+    protected void describe(IndentationWriter writer) {
+        writer.writeLine("SequenceNode  {");
+        for (SchemaNode subSchemaNode : subSchemaNodes) {
+            subSchemaNode.describe(writer);
+        }
+        writer.writeLine("}");
+    }
+
     public static class Builder {
         private SequenceSchemaNode instance;
 
-        private Builder(SchemaNode... schemaNodes) {
+        public Builder(SchemaNode... schemaNodes) {
             instance = new SequenceSchemaNode(schemaNodes);
         }
 
