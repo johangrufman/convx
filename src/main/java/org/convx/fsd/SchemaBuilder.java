@@ -2,9 +2,7 @@ package org.convx.fsd;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -34,66 +32,64 @@ public class SchemaBuilder {
             Unmarshaller unmarshaller = jc.createUnmarshaller();
             schema = (Schema) unmarshaller.unmarshal(schemaFile);
         } catch (JAXBException e) {
-            throw new RuntimeException(e);
+            throw new SchemaBuilderException(e);
         }
-        Map<String, ElementBaseType> topLevelElements = new HashMap<String, ElementBaseType>();
+        SymbolTable symbolTable = new SymbolTable();
         for (JAXBElement<? extends ElementBaseType> jaxbElement : schema.getElementBase()) {
-            ElementBaseType topLevelElement = jaxbElement.getValue();
-            topLevelElements.put(topLevelElement.getId(), topLevelElement);
+            symbolTable.add(jaxbElement.getValue());
         }
-        SchemaNode root = buildNode(schema.getRoot(), topLevelElements);
+        SchemaNode root = buildNode(schema.getRoot(), symbolTable);
         return new org.convx.schema.Schema(root);
     }
 
-    private static SchemaNode buildNode(ElementBaseType elementBaseType, Map<String, ElementBaseType> topLevelElements) {
+    private static SchemaNode buildNode(ElementBaseType elementBaseType, SymbolTable symbolTable) {
 
         SchemaNode schemaNode = null;
 
         if (elementBaseType.getRef() != null) {
-            if (!topLevelElements.containsKey(elementBaseType.getRef())) {
-                throw new RuntimeException("Unknown top level element: " + elementBaseType.getRef());
+            if (!symbolTable.containsElement(elementBaseType.getRef())) {
+                throw new SchemaBuilderException("Unknown top level element: " + elementBaseType.getRef());
             }
-            schemaNode = buildNode(topLevelElements.get(elementBaseType.getRef()), topLevelElements);
+            schemaNode = buildNode(symbolTable.get(elementBaseType.getRef()), symbolTable);
         } else {
             if (elementBaseType instanceof FixedLengthElementType) {
-                FixedLengthElementType fixedLengthElementType = (FixedLengthElementType) elementBaseType;
-                schemaNode = new FixedLengthSchemaNode(Integer.parseInt(fixedLengthElementType.getLength()));
+                schemaNode = buildFixedLengthNode((FixedLengthElementType) elementBaseType);
             }
             if (elementBaseType instanceof DelimitedElementType) {
-                DelimitedElementType delimitedElementType = (DelimitedElementType) elementBaseType;
-                List<Character> exceptions = new ArrayList<Character>();
-                for (char e : CharacterUtil.unescapeCharacters(delimitedElementType.getExceptions()).toCharArray()) {
-                    exceptions.add(e);
-                }
-                schemaNode = new DelimitedSchemaNode(exceptions.toArray(new Character[exceptions.size()]));
+                schemaNode = buildDelimitedNode((DelimitedElementType) elementBaseType);
             }
             if (elementBaseType instanceof ConstantElementType) {
-                ConstantElementType constantElementType = (ConstantElementType) elementBaseType;
-                schemaNode = new ConstantSchemaNode(CharacterUtil.unescapeCharacters(constantElementType.getValue()));
+                schemaNode = buildConstantNode((ConstantElementType) elementBaseType);
             }
             if (elementBaseType instanceof ElementType) {
-                ElementType elementType = (ElementType) elementBaseType;
-                if (elementType.getSequence() != null) {
-                    ElementType.Sequence sequence = elementType.getSequence();
-                    SequenceSchemaNode.Builder builder = new SequenceSchemaNode.Builder();
-                    for (JAXBElement<? extends ElementBaseType> subElement : sequence.getElementBase()) {
-                        builder.add(buildNode(subElement.getValue(), topLevelElements));
-                    }
-                    schemaNode = builder.build();
-                } else {
-                    schemaNode = SequenceSchemaNode.sequence(buildNode(elementType.elementBase.getValue(), topLevelElements))
-                            .build();
-                }
+                schemaNode = buildElementNode((ElementType) elementBaseType, symbolTable);
             }
         }
+        schemaNode = wrapWithNamedNode(elementBaseType, schemaNode);
+
+        schemaNode = wrapWithRepititionNode(elementBaseType, schemaNode);
+
+        return schemaNode;
+
+    }
+
+    private static SchemaNode wrapWithRepititionNode(ElementBaseType elementBaseType, SchemaNode schemaNode) {
+        int minOccurs = minOccurs(elementBaseType);
+        int maxOccurs = maxOccurs(elementBaseType);
+        if (minOccurs != 1 || maxOccurs != 1) {
+            schemaNode = new RepetitionSchemaNode(schemaNode, minOccurs, maxOccurs);
+        }
+        return schemaNode;
+    }
+
+    private static SchemaNode wrapWithNamedNode(ElementBaseType elementBaseType, SchemaNode schemaNode) {
         if (elementBaseType.getName() != null) {
             schemaNode = new NamedSchemaNode(elementBaseType.getName(), schemaNode);
         }
+        return schemaNode;
+    }
 
-        int minOccurs = 1;
-        if (elementBaseType.getMinOccurs() != null) {
-            minOccurs = elementBaseType.getMinOccurs();
-        }
+    private static int maxOccurs(ElementBaseType elementBaseType) {
         int maxOccurs = 1;
         if (elementBaseType.getMaxOccurs() != null) {
             if (elementBaseType.getMaxOccurs().equals("unbounded")) {
@@ -102,11 +98,53 @@ public class SchemaBuilder {
                 maxOccurs = Integer.parseInt(elementBaseType.getMaxOccurs());
             }
         }
-        if (minOccurs != 1 || maxOccurs != 1) {
-            schemaNode = new RepetitionSchemaNode(schemaNode, minOccurs, maxOccurs);
-        }
-
-        return schemaNode;
-
+        return maxOccurs;
     }
+
+    private static int minOccurs(ElementBaseType elementBaseType) {
+        int minOccurs = 1;
+        if (elementBaseType.getMinOccurs() != null) {
+            minOccurs = elementBaseType.getMinOccurs();
+        }
+        return minOccurs;
+    }
+
+    private static SchemaNode buildFixedLengthNode(FixedLengthElementType fixedLengthElementType) {
+        SchemaNode schemaNode;
+        schemaNode = new FixedLengthSchemaNode(Integer.parseInt(fixedLengthElementType.getLength()));
+        return schemaNode;
+    }
+
+    private static SchemaNode buildDelimitedNode(DelimitedElementType delimitedElementType) {
+        SchemaNode schemaNode;
+        List<Character> exceptions = new ArrayList<Character>();
+        for (char e : CharacterUtil.unescapeCharacters(delimitedElementType.getExceptions()).toCharArray()) {
+            exceptions.add(e);
+        }
+        schemaNode = new DelimitedSchemaNode(exceptions.toArray(new Character[exceptions.size()]));
+        return schemaNode;
+    }
+
+    private static SchemaNode buildConstantNode(ConstantElementType constantElementType) {
+        SchemaNode schemaNode;
+        schemaNode = new ConstantSchemaNode(CharacterUtil.unescapeCharacters(constantElementType.getValue()));
+        return schemaNode;
+    }
+
+    private static SchemaNode buildElementNode(ElementType elementType, SymbolTable symbolTable) {
+        SchemaNode schemaNode;
+        if (elementType.getSequence() != null) {
+            ElementType.Sequence sequence = elementType.getSequence();
+            SequenceSchemaNode.Builder builder = new SequenceSchemaNode.Builder();
+            for (JAXBElement<? extends ElementBaseType> subElement : sequence.getElementBase()) {
+                builder.add(buildNode(subElement.getValue(), symbolTable));
+            }
+            schemaNode = builder.build();
+        } else {
+            schemaNode = SequenceSchemaNode.sequence(buildNode(elementType.elementBase.getValue(), symbolTable))
+                    .build();
+        }
+        return schemaNode;
+    }
+
 }
