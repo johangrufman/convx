@@ -5,7 +5,7 @@
     <xs:element name="schema">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="root" type="fsd:ElementType"/>
+                <xs:element name="root" type="fsd:SequenceType"/>
                 <xs:element ref="fsd:elementBase" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
@@ -21,25 +21,24 @@
         <xs:attribute name="id"/>
         <xs:attribute name="minOccurs" type="xs:int"/>
         <xs:attribute name="maxOccurs" type="fsd:allNNI"/>
-        <!--<xs:attribute name="maxOccurs" type="xs:allNNI"/>-->
     </xs:complexType>
 
     <xs:element name="element" type="fsd:ElementType" substitutionGroup="fsd:elementBase"/>
     <xs:complexType name="ElementType">
         <xs:complexContent>
             <xs:extension base="fsd:ElementBaseType">
-                <xs:choice>
+
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="sequence" type="fsd:SequenceType" substitutionGroup="fsd:elementBase"/>
+    <xs:complexType name="SequenceType">
+        <xs:complexContent>
+            <xs:extension base="fsd:ElementBaseType">
                     <xs:sequence>
-                        <xs:element name="sequence">
-                            <xs:complexType>
-                                <xs:sequence>
-                                    <xs:element ref="fsd:elementBase" maxOccurs="unbounded"/>
-                                </xs:sequence>
-                            </xs:complexType>
-                        </xs:element>
+                        <xs:element ref="fsd:elementBase" maxOccurs="unbounded"/>
                     </xs:sequence>
-                    <xs:element ref="fsd:elementBase" minOccurs="0"/>
-                </xs:choice>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
@@ -86,51 +85,4 @@
         </xs:union>
     </xs:simpleType>
 
-    <!--  <xs:element name="root">
-      <xs:complexType>
-        <xs:sequence>
-          <xs:element ref="element"/>
-        </xs:sequence>
-        <xs:attribute name="name" use="required" type="xs:NCName"/>
-      </xs:complexType>
-    </xs:element>
-    <xs:element name="delimitedElement">
-      <xs:complexType>
-        <xs:attribute name="exceptions" use="required"/>
-        <xs:attribute name="id" use="required" type="xs:NCName"/>
-      </xs:complexType>
-    </xs:element>
-    <xs:element name="element">
-      <xs:complexType>
-        <xs:sequence>
-          <xs:element minOccurs="0" ref="sequence"/>
-        </xs:sequence>
-        <xs:attribute name="maxOccurs" type="xs:NCName"/>
-        <xs:attribute name="name" type="xs:NCName"/>
-        <xs:attribute name="ref" type="xs:NCName"/>
-      </xs:complexType>
-    </xs:element>
-    <xs:element name="sequence">
-      <xs:complexType>
-        <xs:choice>
-          <xs:element minOccurs="0" maxOccurs="unbounded" ref="element"/>
-          <xs:sequence>
-            <xs:element maxOccurs="unbounded" ref="fixedLengthElement"/>
-            <xs:element ref="constantElement"/>
-          </xs:sequence>
-        </xs:choice>
-      </xs:complexType>
-    </xs:element>
-    <xs:element name="fixedLengthElement">
-      <xs:complexType>
-        <xs:attribute name="length" use="required" type="xs:integer"/>
-        <xs:attribute name="name" use="required" type="xs:NCName"/>
-      </xs:complexType>
-    </xs:element>
-    <xs:element name="constantElement">
-      <xs:complexType>
-        <xs:attribute name="id" type="xs:NCName"/>
-        <xs:attribute name="value" use="required"/>
-      </xs:complexType>
-    </xs:element>-->
 </xs:schema>

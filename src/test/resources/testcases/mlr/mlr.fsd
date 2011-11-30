@@ -1,34 +1,26 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.convx.org/schemas/1.0/fsd ../../../../main/resources/xsd/fsd.xsd"
-    xmlns="http://www.convx.org/schemas/1.0/fsd">
+        xsi:schemaLocation="http://www.convx.org/schemas/1.0/fsd ../../../../main/resources/xsd/fsd.xsd"
+        xmlns="http://www.convx.org/schemas/1.0/fsd">
 
     <root name="persons">
-        <element name="person" maxOccurs="unbounded">
-            <sequence>
-                <element ref="personHeader"/>
-                <element name="firstName">
-                    <sequence>
-                        <element ref="firstNamePrefix"/>
-                        <element ref="field"/>
-                        <element ref="eol"/>
-                    </sequence>
-                </element>
-                <element name="lastName">
-                    <sequence>
-                        <element ref="lastNamePrefix"/>
-                        <element ref="field"/>
-                        <element ref="eol"/>
-                    </sequence>
-                </element>
-                <element name="age">
-                    <sequence>
-                        <element ref="agePrefix"/>
-                        <element ref="field"/>
-                        <element ref="eol"/>
-                    </sequence>
-                </element>
+        <sequence name="person" maxOccurs="unbounded">
+            <element ref="personHeader"/>
+            <sequence name="firstName">
+                <element ref="firstNamePrefix"/>
+                <element ref="field"/>
+                <element ref="eol"/>
             </sequence>
-        </element>
+            <sequence name="lastName">
+                <element ref="lastNamePrefix"/>
+                <element ref="field"/>
+                <element ref="eol"/>
+            </sequence>
+            <sequence name="age">
+                <element ref="agePrefix"/>
+                <element ref="field"/>
+                <element ref="eol"/>
+            </sequence>
+        </sequence>
     </root>
 
     <delimitedElement id="field" exceptions="\r\n"/>

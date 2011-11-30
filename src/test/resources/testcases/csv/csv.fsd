@@ -1,17 +1,15 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
- xsi:schemaLocation="http://www.convx.org/schemas/1.0/fsd ../../../../main/resources/xsd/fsd.xsd"
- xmlns="http://www.convx.org/schemas/1.0/fsd">
+        xsi:schemaLocation="http://www.convx.org/schemas/1.0/fsd ../../../../main/resources/xsd/fsd.xsd"
+        xmlns="http://www.convx.org/schemas/1.0/fsd">
     <root name="persons">
-        <element name="person" maxOccurs="unbounded">
-            <sequence>
-                <element name="firstName" ref="field"/>
-                <element ref="comma"/>
-                <element name="lastName" ref="field"/>
-                <element ref="comma"/>
-                <element name="age" ref="field"/>
-                <element ref="eol"/>
-            </sequence>
-        </element>
+        <sequence name="person" maxOccurs="unbounded">
+            <element name="firstName" ref="field"/>
+            <element ref="comma"/>
+            <element name="lastName" ref="field"/>
+            <element ref="comma"/>
+            <element name="age" ref="field"/>
+            <element ref="eol"/>
+        </sequence>
     </root>
 
     <delimitedElement id="field" exceptions="\n\r,"/>

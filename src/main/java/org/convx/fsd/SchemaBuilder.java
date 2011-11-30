@@ -61,8 +61,8 @@ public class SchemaBuilder {
             if (elementBaseType instanceof ConstantElementType) {
                 schemaNode = buildConstantNode((ConstantElementType) elementBaseType);
             }
-            if (elementBaseType instanceof ElementType) {
-                schemaNode = buildElementNode((ElementType) elementBaseType, symbolTable);
+            if (elementBaseType instanceof SequenceType) {
+                schemaNode = buildElementNode((SequenceType) elementBaseType, symbolTable);
             }
         }
         schemaNode = wrapWithNamedNode(elementBaseType, schemaNode);
@@ -131,20 +131,12 @@ public class SchemaBuilder {
         return schemaNode;
     }
 
-    private static SchemaNode buildElementNode(ElementType elementType, SymbolTable symbolTable) {
-        SchemaNode schemaNode;
-        if (elementType.getSequence() != null) {
-            ElementType.Sequence sequence = elementType.getSequence();
-            SequenceSchemaNode.Builder builder = new SequenceSchemaNode.Builder();
-            for (JAXBElement<? extends ElementBaseType> subElement : sequence.getElementBase()) {
-                builder.add(buildNode(subElement.getValue(), symbolTable));
-            }
-            schemaNode = builder.build();
-        } else {
-            schemaNode = SequenceSchemaNode.sequence(buildNode(elementType.elementBase.getValue(), symbolTable))
-                    .build();
+    private static SchemaNode buildElementNode(SequenceType sequenceElementType, SymbolTable symbolTable) {
+        SequenceSchemaNode.Builder builder = new SequenceSchemaNode.Builder();
+        for (JAXBElement<? extends ElementBaseType> subElement : sequenceElementType.getElementBase()) {
+            builder.add(buildNode(subElement.getValue(), symbolTable));
         }
-        return schemaNode;
+        return builder.build();
     }
 
 }
