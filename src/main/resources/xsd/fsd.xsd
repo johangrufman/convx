@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:fsd="http://www.convx.org/schemas/1.0/fsd"
            targetNamespace="http://www.convx.org/schemas/1.0/fsd" elementFormDefault="qualified">
-    <!--  <xs:import namespace="http://www.convx.org/schemas/1.0/fsd" schemaLocation="ns1.xsd"/>-->
+
     <xs:element name="schema">
         <xs:complexType>
             <xs:sequence>
@@ -17,7 +17,6 @@
 
         </xs:sequence>
         <xs:attribute name="name"/>
-        <xs:attribute name="ref"/>
         <xs:attribute name="id"/>
         <xs:attribute name="minOccurs" type="xs:int"/>
         <xs:attribute name="maxOccurs" type="fsd:allNNI"/>
@@ -27,7 +26,7 @@
     <xs:complexType name="ElementType">
         <xs:complexContent>
             <xs:extension base="fsd:ElementBaseType">
-
+                <xs:attribute name="ref" use="required" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

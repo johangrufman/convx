@@ -46,24 +46,28 @@ public class SchemaBuilder {
 
         SchemaNode schemaNode = null;
 
-        if (elementBaseType.getRef() != null) {
-            if (!symbolTable.containsElement(elementBaseType.getRef())) {
-                throw new SchemaBuilderException("Unknown top level element: " + elementBaseType.getRef());
+        if (elementBaseType instanceof ElementType) {
+            ElementType elementType = (ElementType) elementBaseType;
+            if (elementType.getRef() != null) {
+                if (!symbolTable.containsElement(elementType.getRef())) {
+                    throw new SchemaBuilderException("Unknown top level element: " + elementType.getRef());
+                }
+                schemaNode = buildNode(symbolTable.get(elementType.getRef()), symbolTable);
+            } else {
+                throw new SchemaBuilderException("Ref attribute required");
             }
-            schemaNode = buildNode(symbolTable.get(elementBaseType.getRef()), symbolTable);
-        } else {
-            if (elementBaseType instanceof FixedLengthElementType) {
-                schemaNode = buildFixedLengthNode((FixedLengthElementType) elementBaseType);
-            }
-            if (elementBaseType instanceof DelimitedElementType) {
-                schemaNode = buildDelimitedNode((DelimitedElementType) elementBaseType);
-            }
-            if (elementBaseType instanceof ConstantElementType) {
-                schemaNode = buildConstantNode((ConstantElementType) elementBaseType);
-            }
-            if (elementBaseType instanceof SequenceType) {
-                schemaNode = buildElementNode((SequenceType) elementBaseType, symbolTable);
-            }
+        }
+        if (elementBaseType instanceof FixedLengthElementType) {
+            schemaNode = buildFixedLengthNode((FixedLengthElementType) elementBaseType);
+        }
+        if (elementBaseType instanceof DelimitedElementType) {
+            schemaNode = buildDelimitedNode((DelimitedElementType) elementBaseType);
+        }
+        if (elementBaseType instanceof ConstantElementType) {
+            schemaNode = buildConstantNode((ConstantElementType) elementBaseType);
+        }
+        if (elementBaseType instanceof SequenceType) {
+            schemaNode = buildElementNode((SequenceType) elementBaseType, symbolTable);
         }
         schemaNode = wrapWithNamedNode(elementBaseType, schemaNode);
 
