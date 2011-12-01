@@ -35,109 +35,109 @@ public class SchemaBuilder {
             throw new SchemaBuilderException(e);
         }
         SymbolTable symbolTable = new SymbolTable();
-        for (JAXBElement<? extends ElementBaseType> jaxbElement : schema.getElementBase()) {
+        for (JAXBElement<? extends ElementBase> jaxbElement : schema.getElementBase()) {
             symbolTable.add(jaxbElement.getValue());
         }
         SchemaNode root = buildNode(schema.getRoot(), symbolTable);
         return new org.convx.schema.Schema(root);
     }
 
-    private static SchemaNode buildNode(ElementBaseType elementBaseType, SymbolTable symbolTable) {
+    private static SchemaNode buildNode(ElementBase elementBase, SymbolTable symbolTable) {
 
         SchemaNode schemaNode = null;
 
-        if (elementBaseType instanceof ElementType) {
-            ElementType elementType = (ElementType) elementBaseType;
-            if (elementType.getRef() != null) {
-                if (!symbolTable.containsElement(elementType.getRef())) {
-                    throw new SchemaBuilderException("Unknown top level element: " + elementType.getRef());
+        if (elementBase instanceof Element) {
+            Element element = (Element) elementBase;
+            if (element.getRef() != null) {
+                if (!symbolTable.containsElement(element.getRef())) {
+                    throw new SchemaBuilderException("Unknown top level element: " + element.getRef());
                 }
-                schemaNode = buildNode(symbolTable.get(elementType.getRef()), symbolTable);
+                schemaNode = buildNode(symbolTable.get(element.getRef()), symbolTable);
             } else {
                 throw new SchemaBuilderException("Ref attribute required");
             }
         }
-        if (elementBaseType instanceof FixedLengthElementType) {
-            schemaNode = buildFixedLengthNode((FixedLengthElementType) elementBaseType);
+        if (elementBase instanceof FixedField) {
+            schemaNode = buildFixedLengthNode((FixedField) elementBase);
         }
-        if (elementBaseType instanceof DelimitedElementType) {
-            schemaNode = buildDelimitedNode((DelimitedElementType) elementBaseType);
+        if (elementBase instanceof DelimitedField) {
+            schemaNode = buildDelimitedNode((DelimitedField) elementBase);
         }
-        if (elementBaseType instanceof ConstantElementType) {
-            schemaNode = buildConstantNode((ConstantElementType) elementBaseType);
+        if (elementBase instanceof Constant) {
+            schemaNode = buildConstantNode((Constant) elementBase);
         }
-        if (elementBaseType instanceof SequenceType) {
-            schemaNode = buildElementNode((SequenceType) elementBaseType, symbolTable);
+        if (elementBase instanceof Sequence) {
+            schemaNode = buildElementNode((Sequence) elementBase, symbolTable);
         }
-        schemaNode = wrapWithNamedNode(elementBaseType, schemaNode);
+        schemaNode = wrapWithNamedNode(elementBase, schemaNode);
 
-        schemaNode = wrapWithRepititionNode(elementBaseType, schemaNode);
+        schemaNode = wrapWithRepititionNode(elementBase, schemaNode);
 
         return schemaNode;
 
     }
 
-    private static SchemaNode wrapWithRepititionNode(ElementBaseType elementBaseType, SchemaNode schemaNode) {
-        int minOccurs = minOccurs(elementBaseType);
-        int maxOccurs = maxOccurs(elementBaseType);
+    private static SchemaNode wrapWithRepititionNode(ElementBase elementBase, SchemaNode schemaNode) {
+        int minOccurs = minOccurs(elementBase);
+        int maxOccurs = maxOccurs(elementBase);
         if (minOccurs != 1 || maxOccurs != 1) {
             schemaNode = new RepetitionSchemaNode(schemaNode, minOccurs, maxOccurs);
         }
         return schemaNode;
     }
 
-    private static SchemaNode wrapWithNamedNode(ElementBaseType elementBaseType, SchemaNode schemaNode) {
-        if (elementBaseType.getName() != null) {
-            schemaNode = new NamedSchemaNode(elementBaseType.getName(), schemaNode);
+    private static SchemaNode wrapWithNamedNode(ElementBase elementBase, SchemaNode schemaNode) {
+        if (elementBase.getName() != null) {
+            schemaNode = new NamedSchemaNode(elementBase.getName(), schemaNode);
         }
         return schemaNode;
     }
 
-    private static int maxOccurs(ElementBaseType elementBaseType) {
+    private static int maxOccurs(ElementBase elementBase) {
         int maxOccurs = 1;
-        if (elementBaseType.getMaxOccurs() != null) {
-            if (elementBaseType.getMaxOccurs().equals("unbounded")) {
+        if (elementBase.getMaxOccurs() != null) {
+            if (elementBase.getMaxOccurs().equals("unbounded")) {
                 maxOccurs = RepetitionSchemaNode.UNBOUNDED;
             } else {
-                maxOccurs = Integer.parseInt(elementBaseType.getMaxOccurs());
+                maxOccurs = Integer.parseInt(elementBase.getMaxOccurs());
             }
         }
         return maxOccurs;
     }
 
-    private static int minOccurs(ElementBaseType elementBaseType) {
+    private static int minOccurs(ElementBase elementBase) {
         int minOccurs = 1;
-        if (elementBaseType.getMinOccurs() != null) {
-            minOccurs = elementBaseType.getMinOccurs();
+        if (elementBase.getMinOccurs() != null) {
+            minOccurs = elementBase.getMinOccurs();
         }
         return minOccurs;
     }
 
-    private static SchemaNode buildFixedLengthNode(FixedLengthElementType fixedLengthElementType) {
+    private static SchemaNode buildFixedLengthNode(FixedField fixedLengthElement) {
         SchemaNode schemaNode;
-        schemaNode = new FixedLengthSchemaNode(Integer.parseInt(fixedLengthElementType.getLength()));
+        schemaNode = new FixedLengthSchemaNode(Integer.parseInt(fixedLengthElement.getLength()));
         return schemaNode;
     }
 
-    private static SchemaNode buildDelimitedNode(DelimitedElementType delimitedElementType) {
+    private static SchemaNode buildDelimitedNode(DelimitedField delimitedElement) {
         SchemaNode schemaNode;
         List<Character> exceptions = new ArrayList<Character>();
-        for (char e : CharacterUtil.unescapeCharacters(delimitedElementType.getExceptions()).toCharArray()) {
+        for (char e : CharacterUtil.unescapeCharacters(delimitedElement.getExceptions()).toCharArray()) {
             exceptions.add(e);
         }
         schemaNode = new DelimitedSchemaNode(exceptions.toArray(new Character[exceptions.size()]));
         return schemaNode;
     }
 
-    private static SchemaNode buildConstantNode(ConstantElementType constantElementType) {
+    private static SchemaNode buildConstantNode(Constant constantElement) {
         SchemaNode schemaNode;
-        schemaNode = new ConstantSchemaNode(CharacterUtil.unescapeCharacters(constantElementType.getValue()));
+        schemaNode = new ConstantSchemaNode(CharacterUtil.unescapeCharacters(constantElement.getValue()));
         return schemaNode;
     }
 
-    private static SchemaNode buildElementNode(SequenceType sequenceElementType, SymbolTable symbolTable) {
+    private static SchemaNode buildElementNode(Sequence sequenceElement, SymbolTable symbolTable) {
         SequenceSchemaNode.Builder builder = new SequenceSchemaNode.Builder();
-        for (JAXBElement<? extends ElementBaseType> subElement : sequenceElementType.getElementBase()) {
+        for (JAXBElement<? extends ElementBase> subElement : sequenceElement.getElementBase()) {
             builder.add(buildNode(subElement.getValue(), symbolTable));
         }
         return builder.build();

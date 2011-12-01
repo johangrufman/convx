@@ -23,11 +23,11 @@
         </sequence>
     </root>
 
-    <delimitedElement id="field" exceptions="\r\n"/>
+    <delimitedField id="field" exceptions="\r\n"/>
 
-    <constantElement id="personHeader" value="[person]\n"/>
-    <constantElement id="firstNamePrefix" value="firstName:"/>
-    <constantElement id="lastNamePrefix" value="lastName:"/>
-    <constantElement id="agePrefix" value="age:"/>
-    <constantElement id="eol" value="\n"/>
+    <constant id="personHeader" value="[person]\n"/>
+    <constant id="firstNamePrefix" value="firstName:"/>
+    <constant id="lastNamePrefix" value="lastName:"/>
+    <constant id="agePrefix" value="age:"/>
+    <constant id="eol" value="\n"/>
 </schema>

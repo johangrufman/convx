@@ -12,7 +12,7 @@
         </sequence>
     </root>
 
-    <delimitedElement id="field" exceptions="\n\r,"/>
-    <constantElement id="comma" value=","/>
-    <constantElement id="eol" value="\n"/>
+    <delimitedField id="field" exceptions="\n\r,"/>
+    <constant id="comma" value=","/>
+    <constant id="eol" value="\n"/>
 </schema>

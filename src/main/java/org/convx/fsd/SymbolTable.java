@@ -8,16 +8,16 @@ import java.util.Map;
 * @since 2011-11-24
 */
 class SymbolTable {
-    private Map<String, ElementBaseType> elements = new HashMap<String, ElementBaseType>();
+    private Map<String, ElementBase> elements = new HashMap<String, ElementBase>();
 
-    public void add(ElementBaseType element) {
+    public void add(ElementBase element) {
         if (elements.containsKey(element.getId())) {
             throw new SchemaBuilderException("Symbol table already contains element with id: " + element.getId());
         }
         elements.put(element.getId(), element);
     }
 
-    public ElementBaseType get(String id) {
+    public ElementBase get(String id) {
         return elements.get(id);
     }
 

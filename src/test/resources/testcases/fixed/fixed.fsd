@@ -4,10 +4,10 @@
 
     <root name="persons">
         <sequence name="person" maxOccurs="unbounded">
-            <fixedLengthElement name="firstName" length="15"/>
-            <fixedLengthElement name="lastName" length="15"/>
-            <fixedLengthElement name="age" length="2"/>
-            <constantElement value="\n"/>
+            <fixedField name="firstName" length="15"/>
+            <fixedField name="lastName" length="15"/>
+            <fixedField name="age" length="2"/>
+            <constant value="\n"/>
         </sequence>
     </root>
 

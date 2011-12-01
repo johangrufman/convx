@@ -5,14 +5,14 @@
     <xs:element name="schema">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="root" type="fsd:SequenceType"/>
+                <xs:element name="root" type="fsd:Sequence"/>
                 <xs:element ref="fsd:elementBase" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="elementBase" abstract="true" type="fsd:ElementBaseType"/>
-    <xs:complexType name="ElementBaseType">
+    <xs:element name="elementBase" abstract="true" type="fsd:ElementBase"/>
+    <xs:complexType name="ElementBase">
         <xs:sequence>
 
         </xs:sequence>
@@ -22,19 +22,19 @@
         <xs:attribute name="maxOccurs" type="fsd:allNNI"/>
     </xs:complexType>
 
-    <xs:element name="element" type="fsd:ElementType" substitutionGroup="fsd:elementBase"/>
-    <xs:complexType name="ElementType">
+    <xs:element name="element" type="fsd:Element" substitutionGroup="fsd:elementBase"/>
+    <xs:complexType name="Element">
         <xs:complexContent>
-            <xs:extension base="fsd:ElementBaseType">
+            <xs:extension base="fsd:ElementBase">
                 <xs:attribute name="ref" use="required" />
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:element name="sequence" type="fsd:SequenceType" substitutionGroup="fsd:elementBase"/>
-    <xs:complexType name="SequenceType">
+    <xs:element name="sequence" type="fsd:Sequence" substitutionGroup="fsd:elementBase"/>
+    <xs:complexType name="Sequence">
         <xs:complexContent>
-            <xs:extension base="fsd:ElementBaseType">
+            <xs:extension base="fsd:ElementBase">
                     <xs:sequence>
                         <xs:element ref="fsd:elementBase" maxOccurs="unbounded"/>
                     </xs:sequence>
@@ -42,28 +42,28 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:element name="delimitedElement" type="fsd:DelimitedElementType" substitutionGroup="fsd:elementBase"/>
-    <xs:complexType name="DelimitedElementType">
+    <xs:element name="delimitedField" type="fsd:DelimitedField" substitutionGroup="fsd:elementBase"/>
+    <xs:complexType name="DelimitedField">
         <xs:complexContent>
-            <xs:extension base="fsd:ElementBaseType">
+            <xs:extension base="fsd:ElementBase">
                 <xs:attribute name="exceptions"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:element name="constantElement" type="fsd:ConstantElementType" substitutionGroup="fsd:elementBase"/>
-    <xs:complexType name="ConstantElementType">
+    <xs:element name="constant" type="fsd:Constant" substitutionGroup="fsd:elementBase"/>
+    <xs:complexType name="Constant">
         <xs:complexContent>
-            <xs:extension base="fsd:ElementBaseType">
+            <xs:extension base="fsd:ElementBase">
                 <xs:attribute name="value"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:element name="fixedLengthElement" type="fsd:FixedLengthElementType" substitutionGroup="fsd:elementBase"/>
-    <xs:complexType name="FixedLengthElementType">
+    <xs:element name="fixedField" type="fsd:FixedField" substitutionGroup="fsd:elementBase"/>
+    <xs:complexType name="FixedField">
         <xs:complexContent>
-            <xs:extension base="fsd:ElementBaseType">
+            <xs:extension base="fsd:ElementBase">
                 <xs:attribute name="length"/>
             </xs:extension>
         </xs:complexContent>
