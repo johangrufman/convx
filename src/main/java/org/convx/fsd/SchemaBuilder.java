@@ -46,28 +46,25 @@ public class SchemaBuilder {
 
         SchemaNode schemaNode = null;
 
-        if (elementBase instanceof Element) {
-            Element element = (Element) elementBase;
-            if (element.getRef() != null) {
-                if (!symbolTable.containsElement(element.getRef())) {
-                    throw new SchemaBuilderException("Unknown top level element: " + element.getRef());
-                }
-                schemaNode = buildNode(symbolTable.get(element.getRef()), symbolTable);
-            } else {
-                throw new SchemaBuilderException("Ref attribute required");
+
+        if (elementBase.getRef() != null) {
+            if (!symbolTable.containsElement(elementBase.getRef())) {
+                throw new SchemaBuilderException("Unknown top level element: " + elementBase.getRef());
             }
-        }
-        if (elementBase instanceof FixedField) {
-            schemaNode = buildFixedLengthNode((FixedField) elementBase);
-        }
-        if (elementBase instanceof DelimitedField) {
-            schemaNode = buildDelimitedNode((DelimitedField) elementBase);
-        }
-        if (elementBase instanceof Constant) {
-            schemaNode = buildConstantNode((Constant) elementBase);
-        }
-        if (elementBase instanceof Sequence) {
-            schemaNode = buildElementNode((Sequence) elementBase, symbolTable);
+            schemaNode = buildNode(symbolTable.get(elementBase.getRef()), symbolTable);
+        } else {
+            if (elementBase instanceof FixedField) {
+                schemaNode = buildFixedLengthNode((FixedField) elementBase);
+            }
+            if (elementBase instanceof DelimitedField) {
+                schemaNode = buildDelimitedNode((DelimitedField) elementBase);
+            }
+            if (elementBase instanceof Constant) {
+                schemaNode = buildConstantNode((Constant) elementBase);
+            }
+            if (elementBase instanceof Sequence) {
+                schemaNode = buildElementNode((Sequence) elementBase, symbolTable);
+            }
         }
         schemaNode = wrapWithNamedNode(elementBase, schemaNode);
 

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.net.URL;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -62,6 +63,11 @@ public class TestUtil {
     }
 
     public static String getTestResource(String resource) {
-        return TestUtil.class.getResource(resource).getFile();
+        URL resourceUrl = TestUtil.class.getResource(resource);
+        if (resourceUrl != null) {
+            return resourceUrl.getFile();
+        } else {
+            throw new RuntimeException("Resource " + resource + " not found");
+        }
     }
 }

@@ -3,12 +3,12 @@
         xmlns="http://www.convx.org/schemas/1.0/fsd">
     <root name="persons">
         <sequence name="person" maxOccurs="unbounded">
-            <element name="firstName" ref="field"/>
-            <element ref="comma"/>
-            <element name="lastName" ref="field"/>
-            <element ref="comma"/>
-            <element name="age" ref="field"/>
-            <element ref="eol"/>
+            <delimitedField name="firstName" ref="field"/>
+            <constant ref="comma"/>
+            <delimitedField name="lastName" ref="field"/>
+            <constant ref="comma"/>
+            <delimitedField name="age" ref="field"/>
+            <constant ref="eol"/>
         </sequence>
     </root>
 

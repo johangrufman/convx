@@ -4,21 +4,21 @@
 
     <root name="persons">
         <sequence name="person" maxOccurs="unbounded">
-            <element ref="personHeader"/>
+            <constant ref="personHeader"/>
             <sequence name="firstName">
-                <element ref="firstNamePrefix"/>
-                <element ref="field"/>
-                <element ref="eol"/>
+                <constant ref="firstNamePrefix"/>
+                <delimitedField ref="field"/>
+                <constant ref="eol"/>
             </sequence>
             <sequence name="lastName">
-                <element ref="lastNamePrefix"/>
-                <element ref="field"/>
-                <element ref="eol"/>
+                <constant ref="lastNamePrefix"/>
+                <delimitedField ref="field"/>
+                <constant ref="eol"/>
             </sequence>
             <sequence name="age">
-                <element ref="agePrefix"/>
-                <element ref="field"/>
-                <element ref="eol"/>
+                <constant ref="agePrefix"/>
+                <delimitedField ref="field"/>
+                <constant ref="eol"/>
             </sequence>
         </sequence>
     </root>
