@@ -3,11 +3,13 @@ package org.convx.acceptance;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.regex.Pattern;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBException;
@@ -42,8 +44,6 @@ public class AcceptanceTest {
 
     private static final String TEST_CASE_FOLDER = "/testcases/";
 
-    private static final String GENERATED_XSD = "/";
-
     private String name;
 
     private File flatFile;
@@ -60,9 +60,9 @@ public class AcceptanceTest {
 
     public AcceptanceTest(String name) throws SAXException, JAXBException, TransformerException {
         this.name = name;
-        flatFile = testFile(name, ".txt");
-        xmlFile = testFile(name, ".xml");
-        schemaFile = testFile(name, ".fsd");
+        flatFile = testFile(name + ".txt");
+        xmlFile = testFile(name + ".xml");
+        schemaFile = testFile(name + ".fsd");
         flatFileSchema = SchemaBuilder.build(schemaFile);
 
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
@@ -84,10 +84,22 @@ public class AcceptanceTest {
 
 
     @Test
-    public void convertFlatFileToXml() throws IOException, XMLStreamException {
+    public void convertCanonicalFlatFileToXml() throws IOException, XMLStreamException {
+        parseFlatFileAndValidateResult(flatFile);
+    }
+
+    @Test
+    public void convertNonCanonicalFlatFilesToXml() throws IOException, XMLStreamException {
+        File testCaseFolder = new File(TestUtil.getTestResource(testCaseFolderName()));
+        for (File file : testCaseFolder.listFiles(new NonCanonicalFlatFileFilter(name))) {
+            parseFlatFileAndValidateResult(file);
+        }
+    }
+
+    private void parseFlatFileAndValidateResult(File flatFile) throws XMLStreamException, IOException {
         XMLEventReader flatFileReader = flatFileSchema.parser(new FileReader(flatFile));
         XMLEventReader xmlFileReader = XMLInputFactory.newFactory().createXMLEventReader(new FileInputStream(xmlFile));
-        assertEquals(name + "-file converted to incorrectly to xml", TestUtil.serialize(xmlFileReader), TestUtil
+        assertEquals(flatFile.getName() + " converted to incorrectly to xml", TestUtil.serialize(xmlFileReader), TestUtil
                 .serialize(flatFileReader));
     }
 
@@ -142,8 +154,23 @@ public class AcceptanceTest {
         return xmlSchemaStringWriter.toString();
     }
 
-    private File testFile(String name, String fileSuffix) {
-        return new File(TestUtil.getTestResource(TEST_CASE_FOLDER + name + "/" + name + fileSuffix));
+    private File testFile(String fileName) {
+        return new File(TestUtil.getTestResource(testCaseFolderName() + fileName));
     }
 
+    private String testCaseFolderName() {
+        return TEST_CASE_FOLDER + name + "/";
+    }
+
+    private static class NonCanonicalFlatFileFilter implements FilenameFilter {
+        private Pattern fileNamePattern;
+
+        private NonCanonicalFlatFileFilter(String name) {
+            fileNamePattern = Pattern.compile(name + "\\d\\.txt");
+        }
+
+        public boolean accept(File file, String name) {
+            return fileNamePattern.matcher(name).matches();
+        }
+    }
 }

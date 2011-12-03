@@ -111,25 +111,20 @@ public class SchemaBuilder {
     }
 
     private static SchemaNode buildFixedLengthNode(FixedField fixedLengthElement) {
-        SchemaNode schemaNode;
-        schemaNode = new FixedLengthSchemaNode(Integer.parseInt(fixedLengthElement.getLength()));
-        return schemaNode;
+        return new FixedLengthSchemaNode(Integer.parseInt(fixedLengthElement.getLength()));
     }
 
     private static SchemaNode buildDelimitedNode(DelimitedField delimitedElement) {
-        SchemaNode schemaNode;
         List<Character> exceptions = new ArrayList<Character>();
         for (char e : CharacterUtil.unescapeCharacters(delimitedElement.getExceptions()).toCharArray()) {
             exceptions.add(e);
         }
-        schemaNode = new DelimitedSchemaNode(exceptions.toArray(new Character[exceptions.size()]));
-        return schemaNode;
+        boolean doTrim = delimitedElement.isTrim() != null ? delimitedElement.isTrim() : true;
+        return new DelimitedSchemaNode(doTrim, exceptions.toArray(new Character[exceptions.size()]));
     }
 
     private static SchemaNode buildConstantNode(Constant constantElement) {
-        SchemaNode schemaNode;
-        schemaNode = new ConstantSchemaNode(CharacterUtil.unescapeCharacters(constantElement.getValue()));
-        return schemaNode;
+        return new ConstantSchemaNode(CharacterUtil.unescapeCharacters(constantElement.getValue()));
     }
 
     private static SchemaNode buildElementNode(Sequence sequenceElement, SymbolTable symbolTable) {

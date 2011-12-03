@@ -7,8 +7,6 @@ import java.util.Stack;
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.MarkupElement;
 import org.convx.reader.elements.ParsingNodeState;
-import org.convx.writer.DelimitedWriterNode;
-import org.convx.writer.WriterNode;
 
 /**
  * @author johan
@@ -17,7 +15,10 @@ import org.convx.writer.WriterNode;
 public class DelimitedReaderNode implements ReaderNode {
     Set<Character> exceptions = new HashSet<Character>();
 
-    public DelimitedReaderNode(Set<Character> exceptions) {
+    private boolean trim;
+
+    public DelimitedReaderNode(boolean trim, Set<Character> exceptions) {
+        this.trim = trim;
         this.exceptions.addAll(exceptions);
     }
 
@@ -36,7 +37,11 @@ public class DelimitedReaderNode implements ReaderNode {
     }
 
     public boolean parse(Stack<Element> parserStack, ParserContext context, ParsingNodeState state) {
-        parserStack.push(MarkupElement.characters(consume(context)));
+        String content = consume(context);
+        if (trim) {
+            content = content.trim();
+        }
+        parserStack.push(MarkupElement.characters(content));
         return true;
     }
 

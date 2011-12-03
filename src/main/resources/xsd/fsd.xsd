@@ -39,6 +39,7 @@
         <xs:complexContent>
             <xs:extension base="fsd:ElementBase">
                 <xs:attribute name="exceptions"/>
+                <xs:attribute name="trim" type="xs:boolean"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

@@ -22,13 +22,16 @@ public class DelimitedSchemaNode extends SchemaNode {
 
     private Set<Character> exceptions = new HashSet<Character>();
 
-    public DelimitedSchemaNode(Character... exceptions) {
+    private boolean trim;
+
+    public DelimitedSchemaNode(boolean trim, Character... exceptions) {
+        this.trim = trim;
         this.exceptions.addAll(Arrays.asList(exceptions));
     }
 
     @Override
     public ReaderNode asReaderNode() {
-        return new DelimitedReaderNode(exceptions);
+        return new DelimitedReaderNode(trim, exceptions);
     }
 
     @Override

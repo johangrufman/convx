@@ -1,10 +1,15 @@
 package org.convx.schema;
 
+import java.io.StringReader;
+
+import javax.xml.stream.events.Characters;
+import javax.xml.stream.events.EndDocument;
+import javax.xml.stream.events.EndElement;
+import javax.xml.stream.events.StartDocument;
+import javax.xml.stream.events.StartElement;
+
 import org.convx.reader.FlatFileParser;
 import org.junit.Test;
-
-import javax.xml.stream.events.*;
-import java.io.StringReader;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -19,7 +24,7 @@ public class FlatFileParserTest {
     public void testParseOneDelimitedField() throws Exception {
 
         String elementName = "foo";
-        Schema schema = new Schema(new NamedSchemaNode(elementName, new DelimitedSchemaNode('*')));
+        Schema schema = new Schema(new NamedSchemaNode(elementName, new DelimitedSchemaNode(true, '*')));
         FlatFileParser flatFileParser = schema.parser(new StringReader("bar*"));
 
         assertStartOfDocument(flatFileParser);
@@ -41,7 +46,7 @@ public class FlatFileParserTest {
     @Test
     public void testParseSequence() {
         String elementName = "foo";
-        DelimitedSchemaNode delimitedNode = new DelimitedSchemaNode('*');
+        DelimitedSchemaNode delimitedNode = new DelimitedSchemaNode(true, '*');
         ConstantSchemaNode constantNode = new ConstantSchemaNode("*");
         SchemaNode root = new NamedSchemaNode("baz", SequenceSchemaNode.sequence().add(new NamedSchemaNode(elementName, delimitedNode)).add(constantNode).build());
         Schema schema = new Schema(root);
