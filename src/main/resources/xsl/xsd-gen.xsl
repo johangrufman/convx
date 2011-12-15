@@ -23,7 +23,7 @@
     </xsl:template>
 
     <xsl:template match="//fsd:sequence[not(child::node()[@name])]" priority="2">
-        <xsl:variable name="fieldNode" select="fsd:delimitedField | fsd:fixedField"/>
+        <xsl:variable name="fieldNode" select="fsd:field"/>
         <xsl:choose>
             <xsl:when test="$fieldNode/@ref">
                 <xs:element name="{@name}" type="{$fieldNode/@ref}"/>
@@ -38,14 +38,14 @@
         <xs:element name="{@name}" type="{@ref}"/>
     </xsl:template>
 
-    <xsl:template match="/fsd:schema/fsd:fixedField[@id] | /fsd:schema/fsd:delimitedField[@id]">
+    <xsl:template match="/fsd:schema/fsd:field[@id]">
         <xs:simpleType name="{@id}">
             <xs:restriction base="xs:string">
             </xs:restriction>
         </xs:simpleType>
     </xsl:template>
 
-    <xsl:template match="/fsd:schema/fsd:root//fsd:fixedField | /fsd:schema/fsd:root//fsd:delimitedField">
+    <xsl:template match="/fsd:schema/fsd:root//fsd:field">
         <xs:element name="{@name}" type="xs:string"/>
     </xsl:template>
 
