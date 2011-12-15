@@ -10,10 +10,10 @@ import org.apache.commons.lang3.StringUtils;
  * @author johan
  * @since 2011-09-17
  */
-public class FixedLengthWriterNode implements WriterNode {
-    private int length;
+public class FieldWriterNode implements WriterNode {
+    private Integer length;
 
-    public FixedLengthWriterNode(int length) {
+    public FieldWriterNode(Integer length) {
         this.length = length;
     }
 
@@ -22,13 +22,13 @@ public class FixedLengthWriterNode implements WriterNode {
     }
 
     public void consumeEndElement(EndElement endElement, WriterContext context, NodeState state) {
-        context.write(((FixedLengthWriterNodeState) state).stringOfLength(length));
+        context.write(((FieldWriterNodeState) state).buildString(length));
         context.pop();
         context.consumeEndElement(endElement);
     }
 
     public void consumeCharacters(Characters characters, WriterContext context, NodeState state) {
-        ((FixedLengthWriterNodeState) state).append(characters.getData());
+        ((FieldWriterNodeState) state).append(characters.getData());
     }
 
     public boolean startsWith(StartElement startElement) {
@@ -44,13 +44,13 @@ public class FixedLengthWriterNode implements WriterNode {
     }
 
     public void init(WriterContext context) {
-        context.push(new FixedLengthWriterNodeState(this));
+        context.push(new FieldWriterNodeState(this));
     }
 
-    static class FixedLengthWriterNodeState extends NodeState {
+    static class FieldWriterNodeState extends NodeState {
         private StringBuilder stringBuilder = new StringBuilder();
 
-        private FixedLengthWriterNodeState(WriterNode writerNode) {
+        private FieldWriterNodeState(WriterNode writerNode) {
             super(writerNode);
         }
 
@@ -58,8 +58,12 @@ public class FixedLengthWriterNode implements WriterNode {
             stringBuilder.append(charSequence);
         }
 
-        public CharSequence stringOfLength(int length) {
-            return StringUtils.rightPad(stringBuilder.toString(), length, ' ');
+        public CharSequence buildString(Integer length) {
+            if (length != null) {
+                return StringUtils.rightPad(stringBuilder.toString(), length, ' ');
+            } else {
+                return stringBuilder.toString();
+            }
         }
     }
 }

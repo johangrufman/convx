@@ -9,19 +9,35 @@ import java.util.Map;
 */
 class SymbolTable {
     private Map<String, ElementBase> elements = new HashMap<String, ElementBase>();
+    private Map<String, CharacterSet> characterSets = new HashMap<String, CharacterSet>();
 
-    public void add(ElementBase element) {
+    public void addElement(ElementBase element) {
         if (elements.containsKey(element.getId())) {
             throw new SchemaBuilderException("Symbol table already contains element with id: " + element.getId());
         }
         elements.put(element.getId(), element);
     }
 
-    public ElementBase get(String id) {
+    public ElementBase getElement(String id) {
         return elements.get(id);
     }
 
     public boolean containsElement(String id) {
         return elements.containsKey(id);
+    }
+
+    public void addCharacterSet(CharacterSet characterSet) {
+        if (characterSets.containsKey(characterSet.getId())) {
+            throw new SchemaBuilderException("Symbol table already contains characterSet with id: " + characterSet.getId());
+        }
+        characterSets.put(characterSet.getId(), characterSet);
+    }
+
+    public CharacterSet getCharacterSet(String id) {
+        return characterSets.get(id);
+    }
+
+    public boolean containsCharacterSet(String id) {
+        return characterSets.containsKey(id);
     }
 }

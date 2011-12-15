@@ -40,7 +40,7 @@ public class SequenceWriterNodeTest extends AbstractWriterTest {
     @Test
     public void testNamedSequenceOfOneDelimitedNodeAndOneConstantNode() {
         SequenceWriterNode sequenceWriterNode = new SequenceWriterNode();
-        sequenceWriterNode.addSubNode(new DelimitedWriterNode());
+        sequenceWriterNode.addSubNode(new FieldWriterNode(null));
         sequenceWriterNode.addSubNode(new ConstantWriterNode("baz"));
         NamedWriterNode foo = new NamedWriterNode("foo", sequenceWriterNode);
         foo.init(context);
@@ -66,7 +66,7 @@ public class SequenceWriterNodeTest extends AbstractWriterTest {
     public void testNamedSequenceOfTwoConstantNodesAndWithOneDelimitedNodeBetween() {
         SequenceWriterNode sequenceWriterNode = new SequenceWriterNode();
         sequenceWriterNode.addSubNode(new ConstantWriterNode("baz"));
-        sequenceWriterNode.addSubNode(new DelimitedWriterNode());
+        sequenceWriterNode.addSubNode(new FieldWriterNode(null));
         sequenceWriterNode.addSubNode(new ConstantWriterNode("baz"));
         NamedWriterNode foo = new NamedWriterNode("foo", sequenceWriterNode);
         foo.init(context);

@@ -4,11 +4,14 @@
 
     <root name="persons">
         <sequence name="person" maxOccurs="unbounded">
-            <fixedField name="firstName" length="15"/>
-            <fixedField name="lastName" length="15"/>
-            <fixedField name="age" length="2"/>
+            <field name="firstName" length="15" characterSet="fieldChars"/>
+            <field name="lastName" length="15" characterSet="fieldChars"/>
+            <field name="age" length="2" characterSet="fieldChars"/>
             <constant value="\n"/>
         </sequence>
     </root>
 
+    <characterSet id="fieldChars">
+        <include predefined="ALL"/>
+    </characterSet>
 </schema>

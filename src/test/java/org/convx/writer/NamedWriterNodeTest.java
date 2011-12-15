@@ -21,14 +21,12 @@ public class NamedWriterNodeTest extends AbstractWriterTest {
 
     @Test
     public void testSimpleNamedDelimitedNode() {
-        NamedWriterNode foo = new NamedWriterNode("foo", new DelimitedWriterNode());
+        NamedWriterNode foo = new NamedWriterNode("foo", new FieldWriterNode(null));
         foo.init(context);
         pushStartElement("foo");
         assertEquals("", output());
         pushCharacters("b");
-        assertEquals("b", output());
         pushCharacters("a");
-        assertEquals("ba", output());
         pushCharacters("r");
         pushEndElement("foo");
         assertEquals("bar", output());

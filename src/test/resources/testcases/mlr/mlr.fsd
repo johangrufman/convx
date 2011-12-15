@@ -7,27 +7,38 @@
             <constant ref="personHeader"/>
             <sequence name="firstName">
                 <constant ref="firstNamePrefix"/>
-                <delimitedField ref="field"/>
+                <field ref="field"/>
                 <constant ref="eol"/>
             </sequence>
             <sequence name="lastName">
                 <constant ref="lastNamePrefix"/>
-                <delimitedField ref="field"/>
+                <field ref="field"/>
                 <constant ref="eol"/>
             </sequence>
             <sequence name="age">
                 <constant ref="agePrefix"/>
-                <delimitedField ref="field"/>
+                <field ref="field"/>
                 <constant ref="eol"/>
             </sequence>
         </sequence>
     </root>
 
-    <delimitedField id="field" exceptions="\r\n"/>
-
+    <field id="field" characterSet="fieldChars"/>
+    
     <constant id="personHeader" value="[person]\n"/>
     <constant id="firstNamePrefix" value="firstName:"/>
     <constant id="lastNamePrefix" value="lastName:"/>
     <constant id="agePrefix" value="age:"/>
     <constant id="eol" value="\n"/>
+
+    <characterSet id="eolChars">
+        <include controlChar="LINE_FEED"/>
+        <include controlChar="CARRIAGE_RETURN"/>
+    </characterSet>
+    
+    <characterSet id="fieldChars">
+        <include predefined="ALL"/>
+        <exclude set="eolChars"/>
+    </characterSet>
+
 </schema>

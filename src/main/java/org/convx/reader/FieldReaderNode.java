@@ -1,9 +1,8 @@
 package org.convx.reader;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.Stack;
 
+import org.convx.characters.CharacterSet;
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.MarkupElement;
 import org.convx.reader.elements.ParsingNodeState;
@@ -12,19 +11,26 @@ import org.convx.reader.elements.ParsingNodeState;
  * @author johan
  * @since 2011-10-29
  */
-public class DelimitedReaderNode implements ReaderNode {
-    Set<Character> exceptions = new HashSet<Character>();
+public class FieldReaderNode implements ReaderNode {
+    private CharacterSet characterSet;
+
+    private Integer length;
 
     private boolean trim;
 
-    public DelimitedReaderNode(boolean trim, Set<Character> exceptions) {
+    public FieldReaderNode(boolean trim, CharacterSet characterSet, Integer length) {
         this.trim = trim;
-        this.exceptions.addAll(exceptions);
+        this.characterSet = characterSet;
+        if (length != null) {
+            this.length = length;
+        } else {
+            this.length = Integer.MAX_VALUE;
+        }
     }
 
     public String consume(ParserContext context) {
         StringBuilder sb = new StringBuilder();
-        while (context.hasMoreCharacters() && !exceptions.contains(context.nextCharacter())) {
+        while (context.hasMoreCharacters() && characterSet.contains(context.nextCharacter()) && sb.length() < length) {
             sb.append(context.nextCharacter());
             context.advance(1);
         }
@@ -54,6 +60,6 @@ public class DelimitedReaderNode implements ReaderNode {
     }
 
     public void remove(Character character) {
-        exceptions.add(character);
+        throw new UnsupportedOperationException();
     }
 }

@@ -1,17 +1,15 @@
 package org.convx.fsd;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.convx.schema.ConstantSchemaNode;
-import org.convx.schema.DelimitedSchemaNode;
-import org.convx.schema.FixedLengthSchemaNode;
+import org.convx.schema.FieldSchemaNode;
 import org.convx.schema.NamedSchemaNode;
 import org.convx.schema.RepetitionSchemaNode;
 import org.convx.schema.SchemaNode;
@@ -36,7 +34,10 @@ public class SchemaBuilder {
         }
         SymbolTable symbolTable = new SymbolTable();
         for (JAXBElement<? extends ElementBase> jaxbElement : schema.getElementBase()) {
-            symbolTable.add(jaxbElement.getValue());
+            symbolTable.addElement(jaxbElement.getValue());
+        }
+        for (CharacterSet characterSet : schema.getCharacterSet()) {
+            symbolTable.addCharacterSet(characterSet);
         }
         SchemaNode root = buildNode(schema.getRoot(), symbolTable);
         return new org.convx.schema.Schema(root);
@@ -51,13 +52,10 @@ public class SchemaBuilder {
             if (!symbolTable.containsElement(elementBase.getRef())) {
                 throw new SchemaBuilderException("Unknown top level element: " + elementBase.getRef());
             }
-            schemaNode = buildNode(symbolTable.get(elementBase.getRef()), symbolTable);
+            schemaNode = buildNode(symbolTable.getElement(elementBase.getRef()), symbolTable);
         } else {
-            if (elementBase instanceof FixedField) {
-                schemaNode = buildFixedLengthNode((FixedField) elementBase);
-            }
-            if (elementBase instanceof DelimitedField) {
-                schemaNode = buildDelimitedNode((DelimitedField) elementBase);
+            if (elementBase instanceof Field) {
+                schemaNode = buildFieldNode((Field) elementBase, symbolTable);
             }
             if (elementBase instanceof Constant) {
                 schemaNode = buildConstantNode((Constant) elementBase);
@@ -110,17 +108,49 @@ public class SchemaBuilder {
         return minOccurs;
     }
 
-    private static SchemaNode buildFixedLengthNode(FixedField fixedLengthElement) {
-        return new FixedLengthSchemaNode(Integer.parseInt(fixedLengthElement.getLength()));
+
+    private static SchemaNode buildFieldNode(Field elementBase, SymbolTable symbolTable) {
+        boolean doTrim = elementBase.isTrim() != null ? elementBase.isTrim() : true;
+        return new FieldSchemaNode(doTrim,
+                buildCharacterSet(symbolTable.getCharacterSet(elementBase.getCharacterSet()), symbolTable),
+                elementBase.getLength());
     }
 
-    private static SchemaNode buildDelimitedNode(DelimitedField delimitedElement) {
-        List<Character> exceptions = new ArrayList<Character>();
-        for (char e : CharacterUtil.unescapeCharacters(delimitedElement.getExceptions()).toCharArray()) {
-            exceptions.add(e);
+    private static org.convx.characters.CharacterSet buildCharacterSet(CharacterSet characterSet, SymbolTable symbolTable) {
+        org.convx.characters.CharacterSet.Builder builder = org.convx.characters.CharacterSet.empty();
+        for (IncludeExclude include : characterSet.getInclude()) {
+            if (include.getChar() != null && include.getChar().length() > 0) {
+                builder.add(StringEscapeUtils.unescapeJava(include.getChar()).charAt(0));
+            } else if (include.getControlChar() != null) {
+                builder.add(toCharacter(include.getControlChar()));
+            } else if (include.getSet() != null) {
+                builder.add(buildCharacterSet(symbolTable.getCharacterSet(include.getSet()), symbolTable));
+            } else if (include.getPredefined() != null && include.getPredefined() == Predefined.ALL) {
+                builder.addAll();
+            }
         }
-        boolean doTrim = delimitedElement.isTrim() != null ? delimitedElement.isTrim() : true;
-        return new DelimitedSchemaNode(doTrim, exceptions.toArray(new Character[exceptions.size()]));
+        for (IncludeExclude exclude : characterSet.getExclude()) {
+            if (exclude.getChar() != null && exclude.getChar().length() > 0) {
+                builder.remove(StringEscapeUtils.unescapeJava(exclude.getChar()).charAt(0));
+            } else if (exclude.getControlChar() != null) {
+                builder.remove(toCharacter(exclude.getControlChar()));
+            } else if (exclude.getSet() != null) {
+                builder.remove(buildCharacterSet(symbolTable.getCharacterSet(exclude.getSet()), symbolTable));
+            }
+        }
+        return builder.build();
+    }
+
+    private static char toCharacter(ControlChar controlChar) {
+        switch (controlChar) {
+            case CARRIAGE_RETURN:
+                return '\r';
+            case LINE_FEED:
+                return '\n';
+            case TAB:
+                return '\t';
+        }
+        throw new RuntimeException("Unknown control character: " + controlChar);
     }
 
     private static SchemaNode buildConstantNode(Constant constantElement) {

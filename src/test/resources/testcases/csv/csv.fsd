@@ -3,16 +3,27 @@
         xmlns="http://www.convx.org/schemas/1.0/fsd">
     <root name="persons">
         <sequence name="person" maxOccurs="unbounded">
-            <delimitedField name="firstName" ref="field"/>
+            <field name="firstName" ref="field"/>
             <constant ref="comma"/>
-            <delimitedField name="lastName" ref="field"/>
+            <field name="lastName" ref="field"/>
             <constant ref="comma"/>
-            <delimitedField name="age" ref="field"/>
+            <field name="age" ref="field"/>
             <constant ref="eol"/>
         </sequence>
     </root>
 
-    <delimitedField id="field" exceptions="\n\r,"/>
+    <field id="field" characterSet="fieldChars"/>
     <constant id="comma" value=","/>
     <constant id="eol" value="\n"/>
+
+    <characterSet id="eolChars">
+        <include controlChar="LINE_FEED"/>
+        <include controlChar="CARRIAGE_RETURN"/>
+    </characterSet>
+
+    <characterSet id="fieldChars">
+        <include predefined="ALL"/>
+        <exclude set="eolChars"/>
+        <exclude char=","/>
+    </characterSet>
 </schema>

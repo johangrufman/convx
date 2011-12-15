@@ -7,6 +7,7 @@
             <xs:sequence>
                 <xs:element name="root" type="fsd:Sequence"/>
                 <xs:element ref="fsd:elementBase" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="fsd:characterSet" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -27,18 +28,19 @@
     <xs:complexType name="Sequence">
         <xs:complexContent>
             <xs:extension base="fsd:ElementBase">
-                    <xs:sequence>
-                        <xs:element ref="fsd:elementBase" maxOccurs="unbounded"/>
-                    </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="fsd:elementBase" maxOccurs="unbounded"/>
+                </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:element name="delimitedField" type="fsd:DelimitedField" substitutionGroup="fsd:elementBase"/>
-    <xs:complexType name="DelimitedField">
+    <xs:element name="field" type="fsd:Field" substitutionGroup="fsd:elementBase"/>
+    <xs:complexType name="Field">
         <xs:complexContent>
             <xs:extension base="fsd:ElementBase">
-                <xs:attribute name="exceptions"/>
+                <xs:attribute name="length" type="xs:int"/>
+                <xs:attribute name="characterSet"/>
                 <xs:attribute name="trim" type="xs:boolean"/>
             </xs:extension>
         </xs:complexContent>
@@ -53,14 +55,50 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <xs:element name="fixedField" type="fsd:FixedField" substitutionGroup="fsd:elementBase"/>
-    <xs:complexType name="FixedField">
+    <xs:element name="token" type="fsd:Token" substitutionGroup="fsd:elementBase"/>
+    <xs:complexType name="Token">
         <xs:complexContent>
             <xs:extension base="fsd:ElementBase">
-                <xs:attribute name="length"/>
+                <xs:attribute name="characterSet"/>
+                <xs:attribute name="output"/>
+                <xs:attribute name="minLength"/>
+                <xs:attribute name="maxLength"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
+
+    <xs:element name="characterSet" type="fsd:CharacterSet"/>
+    <xs:complexType name="CharacterSet">
+        <xs:complexContent>
+            <xs:extension base="fsd:ElementBase">
+                <xs:sequence>
+                    <xs:element name="include" type="fsd:IncludeExclude" minOccurs="0" maxOccurs="unbounded"/>
+                    <xs:element name="exclude" type="fsd:IncludeExclude" minOccurs="0" maxOccurs="unbounded"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="IncludeExclude">
+        <xs:attribute name="char"/>
+        <xs:attribute name="controlChar" type="fsd:ControlChar"/>
+        <xs:attribute name="set"/>
+        <xs:attribute name="predefined" type="fsd:Predefined"/>
+    </xs:complexType>
+
+    <xs:simpleType name="ControlChar">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="LINE_FEED"/>
+            <xs:enumeration value="CARRIAGE_RETURN"/>
+            <xs:enumeration value="TAB"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Predefined">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ALL"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:simpleType name="allNNI">
         <xs:annotation>
