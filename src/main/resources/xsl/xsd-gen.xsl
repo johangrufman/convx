@@ -45,7 +45,7 @@
         </xs:simpleType>
     </xsl:template>
 
-    <xsl:template match="/fsd:schema/fsd:root//fsd:field">
+    <xsl:template match="/fsd:schema/fsd:root//fsd:field[@name]">
         <xs:element name="{@name}" type="xs:string"/>
     </xsl:template>
 
