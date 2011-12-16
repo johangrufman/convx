@@ -8,22 +8,22 @@
             <field name="lastName" ref="field"/>
             <constant ref="comma"/>
             <field name="age" ref="field"/>
-            <constant ref="eol"/>
+            <field ref="eol"/>
         </sequence>
     </root>
 
-    <field id="field" characterSet="fieldChars"/>
+    <field id="field" characterSet="fieldCharacters"/>
+    <field id="eol" characterSet="eolCharacters" defaultOutput="\n"/>
     <constant id="comma" value=","/>
-    <constant id="eol" value="\n"/>
 
-    <characterSet id="eolChars">
+    <characterSet id="eolCharacters">
         <include controlChar="LINE_FEED"/>
         <include controlChar="CARRIAGE_RETURN"/>
     </characterSet>
 
-    <characterSet id="fieldChars">
+    <characterSet id="fieldCharacters">
         <include predefined="ALL"/>
-        <exclude set="eolChars"/>
+        <exclude set="eolCharacters"/>
         <exclude char=","/>
     </characterSet>
 </schema>

@@ -68,7 +68,14 @@ public class AcceptanceTest {
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         schemaSchema = schemaFactory.newSchema(new StreamSource(TestUtil.getTestResource("/xsd/fsd.xsd")));
 
-        xmlSchema = schemaFactory.newSchema(new StreamSource(new StringReader(transformSchema())));
+        String schemaString = transformSchema();
+        try {
+            xmlSchema = schemaFactory.newSchema(new StreamSource(new StringReader(schemaString)));
+        } catch (SAXException e) {
+            System.out.println("Error parsing generated schema:");
+            System.out.println(schemaString);
+            throw new RuntimeException(e);
+        }
     }
 
     @Parameterized.Parameters

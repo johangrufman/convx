@@ -113,7 +113,8 @@ public class SchemaBuilder {
         boolean doTrim = elementBase.isTrim() != null ? elementBase.isTrim() : true;
         return new FieldSchemaNode(doTrim,
                 buildCharacterSet(symbolTable.getCharacterSet(elementBase.getCharacterSet()), symbolTable),
-                elementBase.getLength());
+                elementBase.getLength(),
+                StringEscapeUtils.unescapeJava(elementBase.getDefaultOutput()));
     }
 
     private static org.convx.characters.CharacterSet buildCharacterSet(CharacterSet characterSet, SymbolTable symbolTable) {

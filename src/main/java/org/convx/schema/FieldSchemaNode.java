@@ -19,10 +19,13 @@ public class FieldSchemaNode extends SchemaNode {
 
     private Integer length;
 
-    public FieldSchemaNode(boolean trim, CharacterSet characterSet, Integer length) {
+    private String defaultOutput;
+
+    public FieldSchemaNode(boolean trim, CharacterSet characterSet, Integer length, String defaultOutput) {
         this.trim = trim;
         this.characterSet = characterSet;
         this.length = length;
+        this.defaultOutput = defaultOutput;
     }
 
     @Override
@@ -32,7 +35,7 @@ public class FieldSchemaNode extends SchemaNode {
 
     @Override
     public WriterNode asWriterNode() {
-        return new FieldWriterNode(length);
+        return new FieldWriterNode(length, defaultOutput);
     }
 
     @Override

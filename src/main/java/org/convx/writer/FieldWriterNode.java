@@ -13,8 +13,11 @@ import org.apache.commons.lang3.StringUtils;
 public class FieldWriterNode implements WriterNode {
     private Integer length;
 
-    public FieldWriterNode(Integer length) {
+    private String defaultOutput;
+
+    public FieldWriterNode(Integer length, String defaultOutput) {
         this.length = length;
+        this.defaultOutput = defaultOutput;
     }
 
     public void consumeStartElement(StartElement startElement, WriterContext context, NodeState state) {
@@ -40,11 +43,15 @@ public class FieldWriterNode implements WriterNode {
     }
 
     public boolean isTriggeredByEvent() {
-        return true;
+        return defaultOutput == null;
     }
 
     public void init(WriterContext context) {
-        context.push(new FieldWriterNodeState(this));
+        if (!isTriggeredByEvent()) {
+            context.write(defaultOutput);
+        } else {
+            context.push(new FieldWriterNodeState(this));
+        }
     }
 
     static class FieldWriterNodeState extends NodeState {

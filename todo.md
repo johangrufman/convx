@@ -5,6 +5,7 @@ Now
 Later
 -----
 * Improve whitespace handling/leniency
+* Improve the way character sets are defined in flat file schema (e.g local sets, order between include/exclude etc)
 * Add proper character escaping (apache commons lang)
 * Quoting
 * Add corrupt flat file to acceptance tests

@@ -34,7 +34,7 @@ public class FlatFileParserTest {
     public void testParseOneDelimitedField() throws Exception {
 
         String elementName = "foo";
-        Schema schema = new Schema(new NamedSchemaNode(elementName, new FieldSchemaNode(true, allButAsterisk, null)));
+        Schema schema = new Schema(new NamedSchemaNode(elementName, new FieldSchemaNode(true, allButAsterisk, null, null)));
         FlatFileParser flatFileParser = schema.parser(new StringReader("bar*"));
 
         assertStartOfDocument(flatFileParser);
@@ -56,7 +56,7 @@ public class FlatFileParserTest {
     @Test
     public void testParseSequence() {
         String elementName = "foo";
-        FieldSchemaNode delimitedNode = new FieldSchemaNode(true, allButAsterisk, null);
+        FieldSchemaNode delimitedNode = new FieldSchemaNode(true, allButAsterisk, null, null);
         ConstantSchemaNode constantNode = new ConstantSchemaNode("*");
         SchemaNode root = new NamedSchemaNode("baz", SequenceSchemaNode.sequence().add(new NamedSchemaNode(elementName, delimitedNode)).add(constantNode).build());
         Schema schema = new Schema(root);
