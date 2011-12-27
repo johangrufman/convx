@@ -22,8 +22,9 @@
     </characterSet>
 
     <characterSet id="fieldCharacters">
-        <include predefined="ALL"/>
+        <include characterClass="ALL"/>
         <exclude set="eolCharacters"/>
         <exclude char=","/>
     </characterSet>
+
 </schema>

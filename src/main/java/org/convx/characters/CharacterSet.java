@@ -49,6 +49,11 @@ public class CharacterSet {
             return this;
         }
 
+        public Builder removeRange(char from, char to) {
+            ranges.removeRange(from, to);
+            return this;
+        }
+
         public CharacterSet build() {
             return new CharacterSet(ranges);
         }
@@ -60,7 +65,7 @@ public class CharacterSet {
         public void remove(CharacterSet characterSet) {
             ranges.removeAll(characterSet.ranges);
         }
-
+        
         public void addAll() {
             ranges.addAllCharacters();
         }

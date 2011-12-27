@@ -70,21 +70,20 @@
 
     <xs:element name="characterSet" type="fsd:CharacterSet"/>
     <xs:complexType name="CharacterSet">
-        <xs:complexContent>
-            <xs:extension base="fsd:ElementBase">
-                <xs:sequence>
-                    <xs:element name="include" type="fsd:IncludeExclude" minOccurs="0" maxOccurs="unbounded"/>
-                    <xs:element name="exclude" type="fsd:IncludeExclude" minOccurs="0" maxOccurs="unbounded"/>
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
+        <xs:sequence>
+            <xs:element ref="fsd:includeExclude" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+        <xs:attribute name="id"/>
     </xs:complexType>
 
+    <xs:element name="includeExclude" abstract="true" type="fsd:IncludeExclude"/>
+    <xs:element name="include" type="fsd:IncludeExclude" substitutionGroup="fsd:includeExclude"/>
+    <xs:element name="exclude" type="fsd:IncludeExclude" substitutionGroup="fsd:includeExclude"/>
     <xs:complexType name="IncludeExclude">
         <xs:attribute name="char"/>
         <xs:attribute name="controlChar" type="fsd:ControlChar"/>
         <xs:attribute name="set"/>
-        <xs:attribute name="predefined" type="fsd:Predefined"/>
+        <xs:attribute name="characterClass" type="fsd:CharacterClass"/>
     </xs:complexType>
 
     <xs:simpleType name="ControlChar">
@@ -95,9 +94,10 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="Predefined">
+    <xs:simpleType name="CharacterClass">
         <xs:restriction base="xs:string">
             <xs:enumeration value="ALL"/>
+            <xs:enumeration value="DIGIT"/>
         </xs:restriction>
     </xs:simpleType>
 

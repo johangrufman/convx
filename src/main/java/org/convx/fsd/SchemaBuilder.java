@@ -119,30 +119,71 @@ public class SchemaBuilder {
 
     private static org.convx.characters.CharacterSet buildCharacterSet(CharacterSet characterSet, SymbolTable symbolTable) {
         org.convx.characters.CharacterSet.Builder builder = org.convx.characters.CharacterSet.empty();
-        for (IncludeExclude include : characterSet.getInclude()) {
-            if (include.getChar() != null && include.getChar().length() > 0) {
-                builder.add(StringEscapeUtils.unescapeJava(include.getChar()).charAt(0));
-            } else if (include.getControlChar() != null) {
-                builder.add(toCharacter(include.getControlChar()));
-            } else if (include.getSet() != null) {
-                builder.add(buildCharacterSet(symbolTable.getCharacterSet(include.getSet()), symbolTable));
-            } else if (include.getPredefined() != null && include.getPredefined() == Predefined.ALL) {
-                builder.addAll();
+        for (JAXBElement<IncludeExclude> includeExcludeElement : characterSet.getIncludeExclude()) {
+            IncludeExclude includeExclude = includeExcludeElement.getValue();
+            boolean include = includeExcludeElement.getName().getLocalPart().equals("include");
+            if (includeExclude.getChar() != null && includeExclude.getChar().length() > 0) {
+                char character = fromEscapedStringToCharacter(includeExclude.getChar());
+                modifyWithCharacter(builder, include, character);
+            } else if (includeExclude.getControlChar() != null) {
+                char character = fromControlCharEnumToCharacter(includeExclude.getControlChar());
+                modifyWithCharacter(builder, include, character);
+            } else if (includeExclude.getSet() != null) {
+                modifyWithSet(builder, include,
+                        buildCharacterSet(symbolTable.getCharacterSet(includeExclude.getSet()), symbolTable));
+            } else if (includeExclude.getCharacterClass() != null) {
+                modifyWithCharacterClass(builder, include, includeExclude.getCharacterClass());
             }
         }
-        for (IncludeExclude exclude : characterSet.getExclude()) {
-            if (exclude.getChar() != null && exclude.getChar().length() > 0) {
-                builder.remove(StringEscapeUtils.unescapeJava(exclude.getChar()).charAt(0));
-            } else if (exclude.getControlChar() != null) {
-                builder.remove(toCharacter(exclude.getControlChar()));
-            } else if (exclude.getSet() != null) {
-                builder.remove(buildCharacterSet(symbolTable.getCharacterSet(exclude.getSet()), symbolTable));
-            }
-        }
+
         return builder.build();
     }
 
-    private static char toCharacter(ControlChar controlChar) {
+    private static void modifyWithSet(org.convx.characters.CharacterSet.Builder builder, boolean include,
+                                      org.convx.characters.CharacterSet characterSet) {
+        if (include) {
+            builder.add(characterSet);
+        } else {
+            builder.remove(characterSet);
+        }
+    }
+
+    private static void modifyWithCharacter(org.convx.characters.CharacterSet.Builder builder, boolean include, char character) {
+        if (include) {
+            builder.add(character);
+        } else {
+            builder.remove(character);
+        }
+    }
+
+    private static void modifyWithCharacterClass(org.convx.characters.CharacterSet.Builder builder, boolean include,
+                                                 CharacterClass characterClass) {
+        char from, to;
+        switch (characterClass) {
+            case ALL:
+                from = Character.MIN_VALUE;
+                to = Character.MAX_VALUE;
+                break;
+            case DIGIT:
+                from = '0';
+                to = '9';
+                break;
+            default:
+                throw new RuntimeException("Unexpected character class: " + characterClass);
+        }
+        if (include) {
+            builder.addRange(from, to);
+        } else {
+            builder.removeRange(from, to);
+        }
+    }
+
+
+    static char fromEscapedStringToCharacter(String escapedString) {
+        return StringEscapeUtils.unescapeJava(escapedString).charAt(0);
+    }
+
+    private static char fromControlCharEnumToCharacter(ControlChar controlChar) {
         switch (controlChar) {
             case CARRIAGE_RETURN:
                 return '\r';

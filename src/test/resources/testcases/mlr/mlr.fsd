@@ -37,7 +37,7 @@
     </characterSet>
     
     <characterSet id="fieldChars">
-        <include predefined="ALL"/>
+        <include characterClass="ALL"/>
         <exclude set="eolChars"/>
     </characterSet>
 

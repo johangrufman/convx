@@ -12,6 +12,6 @@
     </root>
 
     <characterSet id="fieldChars">
-        <include predefined="ALL"/>
+        <include characterClass="ALL"/>
     </characterSet>
 </schema>
