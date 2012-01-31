@@ -1,5 +1,6 @@
 package org.convx.schema;
 
+import org.convx.characters.Char;
 import org.convx.characters.CharacterSet;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,7 +16,7 @@ public class CharacterSetTest {
     @Test
     public void givenEmptySetWhenOneCharacterAddedThenSetShouldContainThatCharacter() throws Exception {
         CharacterSet setWithOneCharacter = CharacterSet.empty()
-                .add('A')
+                .add(Char.valueOf('A'))
                 .build();
         assertTrue(setWithOneCharacter.contains('A'));
     }
@@ -28,14 +29,14 @@ public class CharacterSetTest {
 
     @Test
     public void aCompleteSetWithOneCharacterRemovedShouldNoLongerContainThatCharacter() throws Exception {
-        CharacterSet allCharactersButA = CharacterSet.complete().remove('A').build();
+        CharacterSet allCharactersButA = CharacterSet.complete().remove(Char.valueOf('A')).build();
         assertContainsNot(allCharactersButA, 'A');
         assertContains(allCharactersButA, 'B');
     }
 
     @Test
     public void addingCharacterRange() throws Exception {
-        CharacterSet range = CharacterSet.empty().addRange('b', 'd').build();
+        CharacterSet range = CharacterSet.empty().addRange(Char.valueOf('b'), Char.valueOf('d')).build();
         assertContains(range, 'b', 'c', 'd');
         assertContainsNot(range, 'a', 'e');
     }

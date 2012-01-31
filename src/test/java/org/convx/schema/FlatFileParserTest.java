@@ -8,6 +8,7 @@ import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartDocument;
 import javax.xml.stream.events.StartElement;
 
+import org.convx.characters.Char;
 import org.convx.characters.CharacterSet;
 import org.convx.reader.FlatFileParser;
 import org.junit.Before;
@@ -27,7 +28,7 @@ public class FlatFileParserTest {
 
     @Before
     public void setup() {
-        allButAsterisk = CharacterSet.complete().remove('*').build();
+        allButAsterisk = CharacterSet.complete().remove(Char.valueOf('*')).build();
     }
 
     @Test

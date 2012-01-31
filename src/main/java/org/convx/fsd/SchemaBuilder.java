@@ -8,6 +8,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.convx.characters.Char;
 import org.convx.schema.ConstantSchemaNode;
 import org.convx.schema.FieldSchemaNode;
 import org.convx.schema.NamedSchemaNode;
@@ -124,9 +125,9 @@ public class SchemaBuilder {
             boolean include = includeExcludeElement.getName().getLocalPart().equals("include");
             if (includeExclude.getChar() != null && includeExclude.getChar().length() > 0) {
                 char character = fromEscapedStringToCharacter(includeExclude.getChar());
-                modifyWithCharacter(builder, include, character);
+                modifyWithCharacter(builder, include, new Char(character));
             } else if (includeExclude.getControlChar() != null) {
-                char character = fromControlCharEnumToCharacter(includeExclude.getControlChar());
+                Char character = fromControlCharEnumToCharacter(includeExclude.getControlChar());
                 modifyWithCharacter(builder, include, character);
             } else if (includeExclude.getSet() != null) {
                 modifyWithSet(builder, include,
@@ -148,7 +149,7 @@ public class SchemaBuilder {
         }
     }
 
-    private static void modifyWithCharacter(org.convx.characters.CharacterSet.Builder builder, boolean include, char character) {
+    private static void modifyWithCharacter(org.convx.characters.CharacterSet.Builder builder, boolean include, Char character) {
         if (include) {
             builder.add(character);
         } else {
@@ -158,15 +159,15 @@ public class SchemaBuilder {
 
     private static void modifyWithCharacterClass(org.convx.characters.CharacterSet.Builder builder, boolean include,
                                                  CharacterClass characterClass) {
-        char from, to;
+        Char from, to;
         switch (characterClass) {
             case ALL:
-                from = Character.MIN_VALUE;
-                to = Character.MAX_VALUE;
+                from = Char.MIN_VALUE;
+                to = Char.MAX_VALUE;
                 break;
             case DIGIT:
-                from = '0';
-                to = '9';
+                from = new Char('0');
+                to = new Char('9');
                 break;
             default:
                 throw new RuntimeException("Unexpected character class: " + characterClass);
@@ -183,14 +184,16 @@ public class SchemaBuilder {
         return StringEscapeUtils.unescapeJava(escapedString).charAt(0);
     }
 
-    private static char fromControlCharEnumToCharacter(ControlChar controlChar) {
+    private static Char fromControlCharEnumToCharacter(ControlChar controlChar) {
         switch (controlChar) {
             case CARRIAGE_RETURN:
-                return '\r';
+                return new Char('\r');
             case LINE_FEED:
-                return '\n';
+                return new Char('\n');
             case TAB:
-                return '\t';
+                return new Char('\t');
+            case EOF:
+                return Char.EOF;
         }
         throw new RuntimeException("Unknown control character: " + controlChar);
     }

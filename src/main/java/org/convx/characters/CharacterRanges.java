@@ -10,15 +10,15 @@ import java.util.TreeMap;
  */
 class CharacterRanges {
 
-    private SortedMap<Character, Range> ranges = new TreeMap<Character, Range>();
+    private SortedMap<Char, Range> ranges = new TreeMap<Char, Range>();
 
     private CharacterRanges() {}
 
-    private CharacterRanges(SortedMap<Character, Range> ranges) {
+    private CharacterRanges(SortedMap<Char, Range> ranges) {
         this.ranges.putAll(ranges);
     }
 
-    public void addRange(char from, char to) {
+    public void addRange(Char from, Char to) {
         removeRangesInBetween(from, to);
         Range newRange = new Range(from, to);
         leftMerge(newRange);
@@ -43,55 +43,47 @@ class CharacterRanges {
         ranges.put(range.getFrom(), range);
     }
 
-    public void removeRange(char from, char to) {
+    public void removeRange(Char from, Char to) {
         removeRangesInBetween(from, to);
         Range range = rangeAt(from);
-        if (range != null && range.getFrom() < from) {
-            if (range.getTo() > to) {
+        if (range != null && range.getFrom().lessThan(from)) {
+            if (range.getTo().greaterThan(to)) {
                 ranges.remove(range.getFrom());
-                add(new Range(range.getFrom(), previousChar(from)));
-                add(new Range(nextChar(to), range.getTo()));
+                add(new Range(range.getFrom(), from.previous()));
+                add(new Range(to.next(), range.getTo()));
             } else {
                 ranges.remove(range.getFrom());
-                add(new Range(range.getFrom(), previousChar(from)));
+                add(new Range(range.getFrom(), from.previous()));
             }
         }
         range = rangeAt(to);
         if (range != null) {
             ranges.remove(range.getFrom());
-            add(new Range(nextChar(to), range.getTo()));
+            add(new Range(to.next(), range.getTo()));
         }
 
     }
 
-    private void removeRangesInBetween(char from, char to) {
-        SortedMap<Character, Range> between = ranges.subMap(from, nextChar(to));
+    private void removeRangesInBetween(Char from, Char to) {
+        SortedMap<Char, Range> between = ranges.subMap(from, to.next());
         for (Iterator<Range> iterator = between.values().iterator(); iterator.hasNext(); ) {
             Range range = iterator.next();
-            if (range.getTo() <= to) {
+            if (range.getTo().lessThanOrEquals(to)) {
                 iterator.remove();
             }
         }
     }
 
-    private char previousChar(char from) {
-        return (char) (from - 1);
-    }
-
     public boolean contains(char c) {
-        return rangeAt(c) != null;
+        return rangeAt(new Char(c)) != null;
     }
 
-    private Range rangeAt(char c) {
-        SortedMap<Character, Range> head = ranges.headMap(nextChar(c));
-        if (!head.isEmpty() && ranges.get(head.lastKey()).getTo() >= c) {
+    private Range rangeAt(Char c) {
+        SortedMap<Char, Range> head = ranges.headMap(c.next());
+        if (!head.isEmpty() && ranges.get(head.lastKey()).getTo().greaterThanOrEquals(c)) {
             return ranges.get(head.lastKey());
         }
         return null;
-    }
-
-    private char nextChar(char c) {
-        return (char) (c + 1);
     }
 
     @Override
@@ -109,8 +101,8 @@ class CharacterRanges {
     }
 
     private void rightMerge(Range newRange) {
-        SortedMap<Character, Range> tail = ranges.tailMap(newRange.getFrom());
-        if (!tail.isEmpty() && ranges.get(tail.firstKey()).getFrom() <= newRange.getTo() + 1) {
+        SortedMap<Char, Range> tail = ranges.tailMap(newRange.getFrom());
+        if (!tail.isEmpty() && ranges.get(tail.firstKey()).getFrom().lessThanOrEquals(newRange.getTo().next())) {
             Range overlappingRange = ranges.get(tail.firstKey());
             ranges.remove(overlappingRange.getFrom());
             newRange.merge(overlappingRange);
@@ -118,8 +110,8 @@ class CharacterRanges {
     }
 
     private void leftMerge(Range newRange) {
-        SortedMap<Character, Range> head = ranges.headMap(nextChar(newRange.getFrom()));
-        if (!head.isEmpty() && ranges.get(head.lastKey()).getTo() + 1 >= newRange.getFrom()) {
+        SortedMap<Char, Range> head = ranges.headMap(newRange.getFrom().next());
+        if (!head.isEmpty() && ranges.get(head.lastKey()).getTo().next().greaterThanOrEquals(newRange.getFrom())) {
             Range overlappingRange = ranges.get(head.lastKey());
             ranges.remove(overlappingRange.getFrom());
             newRange.merge(overlappingRange);
@@ -141,43 +133,44 @@ class CharacterRanges {
     }
 
     public void addAllCharacters() {
-        addRange(Character.MIN_VALUE, Character.MAX_VALUE);
+        addRange(Char.MIN_VALUE, Char.MAX_VALUE);
     }
 
     private static class Range {
-        private char from;
+        private Char from;
 
-        private char to;
+        private Char to;
 
-        private Range(char from, char to) {
+        private Range(Char from, Char to) {
             this.from = from;
             this.to = to;
         }
 
-        public char getFrom() {
+        public Char getFrom() {
             return from;
         }
 
-        public char getTo() {
+        public Char getTo() {
             return to;
         }
 
         public void merge(Range overlappingRange) {
-            from = min(overlappingRange.getFrom());
-            to = max(overlappingRange.getTo());
+
+            from = min(from, overlappingRange.getFrom());
+            to = max(to, overlappingRange.getTo());
         }
 
         @Override
         public String toString() {
-            return "[" + from + "-" + to + "]";
+            return "[" + from.asCharacter() + "-" + to.asCharacter() + "]";
         }
 
-        private char min(char c) {
-            return from < c ? from : c;
+        private static Char min(Char c1, Char c2) {
+            return c1.compareTo(c2) < 0 ? c1 : c2;
         }
 
-        private char max(char c) {
-            return to > c ? to : c;
+        private static Char max(Char c1, Char c2) {
+            return c1.compareTo(c2) >= 0 ? c1 : c2;
         }
     }
 

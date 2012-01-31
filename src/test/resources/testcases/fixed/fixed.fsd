@@ -7,11 +7,17 @@
             <field name="firstName" length="15" characterSet="fieldChars"/>
             <field name="lastName" length="15" characterSet="fieldChars"/>
             <field name="age" length="2" characterSet="fieldChars"/>
-            <constant value="\n"/>
+            <field characterSet="eolCharacters" defaultOutput="\n"/>
         </sequence>
     </root>
 
     <characterSet id="fieldChars">
         <include characterClass="ALL"/>
     </characterSet>
+
+    <characterSet id="eolCharacters">
+        <include controlChar="LINE_FEED"/>
+        <include controlChar="CARRIAGE_RETURN"/>
+    </characterSet>
+
 </schema>

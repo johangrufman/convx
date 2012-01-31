@@ -5,14 +5,20 @@ package org.convx.characters;
  * @since 2011-12-07
  */
 public class CharacterSet {
-    private CharacterRanges ranges;
+    private final boolean containsEOF;
+    private final CharacterRanges ranges;
 
-    private CharacterSet(CharacterRanges ranges) {
+    private CharacterSet(CharacterRanges ranges, boolean containsEOF) {
         this.ranges = ranges;
+        this.containsEOF = containsEOF;
     }
 
     public boolean contains(char c) {
         return ranges.contains(c);
+    }
+
+    public boolean containsEOF() {
+        return containsEOF;
     }
 
     public static Builder complete() {
@@ -29,33 +35,44 @@ public class CharacterSet {
 
     public static class Builder {
         private CharacterRanges ranges;
+        private boolean containsEOF;
 
         private Builder(CharacterRanges ranges) {
             this.ranges = ranges;
         }
 
-        public Builder add(char c) {
+        public Builder add(Char c) {
             ranges.addRange(c, c);
             return this;
         }
 
-        public Builder remove(char c) {
+        public Builder remove(Char c) {
             ranges.removeRange(c, c);
             return this;
         }
 
-        public Builder addRange(char from, char to) {
+        public Builder addEOF() {
+            containsEOF = true;
+            return this;
+        }
+
+        public Builder removeEOF() {
+            containsEOF = false;
+            return this;
+        }
+
+        public Builder addRange(Char from, Char to) {
             ranges.addRange(from, to);
             return this;
         }
 
-        public Builder removeRange(char from, char to) {
+        public Builder removeRange(Char from, Char to) {
             ranges.removeRange(from, to);
             return this;
         }
 
         public CharacterSet build() {
-            return new CharacterSet(ranges);
+            return new CharacterSet(ranges, containsEOF);
         }
 
         public void add(CharacterSet characterSet) {

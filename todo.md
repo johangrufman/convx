@@ -1,5 +1,6 @@
 Now
 ---
+* Add EOF-character
 
 
 Later
@@ -7,10 +8,10 @@ Later
 * Improve whitespace handling/leniency
 * Refactor SymbolTable by making ElementBase and CharacterSet implement an interface
 * Namespaces
-* Add EOF-character
 * Add proper character escaping (apache commons lang)
 * Quoting
 * Add corrupt flat file to acceptance tests
+    - For example files without EOL
 * Add more writer unit tests
 * XSL for documentation
 * Get more real world examples

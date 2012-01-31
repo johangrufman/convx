@@ -4,6 +4,7 @@ import java.util.Stack;
 
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.ParsingNodeState;
+import org.convx.util.CharacterUtil;
 
 /**
  * @author johan
@@ -29,7 +30,7 @@ public class ConstantReaderNode implements ReaderNode {
             context.advance(constant.length());
             return true;
         } else {
-            throw new RuntimeException("Unexpected input: " + context.nextCharacters());
+            throw new RuntimeException("Unexpected input: " + CharacterUtil.escapeCharacters(context.nextCharacters().toString()));
 //            return false;
         }
     }

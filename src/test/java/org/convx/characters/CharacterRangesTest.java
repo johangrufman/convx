@@ -13,6 +13,26 @@ import static org.junit.Assert.assertTrue;
  */
 public class CharacterRangesTest {
 
+    private static final Char CHAR_A = Char.valueOf('a');
+
+    private static final Char CHAR_B = Char.valueOf('b');
+
+    private static final Char CHAR_C = Char.valueOf('c');
+
+    private static final Char CHAR_D = Char.valueOf('d');
+
+    private static final Char CHAR_E = Char.valueOf('e');
+
+    private static final Char CHAR_F = Char.valueOf('f');
+
+    private static final Char CHAR_G = Char.valueOf('g');
+
+    private static final Char CHAR_H = Char.valueOf('h');
+
+    private static final Char CHAR_I = Char.valueOf('i');
+
+    private static final Char CHAR_K = Char.valueOf('k');
+
     private CharacterRanges characterRanges;
 
     @Before
@@ -22,165 +42,165 @@ public class CharacterRangesTest {
 
     @Test
     public void basicRange() throws Exception {
-        characterRanges.addRange('b', 'd');
-        assertContainsNot('a', 'e');
-        assertContains('b', 'c', 'd');
+        characterRanges.addRange(CHAR_B, CHAR_D);
+        assertContainsNot(CHAR_A, CHAR_E);
+        assertContains(CHAR_B, CHAR_C, CHAR_D);
         assertRangesEqualTo("[b-d]");
     }
 
     @Test
     public void twoRanges() {
-        characterRanges.addRange('a', 'b');
-        characterRanges.addRange('d', 'e');
-        assertContains('a', 'b', 'd', 'e');
-        assertContainsNot('c', 'f');
+        characterRanges.addRange(CHAR_A, CHAR_B);
+        characterRanges.addRange(CHAR_D, CHAR_E);
+        assertContains(CHAR_A, CHAR_B, CHAR_D, CHAR_E);
+        assertContainsNot(CHAR_C, CHAR_F);
         assertRangesEqualTo("[a-b] [d-e]");
     }
 
     @Test
     public void twoOverlappingRanges() {
-        characterRanges.addRange('a', 'b');
-        characterRanges.addRange('b', 'c');
-        assertContains('a', 'b', 'c');
-        assertContainsNot('d');
+        characterRanges.addRange(CHAR_A, CHAR_B);
+        characterRanges.addRange(CHAR_B, CHAR_C);
+        assertContains(CHAR_A, CHAR_B, CHAR_C);
+        assertContainsNot(CHAR_D);
         assertRangesEqualTo("[a-c]");
     }
 
     @Test
     public void twoOverlappingRangesWithSameFrom() {
-        characterRanges.addRange('a', 'b');
-        characterRanges.addRange('a', 'c');
-        assertContains('a', 'b', 'c');
-        assertContainsNot('d');
+        characterRanges.addRange(CHAR_A, CHAR_B);
+        characterRanges.addRange(CHAR_A, CHAR_C);
+        assertContains(CHAR_A, CHAR_B, CHAR_C);
+        assertContainsNot(CHAR_D);
         assertRangesEqualTo("[a-c]");
     }
 
     @Test
     public void twoOverlappingRangesWithSameFromInReverseOrder() {
-        characterRanges.addRange('a', 'c');
-        characterRanges.addRange('a', 'b');
-        assertContains('a', 'b', 'c');
-        assertContainsNot('d');
+        characterRanges.addRange(CHAR_A, CHAR_C);
+        characterRanges.addRange(CHAR_A, CHAR_B);
+        assertContains(CHAR_A, CHAR_B, CHAR_C);
+        assertContainsNot(CHAR_D);
         assertRangesEqualTo("[a-c]");
     }
 
     @Test
     public void twoNonOverlappingButAdjacentRangesShouldBeMerged() throws Exception {
-        characterRanges.addRange('a', 'b');
-        characterRanges.addRange('c', 'd');
+        characterRanges.addRange(CHAR_A, CHAR_B);
+        characterRanges.addRange(CHAR_C, CHAR_D);
         assertRangesEqualTo("[a-d]");
     }
 
     @Test
     public void twoMoreNonOverlappingButAdjacentRangesShouldBeMerged() throws Exception {
-        characterRanges.addRange('c', 'd');
-        characterRanges.addRange('a', 'b');
+        characterRanges.addRange(CHAR_C, CHAR_D);
+        characterRanges.addRange(CHAR_A, CHAR_B);
         assertRangesEqualTo("[a-d]");
     }
 
     @Test
     public void twoExistingRangesGetMergedByThird() {
-        characterRanges.addRange('a', 'b');
-        characterRanges.addRange('d', 'e');
+        characterRanges.addRange(CHAR_A, CHAR_B);
+        characterRanges.addRange(CHAR_D, CHAR_E);
         assertRangesEqualTo("[a-b] [d-e]");
-        characterRanges.addRange('b', 'd');
+        characterRanges.addRange(CHAR_B, CHAR_D);
         assertRangesEqualTo("[a-e]");
     }
 
     @Test
     public void threeExistingRangesAffectedWhenFourthAdded() {
-        characterRanges.addRange('a', 'b');
-        characterRanges.addRange('d', 'e');
-        characterRanges.addRange('g', 'h');
+        characterRanges.addRange(CHAR_A, CHAR_B);
+        characterRanges.addRange(CHAR_D, CHAR_E);
+        characterRanges.addRange(CHAR_G, CHAR_H);
         assertRangesEqualTo("[a-b] [d-e] [g-h]");
-        characterRanges.addRange('b', 'g');
+        characterRanges.addRange(CHAR_B, CHAR_G);
         assertRangesEqualTo("[a-h]");
     }
 
     @Test
     public void rangedRemovedInTheMiddle() {
-        characterRanges.addRange('a', 'f');
+        characterRanges.addRange(CHAR_A, CHAR_F);
         assertRangesEqualTo("[a-f]");
-        characterRanges.removeRange('c', 'd');
+        characterRanges.removeRange(CHAR_C, CHAR_D);
         assertRangesEqualTo("[a-b] [e-f]");
     }
 
     @Test
     public void rangeRemovedFromTheEnd() throws Exception {
-        characterRanges.addRange('a', 'd');
+        characterRanges.addRange(CHAR_A, CHAR_D);
         assertRangesEqualTo("[a-d]");
-        characterRanges.removeRange('c', 'e');
+        characterRanges.removeRange(CHAR_C, CHAR_E);
         assertRangesEqualTo("[a-b]");
     }
 
     @Test
     public void rangeRemovedFromTheStart() throws Exception {
-        characterRanges.addRange('d', 'f');
+        characterRanges.addRange(CHAR_D, CHAR_F);
         assertRangesEqualTo("[d-f]");
-        characterRanges.removeRange('a', 'd');
+        characterRanges.removeRange(CHAR_A, CHAR_D);
         assertRangesEqualTo("[e-f]");
     }
 
     @Test
     public void prefixRangeRemoved() throws Exception {
-        characterRanges.addRange('c', 'f');
+        characterRanges.addRange(CHAR_C, CHAR_F);
         assertRangesEqualTo("[c-f]");
-        characterRanges.removeRange('c', 'd');
+        characterRanges.removeRange(CHAR_C, CHAR_D);
         assertRangesEqualTo("[e-f]");
     }
 
     @Test
     public void prefixRangeRemoveAll() throws Exception {
-        characterRanges.addRange('a', 'c');
+        characterRanges.addRange(CHAR_A, CHAR_C);
         assertRangesEqualTo("[a-c]");
-        characterRanges.removeRange('a', 'd');
+        characterRanges.removeRange(CHAR_A, CHAR_D);
         assertRangesEqualTo("");
     }
 
     @Test
     public void suffixRangeRemoved() throws Exception {
-        characterRanges.addRange('a', 'f');
+        characterRanges.addRange(CHAR_A, CHAR_F);
         assertRangesEqualTo("[a-f]");
-        characterRanges.removeRange('d', 'f');
+        characterRanges.removeRange(CHAR_D, CHAR_F);
         assertRangesEqualTo("[a-c]");
     }
 
     @Test
     public void suffixRangeRemoveAll() throws Exception {
-        characterRanges.addRange('d', 'f');
+        characterRanges.addRange(CHAR_D, CHAR_F);
         assertRangesEqualTo("[d-f]");
-        characterRanges.removeRange('a', 'f');
+        characterRanges.removeRange(CHAR_A, CHAR_F);
         assertRangesEqualTo("");
     }
 
     @Test
     public void rangeRemovedAffectingTwoExisting() throws Exception {
-        characterRanges.addRange('a', 'c');
-        characterRanges.addRange('e', 'g');
+        characterRanges.addRange(CHAR_A, CHAR_C);
+        characterRanges.addRange(CHAR_E, CHAR_G);
         assertRangesEqualTo("[a-c] [e-g]");
-        characterRanges.removeRange('c', 'e');
+        characterRanges.removeRange(CHAR_C, CHAR_E);
         assertRangesEqualTo("[a-b] [f-g]");
     }
 
     @Test
     public void rangeRemovedAffectingThreeExisting() throws Exception {
-        characterRanges.addRange('a', 'c');
-        characterRanges.addRange('e', 'g');
-        characterRanges.addRange('i', 'k');
+        characterRanges.addRange(CHAR_A, CHAR_C);
+        characterRanges.addRange(CHAR_E, CHAR_G);
+        characterRanges.addRange(CHAR_I, CHAR_K);
         assertRangesEqualTo("[a-c] [e-g] [i-k]");
-        characterRanges.removeRange('c', 'i');
+        characterRanges.removeRange(CHAR_C, CHAR_I);
         assertRangesEqualTo("[a-b] [j-k]");
     }
 
-    private void assertContains(char... chars) {
-        for (char c : chars) {
-            assertTrue("Should contain " + c, characterRanges.contains(c));
+    private void assertContains(Char... chars) {
+        for (Char c : chars) {
+            assertTrue("Should contain " + c, characterRanges.contains(c.asCharacter()));
         }
     }
 
-    private void assertContainsNot(char... chars) {
-        for (char c : chars) {
-            assertFalse("Should not contain " + c, characterRanges.contains(c));
+    private void assertContainsNot(Char... chars) {
+        for (Char c : chars) {
+            assertFalse("Should not contain " + c, characterRanges.contains(c.asCharacter()));
         }
     }
 
