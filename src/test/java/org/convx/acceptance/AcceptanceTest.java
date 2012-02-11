@@ -4,8 +4,6 @@ import org.convx.fsd.SchemaBuilder;
 import org.convx.schema.Schema;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
@@ -21,8 +19,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.regex.Pattern;
 
 import static junit.framework.Assert.assertEquals;
@@ -32,8 +28,8 @@ import static junit.framework.Assert.assertEquals;
  * @since 2011-10-30
  */
 
-@RunWith(Parameterized.class)
-public class AcceptanceTest {
+//@RunWith(Parameterized.class)
+public abstract class AcceptanceTest {
 
     private static final String TEST_CASE_FOLDER = "/testcases/";
 
@@ -76,16 +72,16 @@ public class AcceptanceTest {
         }
     }
 
-    @Parameterized.Parameters
-    public static Collection<Object[]> testCaseNames() {
-        File testCaseFolder = new File(TestUtil.getTestResource(TEST_CASE_FOLDER));
-        Collection<Object[]> testCaseNames = new ArrayList<Object[]>();
-        for (String subFolder : testCaseFolder.list()) {
-            testCaseNames.add(new Object[] {subFolder});
-        }
-
-        return testCaseNames;
-    }
+//    @Parameterized.Parameters
+//    public static Collection<Object[]> testCaseNames() {
+//        File testCaseFolder = new File(TestUtil.getTestResource(TEST_CASE_FOLDER));
+//        Collection<Object[]> testCaseNames = new ArrayList<Object[]>();
+//        for (String subFolder : testCaseFolder.list()) {
+//            testCaseNames.add(new Object[] {subFolder});
+//        }
+//
+//        return testCaseNames;
+//    }
 
 
     @Test
