@@ -1,11 +1,11 @@
 package org.convx.schema;
 
 
-import java.io.StringWriter;
-
 import org.convx.reader.ReaderNode;
 import org.convx.util.IndentationWriter;
 import org.convx.writer.WriterNode;
+
+import java.io.StringWriter;
 
 /**
  * @author johan

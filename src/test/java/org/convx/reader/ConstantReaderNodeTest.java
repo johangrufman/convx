@@ -1,10 +1,10 @@
 package org.convx.reader;
 
-import java.io.StringReader;
-import java.util.Stack;
-
 import org.convx.reader.elements.Element;
 import org.junit.Test;
+
+import java.io.StringReader;
+import java.util.Stack;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;

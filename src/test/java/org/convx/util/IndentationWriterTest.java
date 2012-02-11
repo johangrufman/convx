@@ -1,9 +1,9 @@
 package org.convx.util;
 
-import java.io.StringWriter;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import java.io.StringWriter;
 
 import static org.junit.Assert.assertEquals;
 

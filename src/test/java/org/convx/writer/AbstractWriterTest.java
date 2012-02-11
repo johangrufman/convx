@@ -1,14 +1,11 @@
 package org.convx.writer;
 
-import java.io.StringWriter;
+import org.junit.Before;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.XMLEventFactory;
-import javax.xml.stream.events.Characters;
-import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
-
-import org.junit.Before;
+import java.io.StringWriter;
 
 /**
  * @author johan

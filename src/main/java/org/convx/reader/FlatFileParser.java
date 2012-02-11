@@ -1,17 +1,16 @@
 package org.convx.reader;
 
-import java.io.Reader;
-import java.util.NoSuchElementException;
-import java.util.Stack;
-
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.events.XMLEvent;
-
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.MarkupElement;
 import org.convx.reader.elements.NodeElement;
 import org.convx.schema.Schema;
+
+import javax.xml.stream.XMLEventReader;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.XMLEvent;
+import java.io.Reader;
+import java.util.NoSuchElementException;
+import java.util.Stack;
 
 /**
  * @author johan

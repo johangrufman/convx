@@ -1,6 +1,6 @@
 package org.convx.writer;
 
-import java.io.Writer;
+import org.convx.schema.Schema;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLEventReader;
@@ -10,8 +10,7 @@ import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
-
-import org.convx.schema.Schema;
+import java.io.Writer;
 
 /**
  * @author johan

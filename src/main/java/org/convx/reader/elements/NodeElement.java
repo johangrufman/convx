@@ -1,9 +1,9 @@
 package org.convx.reader.elements;
 
-import java.util.Stack;
-
 import org.convx.reader.ParserContext;
 import org.convx.reader.ReaderNode;
+
+import java.util.Stack;
 
 /**
  * @author johan

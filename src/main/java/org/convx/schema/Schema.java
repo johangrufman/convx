@@ -1,10 +1,10 @@
 package org.convx.schema;
 
-import java.io.Reader;
-import java.io.Writer;
-
 import org.convx.reader.FlatFileParser;
 import org.convx.writer.FlatFileWriter;
+
+import java.io.Reader;
+import java.io.Writer;
 
 /**
  * @author johan

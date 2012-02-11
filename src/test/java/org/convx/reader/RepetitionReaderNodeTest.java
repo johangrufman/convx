@@ -1,13 +1,7 @@
 package org.convx.reader;
 
-import org.convx.reader.ConstantReaderNode;
-import org.convx.reader.ParserContext;
-import org.convx.reader.ReaderNode;
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.NodeElement;
-import org.convx.schema.ConstantSchemaNode;
-import org.convx.schema.RepetitionSchemaNode;
-import org.convx.schema.SchemaNode;
 import org.junit.Before;
 import org.junit.Test;
 

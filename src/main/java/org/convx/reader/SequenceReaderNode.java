@@ -1,13 +1,13 @@
 package org.convx.reader;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Stack;
-
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.NodeElement;
 import org.convx.reader.elements.ParsingNodeState;
 import org.convx.util.CollectionUtil;
+
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Stack;
 
 /**
  * @author johan

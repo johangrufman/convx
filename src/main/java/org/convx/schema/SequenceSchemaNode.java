@@ -1,10 +1,5 @@
 package org.convx.schema;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
-
 import org.convx.reader.ConstantReaderNode;
 import org.convx.reader.ReaderNode;
 import org.convx.reader.SequenceReaderNode;
@@ -12,6 +7,11 @@ import org.convx.util.IndentationWriter;
 import org.convx.writer.ConstantWriterNode;
 import org.convx.writer.SequenceWriterNode;
 import org.convx.writer.WriterNode;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author johan

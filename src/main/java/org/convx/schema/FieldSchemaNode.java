@@ -1,6 +1,6 @@
 package org.convx.schema;
 
-import org.convx.characters.CharacterSet;
+import com.ibm.icu.text.UnicodeSet;
 import org.convx.reader.FieldReaderNode;
 import org.convx.reader.ReaderNode;
 import org.convx.util.IndentationWriter;
@@ -15,13 +15,13 @@ public class FieldSchemaNode extends SchemaNode {
 
     private boolean trim;
 
-    private CharacterSet characterSet;
+    private UnicodeSet characterSet;
 
     private Integer length;
 
     private String defaultOutput;
 
-    public FieldSchemaNode(boolean trim, CharacterSet characterSet, Integer length, String defaultOutput) {
+    public FieldSchemaNode(boolean trim, UnicodeSet characterSet, Integer length, String defaultOutput) {
         this.trim = trim;
         this.characterSet = characterSet;
         this.length = length;

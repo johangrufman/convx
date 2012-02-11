@@ -1,11 +1,10 @@
 package org.convx.writer;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author johan

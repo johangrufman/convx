@@ -12,19 +12,8 @@
         </sequence>
     </root>
 
-    <field id="field" characterSet="fieldCharacters"/>
-    <field id="eol" characterSet="eolCharacters" defaultOutput="\n"/>
+    <field id="field" characterSet="^,\n\r"/>
+    <field id="eol" characterSet="\n\r" defaultOutput="\n"/>
     <constant id="comma" value=","/>
-
-    <characterSet id="eolCharacters">
-        <include controlChar="LINE_FEED"/>
-        <include controlChar="CARRIAGE_RETURN"/>
-    </characterSet>
-
-    <characterSet id="fieldCharacters">
-        <include characterClass="ALL"/>
-        <exclude set="eolCharacters"/>
-        <exclude char=","/>
-    </characterSet>
 
 </schema>

@@ -1,6 +1,5 @@
 package org.convx.reader;
 
-import org.convx.reader.ParserContext;
 import org.junit.Before;
 import org.junit.Test;
 

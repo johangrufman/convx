@@ -1,10 +1,10 @@
 package org.convx.reader;
 
-import java.util.Stack;
-
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.MarkupElement;
 import org.convx.reader.elements.ParsingNodeState;
+
+import java.util.Stack;
 
 /**
  * @author johan

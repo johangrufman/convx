@@ -1,24 +1,24 @@
 package org.convx.reader;
 
-import java.util.Stack;
-
-import org.convx.characters.CharacterSet;
+import com.ibm.icu.text.UnicodeSet;
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.MarkupElement;
 import org.convx.reader.elements.ParsingNodeState;
+
+import java.util.Stack;
 
 /**
  * @author johan
  * @since 2011-10-29
  */
 public class FieldReaderNode implements ReaderNode {
-    private CharacterSet characterSet;
+    private UnicodeSet characterSet;
 
     private Integer length;
 
     private boolean trim;
 
-    public FieldReaderNode(boolean trim, CharacterSet characterSet, Integer length) {
+    public FieldReaderNode(boolean trim, UnicodeSet characterSet, Integer length) {
         this.trim = trim;
         this.characterSet = characterSet;
         if (length != null) {

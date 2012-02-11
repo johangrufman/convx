@@ -1,12 +1,11 @@
 package org.convx.writer;
 
-import java.io.IOException;
-import java.io.Writer;
-import java.util.Stack;
-
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
+import java.io.IOException;
+import java.io.Writer;
+import java.util.Stack;
 
 /**
  * @author johan

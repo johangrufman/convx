@@ -3,8 +3,6 @@ package org.convx.util;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-import org.convx.reader.ReaderNode;
-
 /**
  * @author johan
  * @since 2011-10-31

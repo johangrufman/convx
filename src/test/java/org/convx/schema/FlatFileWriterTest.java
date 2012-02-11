@@ -1,13 +1,12 @@
 package org.convx.schema;
 
-import java.io.ByteArrayInputStream;
-import java.io.StringWriter;
+import org.junit.Test;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamException;
-
-import org.junit.Test;
+import java.io.ByteArrayInputStream;
+import java.io.StringWriter;
 
 import static junit.framework.Assert.assertEquals;
 

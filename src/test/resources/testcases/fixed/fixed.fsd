@@ -4,20 +4,11 @@
 
     <root name="persons">
         <sequence name="person" maxOccurs="unbounded">
-            <field name="firstName" length="15" characterSet="fieldChars"/>
-            <field name="lastName" length="15" characterSet="fieldChars"/>
-            <field name="age" length="2" characterSet="fieldChars"/>
-            <field characterSet="eolCharacters" defaultOutput="\n"/>
+            <field name="firstName" length="15"/>
+            <field name="lastName" length="15"/>
+            <field name="age" length="2"/>
+            <field characterSet="\n\r" defaultOutput="\n"/>
         </sequence>
     </root>
-
-    <characterSet id="fieldChars">
-        <include characterClass="ALL"/>
-    </characterSet>
-
-    <characterSet id="eolCharacters">
-        <include controlChar="LINE_FEED"/>
-        <include controlChar="CARRIAGE_RETURN"/>
-    </characterSet>
 
 </schema>

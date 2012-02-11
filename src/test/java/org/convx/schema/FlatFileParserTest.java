@@ -1,22 +1,14 @@
 package org.convx.schema;
 
-import java.io.StringReader;
-
-import javax.xml.stream.events.Characters;
-import javax.xml.stream.events.EndDocument;
-import javax.xml.stream.events.EndElement;
-import javax.xml.stream.events.StartDocument;
-import javax.xml.stream.events.StartElement;
-
-import org.convx.characters.Char;
-import org.convx.characters.CharacterSet;
+import com.ibm.icu.text.UnicodeSet;
 import org.convx.reader.FlatFileParser;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import javax.xml.stream.events.*;
+import java.io.StringReader;
+
+import static org.junit.Assert.*;
 
 /**
  * @author johan
@@ -24,11 +16,11 @@ import static org.junit.Assert.assertTrue;
  */
 public class FlatFileParserTest {
 
-    private CharacterSet allButAsterisk;
+    private UnicodeSet allButAsterisk;
 
     @Before
     public void setup() {
-        allButAsterisk = CharacterSet.complete().remove(Char.valueOf('*')).build();
+        allButAsterisk = new UnicodeSet("[^*]");
     }
 
     @Test

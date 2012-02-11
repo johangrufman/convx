@@ -1,10 +1,10 @@
 package org.convx.util;
 
+import org.junit.Test;
+
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
-
-import org.junit.Test;
 
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

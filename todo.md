@@ -1,7 +1,8 @@
 Now
 ---
-* Add EOF-character
-
+* Introduce ICU4J
+    * UnicodeSet
+    * Line
 
 Later
 -----
@@ -23,3 +24,4 @@ Done
 ----
 * Introduce character sets and use in new field node
 * Improve the way character sets are defined in flat file schema (order between include/exclude etc)
+* Add EOF-character

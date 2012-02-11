@@ -1,10 +1,10 @@
 package org.convx.writer;
 
+import org.apache.commons.lang3.StringUtils;
+
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
 import javax.xml.stream.events.StartElement;
-
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author johan

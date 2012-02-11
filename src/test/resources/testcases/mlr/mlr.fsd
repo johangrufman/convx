@@ -23,22 +23,12 @@
         </sequence>
     </root>
 
-    <field id="field" characterSet="fieldChars"/>
+    <field id="field" characterSet="^\n\r"/>
     
     <constant id="personHeader" value="[person]\n"/>
     <constant id="firstNamePrefix" value="firstName:"/>
     <constant id="lastNamePrefix" value="lastName:"/>
     <constant id="agePrefix" value="age:"/>
     <constant id="eol" value="\n"/>
-
-    <characterSet id="eolChars">
-        <include controlChar="LINE_FEED"/>
-        <include controlChar="CARRIAGE_RETURN"/>
-    </characterSet>
-    
-    <characterSet id="fieldChars">
-        <include characterClass="ALL"/>
-        <exclude set="eolChars"/>
-    </characterSet>
 
 </schema>

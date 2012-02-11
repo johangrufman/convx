@@ -1,21 +1,15 @@
 package org.convx.fsd;
 
-import java.io.File;
+import com.ibm.icu.text.UnicodeSet;
+import org.apache.commons.lang3.StringEscapeUtils;
+import org.convx.schema.*;
+import org.convx.util.CharacterUtil;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-
-import org.apache.commons.lang3.StringEscapeUtils;
-import org.convx.characters.Char;
-import org.convx.schema.ConstantSchemaNode;
-import org.convx.schema.FieldSchemaNode;
-import org.convx.schema.NamedSchemaNode;
-import org.convx.schema.RepetitionSchemaNode;
-import org.convx.schema.SchemaNode;
-import org.convx.schema.SequenceSchemaNode;
-import org.convx.util.CharacterUtil;
+import java.io.File;
 
 /**
  * @author johan
@@ -37,9 +31,6 @@ public class SchemaBuilder {
         for (JAXBElement<? extends ElementBase> jaxbElement : schema.getElementBase()) {
             symbolTable.addElement(jaxbElement.getValue());
         }
-        for (CharacterSet characterSet : schema.getCharacterSet()) {
-            symbolTable.addCharacterSet(characterSet);
-        }
         SchemaNode root = buildNode(schema.getRoot(), symbolTable);
         return new org.convx.schema.Schema(root);
     }
@@ -56,7 +47,7 @@ public class SchemaBuilder {
             schemaNode = buildNode(symbolTable.getElement(elementBase.getRef()), symbolTable);
         } else {
             if (elementBase instanceof Field) {
-                schemaNode = buildFieldNode((Field) elementBase, symbolTable);
+                schemaNode = buildFieldNode((Field) elementBase);
             }
             if (elementBase instanceof Constant) {
                 schemaNode = buildConstantNode((Constant) elementBase);
@@ -67,13 +58,13 @@ public class SchemaBuilder {
         }
         schemaNode = wrapWithNamedNode(elementBase, schemaNode);
 
-        schemaNode = wrapWithRepititionNode(elementBase, schemaNode);
+        schemaNode = wrapWithRepetitionNode(elementBase, schemaNode);
 
         return schemaNode;
 
     }
 
-    private static SchemaNode wrapWithRepititionNode(ElementBase elementBase, SchemaNode schemaNode) {
+    private static SchemaNode wrapWithRepetitionNode(ElementBase elementBase, SchemaNode schemaNode) {
         int minOccurs = minOccurs(elementBase);
         int maxOccurs = maxOccurs(elementBase);
         if (minOccurs != 1 || maxOccurs != 1) {
@@ -110,92 +101,17 @@ public class SchemaBuilder {
     }
 
 
-    private static SchemaNode buildFieldNode(Field elementBase, SymbolTable symbolTable) {
+    private static SchemaNode buildFieldNode(Field elementBase) {
         boolean doTrim = elementBase.isTrim() != null ? elementBase.isTrim() : true;
+        String characterSet = elementBase.getCharacterSet() == null ? "^" : elementBase.getCharacterSet();
         return new FieldSchemaNode(doTrim,
-                buildCharacterSet(symbolTable.getCharacterSet(elementBase.getCharacterSet()), symbolTable),
+                new UnicodeSet("[" + characterSet + "]"),
                 elementBase.getLength(),
                 StringEscapeUtils.unescapeJava(elementBase.getDefaultOutput()));
     }
 
-    private static org.convx.characters.CharacterSet buildCharacterSet(CharacterSet characterSet, SymbolTable symbolTable) {
-        org.convx.characters.CharacterSet.Builder builder = org.convx.characters.CharacterSet.empty();
-        for (JAXBElement<IncludeExclude> includeExcludeElement : characterSet.getIncludeExclude()) {
-            IncludeExclude includeExclude = includeExcludeElement.getValue();
-            boolean include = includeExcludeElement.getName().getLocalPart().equals("include");
-            if (includeExclude.getChar() != null && includeExclude.getChar().length() > 0) {
-                char character = fromEscapedStringToCharacter(includeExclude.getChar());
-                modifyWithCharacter(builder, include, new Char(character));
-            } else if (includeExclude.getControlChar() != null) {
-                Char character = fromControlCharEnumToCharacter(includeExclude.getControlChar());
-                modifyWithCharacter(builder, include, character);
-            } else if (includeExclude.getSet() != null) {
-                modifyWithSet(builder, include,
-                        buildCharacterSet(symbolTable.getCharacterSet(includeExclude.getSet()), symbolTable));
-            } else if (includeExclude.getCharacterClass() != null) {
-                modifyWithCharacterClass(builder, include, includeExclude.getCharacterClass());
-            }
-        }
-
-        return builder.build();
-    }
-
-    private static void modifyWithSet(org.convx.characters.CharacterSet.Builder builder, boolean include,
-                                      org.convx.characters.CharacterSet characterSet) {
-        if (include) {
-            builder.add(characterSet);
-        } else {
-            builder.remove(characterSet);
-        }
-    }
-
-    private static void modifyWithCharacter(org.convx.characters.CharacterSet.Builder builder, boolean include, Char character) {
-        if (include) {
-            builder.add(character);
-        } else {
-            builder.remove(character);
-        }
-    }
-
-    private static void modifyWithCharacterClass(org.convx.characters.CharacterSet.Builder builder, boolean include,
-                                                 CharacterClass characterClass) {
-        Char from, to;
-        switch (characterClass) {
-            case ALL:
-                from = Char.MIN_VALUE;
-                to = Char.MAX_VALUE;
-                break;
-            case DIGIT:
-                from = new Char('0');
-                to = new Char('9');
-                break;
-            default:
-                throw new RuntimeException("Unexpected character class: " + characterClass);
-        }
-        if (include) {
-            builder.addRange(from, to);
-        } else {
-            builder.removeRange(from, to);
-        }
-    }
-
-
     static char fromEscapedStringToCharacter(String escapedString) {
         return StringEscapeUtils.unescapeJava(escapedString).charAt(0);
-    }
-
-    private static Char fromControlCharEnumToCharacter(ControlChar controlChar) {
-        switch (controlChar) {
-            case CARRIAGE_RETURN:
-                return new Char('\r');
-            case LINE_FEED:
-                return new Char('\n');
-            case TAB:
-                return new Char('\t');
-            case EOF:
-                return Char.EOF;
-        }
-        throw new RuntimeException("Unknown control character: " + controlChar);
     }
 
     private static SchemaNode buildConstantNode(Constant constantElement) {

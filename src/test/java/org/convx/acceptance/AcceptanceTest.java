@@ -1,15 +1,12 @@
 package org.convx.acceptance;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileReader;
-import java.io.FilenameFilter;
-import java.io.IOException;
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.regex.Pattern;
+import org.convx.fsd.SchemaBuilder;
+import org.convx.schema.Schema;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.xml.sax.SAXException;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBException;
@@ -23,14 +20,10 @@ import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-
-import org.convx.fsd.SchemaBuilder;
-import org.convx.schema.Schema;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.xml.sax.SAXException;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.regex.Pattern;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -63,7 +56,12 @@ public class AcceptanceTest {
         flatFile = testFile(name + ".txt");
         xmlFile = testFile(name + ".xml");
         schemaFile = testFile(name + ".fsd");
-        flatFileSchema = SchemaBuilder.build(schemaFile);
+        try {
+            flatFileSchema = SchemaBuilder.build(schemaFile);
+        } catch (RuntimeException e) {
+            System.out.println("Error parsing " + schemaFile);
+            throw e;
+        }
 
         SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
         schemaSchema = schemaFactory.newSchema(new StreamSource(TestUtil.getTestResource("/xsd/fsd.xsd")));
@@ -91,8 +89,13 @@ public class AcceptanceTest {
 
 
     @Test
-    public void convertCanonicalFlatFileToXml() throws IOException, XMLStreamException {
-        parseFlatFileAndValidateResult(flatFile);
+    public void convertCanonicalFlatFileToXml() throws Exception {
+        try {
+            parseFlatFileAndValidateResult(flatFile);
+        } catch (Exception e) {
+            System.out.println("Error parsing flat file: " + flatFile);
+            throw e;
+        }
     }
 
     @Test

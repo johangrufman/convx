@@ -7,7 +7,6 @@
             <xs:sequence>
                 <xs:element name="root" type="fsd:Sequence"/>
                 <xs:element ref="fsd:elementBase" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="fsd:characterSet" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -67,40 +66,6 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-
-    <xs:element name="characterSet" type="fsd:CharacterSet"/>
-    <xs:complexType name="CharacterSet">
-        <xs:sequence>
-            <xs:element ref="fsd:includeExclude" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="id"/>
-    </xs:complexType>
-
-    <xs:element name="includeExclude" abstract="true" type="fsd:IncludeExclude"/>
-    <xs:element name="include" type="fsd:IncludeExclude" substitutionGroup="fsd:includeExclude"/>
-    <xs:element name="exclude" type="fsd:IncludeExclude" substitutionGroup="fsd:includeExclude"/>
-    <xs:complexType name="IncludeExclude">
-        <xs:attribute name="char"/>
-        <xs:attribute name="controlChar" type="fsd:ControlChar"/>
-        <xs:attribute name="set"/>
-        <xs:attribute name="characterClass" type="fsd:CharacterClass"/>
-    </xs:complexType>
-
-    <xs:simpleType name="ControlChar">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="LINE_FEED"/>
-            <xs:enumeration value="CARRIAGE_RETURN"/>
-            <xs:enumeration value="TAB"/>
-            <xs:enumeration value="EOF"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="CharacterClass">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="ALL"/>
-            <xs:enumeration value="DIGIT"/>
-        </xs:restriction>
-    </xs:simpleType>
 
     <xs:simpleType name="allNNI">
         <xs:annotation>
