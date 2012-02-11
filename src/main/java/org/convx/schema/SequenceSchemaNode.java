@@ -46,7 +46,7 @@ public class SequenceSchemaNode extends SchemaNode {
                 if (!first) {
                     subNodes.add(new ConstantReaderNode(separator));
                 }
-                subReaderNode.remove(new UnicodeSet(separator));
+                subReaderNode.remove(new UnicodeSet("[" + separator + "]"));
             }
             subNodes.add(subReaderNode);
             first = false;
@@ -91,13 +91,17 @@ public class SequenceSchemaNode extends SchemaNode {
             instance.line = line;
         }
 
-
         public Builder add(SchemaNode node) {
             instance.subSchemaNodes.add(node);
             return this;
         }
 
         public SequenceSchemaNode build() {
+            return instance;
+        }
+
+        public SequenceSchemaNode setSeparatedBy(char separator) {
+            instance.separator = separator;
             return instance;
         }
 

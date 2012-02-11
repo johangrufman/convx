@@ -30,6 +30,7 @@
                 <xs:sequence>
                     <xs:element ref="fsd:elementBase" maxOccurs="unbounded"/>
                 </xs:sequence>
+                <xs:attribute name="separatedBy"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

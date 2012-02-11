@@ -128,6 +128,9 @@ public class SchemaBuilder {
         for (JAXBElement<? extends ElementBase> subElement : sequenceElement.getElementBase()) {
             builder.add(buildNode(subElement.getValue(), symbolTable));
         }
+        if (sequenceElement.getSeparatedBy() != null) {
+            builder.setSeparatedBy(fromEscapedStringToCharacter(sequenceElement.getSeparatedBy()));
+        }
         return builder.build();
     }
 
