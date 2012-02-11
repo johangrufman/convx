@@ -107,10 +107,14 @@ public class SchemaBuilder {
         return new FieldSchemaNode(doTrim,
                 new UnicodeSet("[" + characterSet + "]"),
                 elementBase.getLength(),
-                StringEscapeUtils.unescapeJava(elementBase.getDefaultOutput()));
+                StringEscapeUtils.unescapeJava(elementBase.getDefaultOutput()),
+                fromEscapedStringToCharacter(elementBase.getQuoteCharacter()));
     }
 
-    static char fromEscapedStringToCharacter(String escapedString) {
+    static Character fromEscapedStringToCharacter(String escapedString) {
+        if (escapedString == null) {
+            return null;
+        }
         return StringEscapeUtils.unescapeJava(escapedString).charAt(0);
     }
 

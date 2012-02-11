@@ -12,10 +12,10 @@ public class SchemaBuilderTest {
 
     @Test
     public void unescapingCharacters() throws Exception {
-        assertEquals('\n', SchemaBuilder.fromEscapedStringToCharacter("\\n"));
-        assertEquals('\t', SchemaBuilder.fromEscapedStringToCharacter("\\t"));
-        assertEquals(' ', SchemaBuilder.fromEscapedStringToCharacter("\\u0020"));
-        assertEquals('\\', SchemaBuilder.fromEscapedStringToCharacter("\\\\"));
-        assertEquals('\'', SchemaBuilder.fromEscapedStringToCharacter("\\\'"));
+        assertEquals('\n', (char)SchemaBuilder.fromEscapedStringToCharacter("\\n"));
+        assertEquals('\t', (char)SchemaBuilder.fromEscapedStringToCharacter("\\t"));
+        assertEquals(' ', (char)SchemaBuilder.fromEscapedStringToCharacter("\\u0020"));
+        assertEquals('\\', (char)SchemaBuilder.fromEscapedStringToCharacter("\\\\"));
+        assertEquals('\'', (char)SchemaBuilder.fromEscapedStringToCharacter("\\\'"));
     }
 }

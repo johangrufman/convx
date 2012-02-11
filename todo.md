@@ -6,7 +6,6 @@ Later
 * Improve whitespace handling/leniency
 * Namespaces
 * Add proper character escaping (apache commons lang)
-* Quoting
 * Error handling
 * Add corrupt flat file to acceptance tests
     - For example files without EOL
@@ -28,3 +27,4 @@ Done
 * Introduce ICU4J
     * UnicodeSet
 * "Separated by"
+* Quoting

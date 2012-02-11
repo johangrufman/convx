@@ -1,3 +1,10 @@
-Pablo, Picasso,50
-Oscar ,Wilde,35 
+Timon ,Mckinney,"1466, Vitae St.",Anderson,02/06/1978
+Basil,Mitchell,P.O. Box 148 253 Cum Ave,Malibu,12/11/1973
+Elizabeth,Byrd,Ap #831-8168 Nec Rd.,Gary, 17/04/1983
+Aristotle,Rosario,Ap #394-4749 Ac Road,Ardmore,01/01/1989
+Dane,Bishop,"3255, Elit Road",Hartford,07/01/1978
+Zachery,Watkins,P.O. Box 945 7716 Mollis Ave,New London,06/12/1978
+Dahlia,Thompson,Ap #182-6045 Duis Av.,Statesboro,23/05/1987
+Camille,Hartman  ,P.O. Box 223 9677 At Rd.,Buffalo,17/12/1968
+Haley,Barnett,6231 Sit Ave,Bismarck,26/03/1969
 

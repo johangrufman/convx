@@ -5,10 +5,12 @@
         <line name="person" maxOccurs="unbounded" separatedBy=",">
             <field name="firstName" ref="field"/>
             <field name="lastName" ref="field"/>
-            <field name="age" ref="field"/>
+            <field name="address" ref="field"/>
+            <field name="city" ref="field"/>
+            <field name="dateOfBirth" ref="field"/>
         </line>
     </root>
 
-    <field id="field" characterSet="^,\n\r"/>
+    <field id="field" characterSet="^,\n\r" quoteCharacter='"'/>
 
 </schema>

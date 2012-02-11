@@ -49,6 +49,7 @@
             <xs:extension base="fsd:ElementBase">
                 <xs:attribute name="length" type="xs:int"/>
                 <xs:attribute name="characterSet"/>
+                <xs:attribute name="quoteCharacter"/>
                 <xs:attribute name="defaultOutput"/>
                 <xs:attribute name="trim" type="xs:boolean"/>
             </xs:extension>

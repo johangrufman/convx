@@ -1,12 +1,66 @@
+<?xml version="1.0"?>
 <persons>
     <person>
-        <firstName>Pablo</firstName>
-        <lastName>Picasso</lastName>
-        <age>50</age>
+        <firstName>Timon</firstName>
+        <lastName>Mckinney</lastName>
+        <address>1466, Vitae St.</address>
+        <city>Anderson</city>
+        <dateOfBirth>02/06/1978</dateOfBirth>
     </person>
     <person>
-        <firstName>Oscar</firstName>
-        <lastName>Wilde</lastName>
-        <age>35</age>
+        <firstName>Basil</firstName>
+        <lastName>Mitchell</lastName>
+        <address>P.O. Box 148 253 Cum Ave</address>
+        <city>Malibu</city>
+        <dateOfBirth>12/11/1973</dateOfBirth>
+    </person>
+    <person>
+        <firstName>Elizabeth</firstName>
+        <lastName>Byrd</lastName>
+        <address>Ap #831-8168 Nec Rd.</address>
+        <city>Gary</city>
+        <dateOfBirth>17/04/1983</dateOfBirth>
+    </person>
+    <person>
+        <firstName>Aristotle</firstName>
+        <lastName>Rosario</lastName>
+        <address>Ap #394-4749 Ac Road</address>
+        <city>Ardmore</city>
+        <dateOfBirth>01/01/1989</dateOfBirth>
+    </person>
+    <person>
+        <firstName>Dane</firstName>
+        <lastName>Bishop</lastName>
+        <address>3255, Elit Road</address>
+        <city>Hartford</city>
+        <dateOfBirth>07/01/1978</dateOfBirth>
+    </person>
+    <person>
+        <firstName>Zachery</firstName>
+        <lastName>Watkins</lastName>
+        <address>P.O. Box 945 7716 Mollis Ave</address>
+        <city>New London</city>
+        <dateOfBirth>06/12/1978</dateOfBirth>
+    </person>
+    <person>
+        <firstName>Dahlia</firstName>
+        <lastName>Thompson</lastName>
+        <address>Ap #182-6045 Duis Av.</address>
+        <city>Statesboro</city>
+        <dateOfBirth>23/05/1987</dateOfBirth>
+    </person>
+    <person>
+        <firstName>Camille</firstName>
+        <lastName>Hartman</lastName>
+        <address>P.O. Box 223 9677 At Rd.</address>
+        <city>Buffalo</city>
+        <dateOfBirth>17/12/1968</dateOfBirth>
+    </person>
+    <person>
+        <firstName>Haley</firstName>
+        <lastName>Barnett</lastName>
+        <address>6231 Sit Ave</address>
+        <city>Bismarck</city>
+        <dateOfBirth>26/03/1969</dateOfBirth>
     </person>
 </persons>

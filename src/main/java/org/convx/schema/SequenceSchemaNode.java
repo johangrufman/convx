@@ -52,7 +52,7 @@ public class SequenceSchemaNode extends SchemaNode {
             first = false;
         }
         if (line) {
-            subNodes.add(new FieldReaderNode(false, new UnicodeSet("[\\n\\r]"), null));
+            subNodes.add(new FieldReaderNode(false, new UnicodeSet("[\\n\\r]"), null, null));
         }
         return new SequenceReaderNode(subNodes.toArray(new ReaderNode[subNodes.size()]));
     }

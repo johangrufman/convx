@@ -21,21 +21,24 @@ public class FieldSchemaNode extends SchemaNode {
 
     private String defaultOutput;
 
-    public FieldSchemaNode(boolean trim, UnicodeSet characterSet, Integer length, String defaultOutput) {
+    private Character quoteCharacter;
+
+    public FieldSchemaNode(boolean trim, UnicodeSet characterSet, Integer length, String defaultOutput, Character quoteCharacter) {
         this.trim = trim;
         this.characterSet = characterSet;
         this.length = length;
         this.defaultOutput = defaultOutput;
+        this.quoteCharacter = quoteCharacter;
     }
 
     @Override
     public ReaderNode asReaderNode() {
-        return new FieldReaderNode(trim, characterSet, length);
+        return new FieldReaderNode(trim, characterSet, length, quoteCharacter);
     }
 
     @Override
     public WriterNode asWriterNode() {
-        return new FieldWriterNode(length, defaultOutput);
+        return new FieldWriterNode(length, defaultOutput, characterSet, quoteCharacter);
     }
 
     @Override
