@@ -53,7 +53,7 @@ public class SchemaBuilder {
                 schemaNode = buildConstantNode((Constant) elementBase);
             }
             if (elementBase instanceof Sequence) {
-                schemaNode = buildElementNode((Sequence) elementBase, symbolTable);
+                schemaNode = buildSequenceNode((Sequence) elementBase, symbolTable);
             }
         }
         schemaNode = wrapWithNamedNode(elementBase, schemaNode);
@@ -118,8 +118,13 @@ public class SchemaBuilder {
         return new ConstantSchemaNode(CharacterUtil.unescapeCharacters(constantElement.getValue()));
     }
 
-    private static SchemaNode buildElementNode(Sequence sequenceElement, SymbolTable symbolTable) {
-        SequenceSchemaNode.Builder builder = SequenceSchemaNode.sequence();
+    private static SchemaNode buildSequenceNode(Sequence sequenceElement, SymbolTable symbolTable) {
+        SequenceSchemaNode.Builder builder;
+        if (sequenceElement instanceof Line) {
+            builder = SequenceSchemaNode.lineSequence();
+        } else {
+            builder = SequenceSchemaNode.sequence();
+        }
         for (JAXBElement<? extends ElementBase> subElement : sequenceElement.getElementBase()) {
             builder.add(buildNode(subElement.getValue(), symbolTable));
         }

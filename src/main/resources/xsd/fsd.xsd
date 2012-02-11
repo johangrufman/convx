@@ -34,6 +34,14 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <xs:element name="line" type="fsd:Line" substitutionGroup="fsd:elementBase"/>
+    <xs:complexType name="Line">
+        <xs:complexContent>
+            <xs:extension base="fsd:Sequence">
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
     <xs:element name="field" type="fsd:Field" substitutionGroup="fsd:elementBase"/>
     <xs:complexType name="Field">
         <xs:complexContent>

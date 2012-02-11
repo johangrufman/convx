@@ -5,21 +5,18 @@
     <root name="persons">
         <sequence name="person" maxOccurs="unbounded">
             <constant ref="personHeader"/>
-            <sequence name="firstName">
+            <line name="firstName">
                 <constant ref="firstNamePrefix"/>
                 <field ref="field"/>
-                <constant ref="eol"/>
-            </sequence>
-            <sequence name="lastName">
+            </line>
+            <line name="lastName">
                 <constant ref="lastNamePrefix"/>
                 <field ref="field"/>
-                <constant ref="eol"/>
-            </sequence>
-            <sequence name="age">
+            </line>
+            <line name="age">
                 <constant ref="agePrefix"/>
                 <field ref="field"/>
-                <constant ref="eol"/>
-            </sequence>
+            </line>
         </sequence>
     </root>
 

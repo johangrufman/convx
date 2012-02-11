@@ -2,18 +2,16 @@
         xsi:schemaLocation="http://www.convx.org/schemas/1.0/fsd ../../../../main/resources/xsd/fsd.xsd"
         xmlns="http://www.convx.org/schemas/1.0/fsd">
     <root name="persons">
-        <sequence name="person" maxOccurs="unbounded">
+        <line name="person" maxOccurs="unbounded">
             <field name="firstName" ref="field"/>
             <constant ref="comma"/>
             <field name="lastName" ref="field"/>
             <constant ref="comma"/>
             <field name="age" ref="field"/>
-            <field ref="eol"/>
-        </sequence>
+        </line>
     </root>
 
     <field id="field" characterSet="^,\n\r"/>
-    <field id="eol" characterSet="\n\r" defaultOutput="\n"/>
     <constant id="comma" value=","/>
 
 </schema>

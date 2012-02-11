@@ -9,7 +9,7 @@
         </xs:schema>
     </xsl:template>
 
-    <xsl:template match="/fsd:schema/fsd:root | //fsd:sequence" priority="1">
+    <xsl:template match="/fsd:schema/fsd:root | //fsd:sequence | //fsd:line" priority="1">
         <xs:element name="{@name}">
             <xsl:if test="@maxOccurs">
                 <xsl:attribute name="maxOccurs"><xsl:value-of select="@maxOccurs"/></xsl:attribute>
@@ -22,7 +22,7 @@
         </xs:element>
     </xsl:template>
 
-    <xsl:template match="//fsd:sequence[not(child::node()[@name])]" priority="2">
+    <xsl:template match="//fsd:sequence[not(child::node()[@name])] | //fsd:line[not(child::node()[@name])]" priority="2">
         <xsl:variable name="fieldNode" select="fsd:field"/>
         <xsl:choose>
             <xsl:when test="$fieldNode/@ref">

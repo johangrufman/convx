@@ -3,12 +3,11 @@
         xmlns="http://www.convx.org/schemas/1.0/fsd">
 
     <root name="persons">
-        <sequence name="person" maxOccurs="unbounded">
+        <line name="person" maxOccurs="unbounded">
             <field name="firstName" length="15"/>
             <field name="lastName" length="15"/>
             <field name="age" length="2"/>
-            <field characterSet="\n\r" defaultOutput="\n"/>
-        </sequence>
+        </line>
     </root>
 
 </schema>
