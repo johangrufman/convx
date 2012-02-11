@@ -28,7 +28,6 @@ import static junit.framework.Assert.assertEquals;
  * @since 2011-10-30
  */
 
-//@RunWith(Parameterized.class)
 public abstract class AcceptanceTest {
 
     private static final String TEST_CASE_FOLDER = "/testcases/";
@@ -71,18 +70,6 @@ public abstract class AcceptanceTest {
             throw new RuntimeException(e);
         }
     }
-
-//    @Parameterized.Parameters
-//    public static Collection<Object[]> testCaseNames() {
-//        File testCaseFolder = new File(TestUtil.getTestResource(TEST_CASE_FOLDER));
-//        Collection<Object[]> testCaseNames = new ArrayList<Object[]>();
-//        for (String subFolder : testCaseFolder.list()) {
-//            testCaseNames.add(new Object[] {subFolder});
-//        }
-//
-//        return testCaseNames;
-//    }
-
 
     @Test
     public void convertCanonicalFlatFileToXml() throws Exception {
