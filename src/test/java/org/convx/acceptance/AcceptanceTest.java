@@ -19,7 +19,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 import java.io.*;
-import java.util.regex.Pattern;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -81,15 +80,7 @@ public abstract class AcceptanceTest {
         }
     }
 
-    @Test
-    public void convertNonCanonicalFlatFilesToXml() throws IOException, XMLStreamException {
-        File testCaseFolder = new File(TestUtil.getTestResource(testCaseFolderName()));
-        for (File file : testCaseFolder.listFiles(new NonCanonicalFlatFileFilter(name))) {
-            parseFlatFileAndValidateResult(file);
-        }
-    }
-
-    private void parseFlatFileAndValidateResult(File flatFile) throws XMLStreamException, IOException {
+    protected void parseFlatFileAndValidateResult(File flatFile) throws XMLStreamException, IOException {
         XMLEventReader flatFileReader = flatFileSchema.parser(new FileReader(flatFile));
         XMLEventReader xmlFileReader = XMLInputFactory.newFactory().createXMLEventReader(new FileInputStream(xmlFile));
         assertEquals(flatFile.getName() + " converted to incorrectly to xml", TestUtil.serialize(xmlFileReader), TestUtil
@@ -123,6 +114,11 @@ public abstract class AcceptanceTest {
         }
     }
 
+    protected void convertFlatFilesToXmlAndValidate(String fileName) throws IOException, XMLStreamException {
+        File testCaseFolder = new File(TestUtil.getTestResource(testCaseFolderName()));
+        parseFlatFileAndValidateResult(new File(testCaseFolder, fileName));
+    }
+
     private String buildValidationErrorMessage(String message) throws IOException, TransformerException {
         StringBuilder sb = new StringBuilder();
         sb.append(message);
@@ -153,17 +149,5 @@ public abstract class AcceptanceTest {
 
     private String testCaseFolderName() {
         return TEST_CASE_FOLDER + name + "/";
-    }
-
-    private static class NonCanonicalFlatFileFilter implements FilenameFilter {
-        private Pattern fileNamePattern;
-
-        private NonCanonicalFlatFileFilter(String name) {
-            fileNamePattern = Pattern.compile(name + "\\d\\.txt");
-        }
-
-        public boolean accept(File file, String name) {
-            return fileNamePattern.matcher(name).matches();
-        }
     }
 }
