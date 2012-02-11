@@ -1,5 +1,6 @@
 package org.convx.schema;
 
+import com.ibm.icu.text.UnicodeSet;
 import org.convx.reader.ConstantReaderNode;
 import org.convx.reader.ReaderNode;
 import org.convx.reader.SequenceReaderNode;
@@ -39,7 +40,7 @@ public class SequenceSchemaNode extends SchemaNode {
                 if (!first) {
                     subNodes.add(new ConstantReaderNode(separator));
                 }
-                subReaderNode.remove(separator);
+                subReaderNode.remove(new UnicodeSet(separator));
             }
             subNodes.add(subReaderNode);
             first = false;
@@ -73,7 +74,7 @@ public class SequenceSchemaNode extends SchemaNode {
     public static class Builder {
         private SequenceSchemaNode instance;
 
-        public Builder(SchemaNode... schemaNodes) {
+        private Builder(SchemaNode... schemaNodes) {
             instance = new SequenceSchemaNode(schemaNodes);
         }
 
@@ -86,9 +87,5 @@ public class SequenceSchemaNode extends SchemaNode {
             return instance;
         }
 
-        public Builder separatedBy(Character separator) {
-            instance.separator = separator;
-            return this;
-        }
     }
 }

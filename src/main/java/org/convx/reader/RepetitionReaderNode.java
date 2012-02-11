@@ -1,5 +1,6 @@
 package org.convx.reader;
 
+import com.ibm.icu.text.UnicodeSet;
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.NodeElement;
 import org.convx.reader.elements.ParsingNodeState;
@@ -49,8 +50,8 @@ public class RepetitionReaderNode implements ReaderNode {
         return minOccurs == 0;
     }
 
-    public void remove(Character character) {
-        readerNode.remove(character);
+    public void remove(UnicodeSet characters) {
+        readerNode.remove(characters);
     }
 
     private boolean isUnbounded() {

@@ -59,7 +59,7 @@ public class FieldReaderNode implements ReaderNode {
         return false;
     }
 
-    public void remove(Character character) {
-        throw new UnsupportedOperationException();
+    public void remove(UnicodeSet characters) {
+        characterSet.removeAll(characters);
     }
 }

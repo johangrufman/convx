@@ -119,7 +119,7 @@ public class SchemaBuilder {
     }
 
     private static SchemaNode buildElementNode(Sequence sequenceElement, SymbolTable symbolTable) {
-        SequenceSchemaNode.Builder builder = new SequenceSchemaNode.Builder();
+        SequenceSchemaNode.Builder builder = SequenceSchemaNode.sequence();
         for (JAXBElement<? extends ElementBase> subElement : sequenceElement.getElementBase()) {
             builder.add(buildNode(subElement.getValue(), symbolTable));
         }

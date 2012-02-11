@@ -1,5 +1,6 @@
 package org.convx.reader;
 
+import com.ibm.icu.text.UnicodeSet;
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.ParsingNodeState;
 
@@ -18,5 +19,5 @@ public interface ReaderNode {
 
     public boolean isOptional();
 
-    void remove(Character character);
+    void remove(UnicodeSet characters);
 }

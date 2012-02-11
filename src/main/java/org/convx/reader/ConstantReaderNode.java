@@ -1,5 +1,7 @@
 package org.convx.reader;
 
+import com.ibm.icu.text.UnicodeSet;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.ParsingNodeState;
 import org.convx.util.CharacterUtil;
@@ -31,7 +33,6 @@ public class ConstantReaderNode implements ReaderNode {
             return true;
         } else {
             throw new RuntimeException("Unexpected input: " + CharacterUtil.escapeCharacters(context.nextCharacters().toString()));
-//            return false;
         }
     }
 
@@ -43,9 +44,11 @@ public class ConstantReaderNode implements ReaderNode {
         return false;
     }
 
-    public void remove(Character character) {
-        if (constant.indexOf(character) >= 0) {
-            throw new RuntimeException("Cannot remove character " + character + " from constant " + constant);
+    public void remove(UnicodeSet characters) {
+        for (char c : constant.toCharArray()) {
+            if (characters.contains(c)) {
+                throw new RuntimeException("Cannot remove character " + StringEscapeUtils.escapeJava(String.valueOf(c)) + " from constant " + constant);
+            }
         }
     }
 }

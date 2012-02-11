@@ -1,5 +1,6 @@
 package org.convx.reader;
 
+import com.ibm.icu.text.UnicodeSet;
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.MarkupElement;
 import org.convx.reader.elements.ParsingNodeState;
@@ -43,7 +44,7 @@ public class NamedReaderNode implements ReaderNode {
         return readerNode.isOptional();
     }
 
-    public void remove(Character character) {
-        readerNode.remove(character);
+    public void remove(UnicodeSet characters) {
+        readerNode.remove(characters);
     }
 }
