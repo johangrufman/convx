@@ -2,6 +2,7 @@ package org.convx.schema;
 
 import com.ibm.icu.text.UnicodeSet;
 import org.convx.reader.FlatFileParser;
+import org.convx.reader.ParsingException;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -47,7 +48,7 @@ public class FlatFileParserTest {
     }
 
     @Test
-    public void testParseSequence() {
+    public void testParseSequence() throws ParsingException {
         String elementName = "foo";
         FieldSchemaNode delimitedNode = new FieldSchemaNode(true, allButAsterisk, null, null, null);
         ConstantSchemaNode constantNode = new ConstantSchemaNode("*");
@@ -65,18 +66,18 @@ public class FlatFileParserTest {
 
 
 
-    private void assertElementWithContent(FlatFileParser flatFileParser, String elementName, String elementContent) {
+    private void assertElementWithContent(FlatFileParser flatFileParser, String elementName, String elementContent) throws ParsingException {
         assertEquals(elementName, ((StartElement)flatFileParser.nextEvent()).getName().getLocalPart());
         assertEquals(elementContent, ((Characters) flatFileParser.nextEvent()).getData());
         assertEquals(elementName, ((EndElement) flatFileParser.nextEvent()).getName().getLocalPart());
     }
 
 
-    private void assertStartOfDocument(FlatFileParser flatFileParser) {
+    private void assertStartOfDocument(FlatFileParser flatFileParser) throws ParsingException {
         assertTrue(flatFileParser.nextEvent() instanceof StartDocument);
     }
 
-    private void assertEndOfDocument(FlatFileParser flatFileParser) {
+    private void assertEndOfDocument(FlatFileParser flatFileParser) throws ParsingException {
         assertTrue(flatFileParser.nextEvent() instanceof EndDocument);
         assertFalse(flatFileParser.hasNext());
     }

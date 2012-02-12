@@ -1,5 +1,6 @@
 package org.convx.acceptance;
 
+import org.convx.reader.ParsingException;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -23,5 +24,11 @@ public class CsvTest extends AcceptanceTest {
     @Test
     public void testParsingNonCanonicalFile2() throws Exception {
         convertFlatFilesToXmlAndValidate("nc_csv2.txt");
+    }
+
+    @Test(expected = ParsingException.class)
+    public void testParsingFileWithErrors() throws Exception {
+        convertFlatFilesToXmlAndValidate("error_csv1.txt");
+
     }
 }

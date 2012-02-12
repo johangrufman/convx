@@ -1,6 +1,7 @@
 package org.convx.reader.elements;
 
 import org.convx.reader.ParserContext;
+import org.convx.reader.ParsingException;
 import org.convx.reader.ReaderNode;
 
 import java.util.Stack;
@@ -23,7 +24,7 @@ public class NodeElement implements Element {
         this.state = state;
     }
 
-    public void parse(Stack<Element> parserStack, ParserContext context) {
+    public void parse(Stack<Element> parserStack, ParserContext context) throws ParsingException {
         readerNode.parse(parserStack, context, state);
     }
 

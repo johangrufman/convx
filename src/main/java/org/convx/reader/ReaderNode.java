@@ -13,7 +13,7 @@ import java.util.Stack;
 public interface ReaderNode {
     public int lookAhead();
 
-    public boolean parse(Stack<Element> parserStack, ParserContext context, ParsingNodeState state);
+    public boolean parse(Stack<Element> parserStack, ParserContext context, ParsingNodeState state) throws ParsingException;
 
     public PrefixMatcher prefixes();
 

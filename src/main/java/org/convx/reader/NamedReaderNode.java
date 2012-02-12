@@ -25,7 +25,7 @@ public class NamedReaderNode implements ReaderNode {
         return readerNode.lookAhead();
     }
 
-    public boolean parse(Stack<Element> parserStack, ParserContext context, ParsingNodeState state) {
+    public boolean parse(Stack<Element> parserStack, ParserContext context, ParsingNodeState state) throws ParsingException {
         Stack<Element> tmpParserStack = new Stack<Element>();
         boolean successfulParse = readerNode.parse(tmpParserStack, context, state);
         if (successfulParse) {

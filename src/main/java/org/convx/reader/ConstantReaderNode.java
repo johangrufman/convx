@@ -27,12 +27,12 @@ public class ConstantReaderNode implements ReaderNode {
         return constant.length();
     }
 
-    public boolean parse(Stack<Element> parserStack, ParserContext context, ParsingNodeState state) {
+    public boolean parse(Stack<Element> parserStack, ParserContext context, ParsingNodeState state) throws ParsingException {
         if (context.nextCharacters().toString().startsWith(constant)) {
             context.advance(constant.length());
             return true;
         } else {
-            throw new RuntimeException("Unexpected input: " + CharacterUtil.escapeCharacters(context.nextCharacters().toString()));
+            throw new ParsingException("Unexpected input: " + CharacterUtil.escapeCharacters(context.nextCharacters().toString()), context.getFlatFileLocation());
         }
     }
 

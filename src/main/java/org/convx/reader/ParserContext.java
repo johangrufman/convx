@@ -19,6 +19,8 @@ public class ParserContext {
 
     private int position = 0;
 
+    private FlatFileLocation flatFileLocation = new FlatFileLocation();
+
     public ParserContext(Reader reader, int lookAhead) {
         this(reader, lookAhead, BUFFER_SIZE);
     }
@@ -48,6 +50,7 @@ public class ParserContext {
     }
 
     public void advance(int length) {
+        flatFileLocation.advance(buffer.subSequence(0, Math.min(buffer.remaining(), length)));
         position += length;
         buffer.position(position);
         if (buffer.length() < lookAhead) {
@@ -64,5 +67,9 @@ public class ParserContext {
 
     public char nextCharacter() {
         return buffer.charAt(0);
+    }
+
+    public FlatFileLocation getFlatFileLocation() {
+        return flatFileLocation;
     }
 }

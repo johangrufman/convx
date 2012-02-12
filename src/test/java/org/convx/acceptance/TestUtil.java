@@ -36,8 +36,6 @@ public class TestUtil {
             return doc;
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
-        } catch (XMLStreamException e) {
-            throw new RuntimeException(e);
         }
     }
 
