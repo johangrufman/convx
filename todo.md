@@ -1,12 +1,12 @@
 Now
 ---
+* Error handling
 
 Later
 -----
 * Improve whitespace handling/leniency
 * Namespaces
 * Add proper character escaping (apache commons lang)
-* Error handling
 * Add corrupt flat file to acceptance tests
     - For example files without EOL
 * Add corrupt flat file schemas
