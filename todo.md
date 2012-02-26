@@ -1,9 +1,12 @@
 Now
 ---
-* Error handling
+* Add educational example
+* Release
+* Add licence to pom
 
 Later
 -----
+* Error handling
 * Improve whitespace handling/leniency
 * Namespaces
 * Add proper character escaping (apache commons lang)
