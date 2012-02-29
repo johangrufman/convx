@@ -23,10 +23,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <scm>
-        <connection>scm:git:git://github.com/johangrufman/convx.git</connection>
-        <developerConnection>scm:git:git://github.com/johangrufman/convx.git</developerConnection>
-        <tag>HEAD</tag>
-        <url>http://127.0.0.1/websvn/my-project</url>
+        <connection>scm:git:git@github.com:johangrufman/convx.git</connection>
+        <url>scm:git:git@github.com:johangrufman/convx.git</url>
+        <developerConnection>scm:git:git@github.com:johangrufman/convx.git</developerConnection>
     </scm>
     <build>
         <plugins>
