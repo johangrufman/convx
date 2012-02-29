@@ -54,6 +54,16 @@
         </dependency>
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <targetPath>META-INF</targetPath>
+                <filtering>false</filtering>
+                <directory>${basedir}</directory>
+                <includes>
+                    <include>LICENCE</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>com.sun.tools.xjc.maven2</groupId>
@@ -98,7 +108,8 @@
                             </includes>
                             <stylesheet>src/main/resources/xsl/xsd-gen.xsl</stylesheet>
                             <fileMappers>
-                                <fileMapper implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
+                                <fileMapper
+                                        implementation="org.codehaus.plexus.components.io.filemappers.FileExtensionMapper">
                                     <targetExtension>.xsd</targetExtension>
                                 </fileMapper>
                             </fileMappers>

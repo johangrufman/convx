@@ -1,8 +1,8 @@
 Now
 ---
-* Make sure the jar contains everything
 * Release
 * Make sure the flat file parser implements the XMLEventReader contract
+* Namespace urls
 
 Later
 -----
@@ -23,6 +23,7 @@ Later
 
 Done
 ----
+* Make sure the jar contains everything
 * Add educational example
 * Introduce character sets and use in new field node
 * Improve the way character sets are defined in flat file schema (order between include/exclude etc)
