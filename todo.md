@@ -1,8 +1,8 @@
 Now
 ---
-* Add educational example
+* Make sure the jar contains everything
 * Release
-* Add licence to pom
+* Make sure the flat file parser implements the XMLEventReader contract
 
 Later
 -----
@@ -23,6 +23,7 @@ Later
 
 Done
 ----
+* Add educational example
 * Introduce character sets and use in new field node
 * Improve the way character sets are defined in flat file schema (order between include/exclude etc)
 * Add EOF-character
@@ -31,3 +32,4 @@ Done
     * UnicodeSet
 * "Separated by"
 * Quoting
+* Add licence to pom
