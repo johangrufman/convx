@@ -60,8 +60,12 @@
                 <filtering>false</filtering>
                 <directory>${basedir}</directory>
                 <includes>
-                    <include>LICENCE</include>
+                    <include>LICENSE</include>
                 </includes>
+            </resource>
+            <resource>
+                <filtering>false</filtering>
+                <directory>${basedir}/src/main/resources</directory>
             </resource>
         </resources>
         <plugins>
