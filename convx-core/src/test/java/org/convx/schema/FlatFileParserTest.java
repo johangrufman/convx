@@ -15,15 +15,19 @@
  */
 package org.convx.schema;
 
-import com.ibm.icu.text.UnicodeSet;
 import org.convx.reader.FlatFileParser;
+import org.convx.reader.ParserStream;
+import org.convx.reader.ParsingException;
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.xml.stream.XMLEventReader;
+import javax.xml.namespace.QName;
+import javax.xml.stream.XMLEventFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.*;
-import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -33,67 +37,190 @@ import static org.junit.Assert.*;
  */
 public class FlatFileParserTest {
 
-    private UnicodeSet allButAsterisk;
-
     @Before
     public void setup() {
-        allButAsterisk = new UnicodeSet("[^*]");
     }
 
     @Test
-    public void testParseOneDelimitedField() throws Exception {
-
-        String elementName = "foo";
-        Schema schema = new Schema(new NamedSchemaNode(elementName, new FieldSchemaNode(true, allButAsterisk, null, null, null)));
-        XMLEventReader flatFileParser = schema.parser(new StringReader("bar*"));
-
-        assertStartOfDocument(flatFileParser);
-        assertElementWithContent(flatFileParser, elementName, "bar");
-        assertEndOfDocument(flatFileParser);
+    public void testBasicIteratorBehaviour() throws Exception {
+        ParserStreamMock parserStream = parserStreamMock().addStartDocumentEvent().addEndDocumentEvent().build();
+        FlatFileParser flatFileParser = new FlatFileParser(parserStream);
+        assertTrue(flatFileParser.hasNext());
+        assertTrue(flatFileParser.next() instanceof StartDocument);
+        assertTrue(flatFileParser.hasNext());
+        assertTrue(flatFileParser.next() instanceof EndDocument);
+        assertFalse(flatFileParser.hasNext());
     }
 
     @Test
-    public void testParseOneConstantField() throws Exception {
-
-        Schema schema = new Schema(new ConstantSchemaNode("*"));
-        XMLEventReader flatFileParser = schema.parser(new StringReader("*"));
-
-        assertStartOfDocument(flatFileParser);
-        assertEndOfDocument(flatFileParser);
-        assertTrue(((FlatFileParser) flatFileParser).hasConsumedAllInput());
-    }
-
-    @Test
-    public void testParseSequence() throws XMLStreamException {
-        String elementName = "foo";
-        FieldSchemaNode delimitedNode = new FieldSchemaNode(true, allButAsterisk, null, null, null);
-        ConstantSchemaNode constantNode = new ConstantSchemaNode("*");
-        SchemaNode root = new NamedSchemaNode("baz", SequenceSchemaNode.sequence().add(new NamedSchemaNode(elementName, delimitedNode)).add(constantNode).build());
-        Schema schema = new Schema(root);
-        XMLEventReader flatFileParser = schema.parser(new StringReader("bar*"));
-
-        assertStartOfDocument(flatFileParser);
-        assertEquals("baz", ((StartElement) flatFileParser.nextEvent()).getName().getLocalPart());
-        assertElementWithContent(flatFileParser, elementName, "bar");
-        assertEquals("baz", ((EndElement) flatFileParser.nextEvent()).getName().getLocalPart());
-        assertEndOfDocument(flatFileParser);
-        assertTrue(((FlatFileParser) flatFileParser).hasConsumedAllInput());
-    }
-
-
-    private void assertElementWithContent(XMLEventReader flatFileParser, String elementName, String elementContent) throws XMLStreamException {
-        assertEquals(elementName, ((StartElement) flatFileParser.nextEvent()).getName().getLocalPart());
-        assertEquals(elementContent, ((Characters) flatFileParser.nextEvent()).getData());
-        assertEquals(elementName, ((EndElement) flatFileParser.nextEvent()).getName().getLocalPart());
-    }
-
-
-    private void assertStartOfDocument(XMLEventReader flatFileParser) throws XMLStreamException {
+    public void testBasicXmlIteratorBehaviour() throws Exception {
+        ParserStreamMock parserStream = parserStreamMock().addStartDocumentEvent().addEndDocumentEvent().build();
+        FlatFileParser flatFileParser = new FlatFileParser(parserStream);
+        assertTrue(flatFileParser.hasNext());
+        assertTrue(flatFileParser.peek() instanceof StartDocument);
         assertTrue(flatFileParser.nextEvent() instanceof StartDocument);
-    }
-
-    private void assertEndOfDocument(XMLEventReader flatFileParser) throws XMLStreamException {
+        assertTrue(flatFileParser.hasNext());
+        assertTrue(flatFileParser.peek() instanceof EndDocument);
         assertTrue(flatFileParser.nextEvent() instanceof EndDocument);
         assertFalse(flatFileParser.hasNext());
+    }
+
+    @Test
+    public void testGetElementText() throws XMLStreamException {
+        ParserStreamMock parserStream = parserStreamMock()
+                .addStartElementEvent()
+                .addCharacters("content")
+                .addEndElementEvent()
+                .build();
+        FlatFileParser flatFileParser = new FlatFileParser(parserStream);
+        assertEquals("content", flatFileParser.getElementText());
+        assertTrue(flatFileParser.peek() instanceof EndElement);
+    }
+
+    @Test
+    public void testGetElementTextWithMultipleCharacterEvents() throws XMLStreamException {
+        ParserStreamMock parserStream = parserStreamMock()
+                .addStartElementEvent()
+                .addCharacters("content")
+                .addCharacters(" ")
+                .addCharacters("content")
+                .addEndElementEvent()
+                .build();
+        FlatFileParser flatFileParser = new FlatFileParser(parserStream);
+        assertEquals("content content", flatFileParser.getElementText());
+        assertTrue(flatFileParser.peek() instanceof EndElement);
+    }
+
+    @Test(expected = XMLStreamException.class)
+    public void testGetElementTextWithMixedContent() throws XMLStreamException {
+        ParserStreamMock parserStream = parserStreamMock()
+                .addStartElementEvent()
+                .addCharacters("content")
+                .addStartElementEvent()
+                .addCharacters("content")
+                .addEndElementEvent()
+                .addCharacters("content")
+                .addEndElementEvent()
+                .build();
+        FlatFileParser flatFileParser = new FlatFileParser(parserStream);
+        flatFileParser.getElementText();
+    }
+
+    @Test(expected = XMLStreamException.class)
+    public void testGetElementTextWithoutEndElement() throws XMLStreamException {
+        ParserStreamMock parserStream = parserStreamMock()
+                .addStartElementEvent()
+                .addCharacters("content")
+                .build();
+        FlatFileParser flatFileParser = new FlatFileParser(parserStream);
+        flatFileParser.getElementText();
+    }
+
+    @Test
+    public void testNextTagWithEmptyElement() throws Exception {
+        ParserStreamMock parserStream = parserStreamMock()
+                .addStartElementEvent()
+                .addEndElementEvent()
+                .build();
+        FlatFileParser flatFileParser = new FlatFileParser(parserStream);
+        assertTrue(flatFileParser.nextTag() instanceof StartElement);
+        assertTrue(flatFileParser.nextTag() instanceof EndElement);
+    }
+
+    @Test
+    public void testNextTagSkipsWhitespace() throws Exception {
+        ParserStreamMock parserStream = parserStreamMock()
+                .addWhitespace()
+                .addWhitespace()
+                .addStartElementEvent()
+                .build();
+        FlatFileParser flatFileParser = new FlatFileParser(parserStream);
+        assertTrue(flatFileParser.nextTag() instanceof StartElement);
+    }
+
+    @Test(expected = XMLStreamException.class)
+    public void testNextTagThrowsExceptionOnNonWhitespace() throws Exception {
+        ParserStreamMock parserStream = parserStreamMock()
+                .addWhitespace()
+                .addCharacters("content")
+                .addStartElementEvent()
+                .build();
+        FlatFileParser flatFileParser = new FlatFileParser(parserStream);
+        flatFileParser.nextTag();
+    }
+
+    @Test(expected = XMLStreamException.class)
+    public void testNextTagThrowsExceptionOnNoTagFound() throws Exception {
+        ParserStreamMock parserStream = parserStreamMock()
+                .addWhitespace()
+                .build();
+        FlatFileParser flatFileParser = new FlatFileParser(parserStream);
+        flatFileParser.nextTag();
+    }
+
+    private static ParserStreamMockBuilder parserStreamMock() {
+        return new ParserStreamMockBuilder();
+    }
+
+    private static class ParserStreamMock implements ParserStream {
+        private Iterator<XMLEvent> iterator;
+
+        private ParserStreamMock(List<XMLEvent> events) {
+            this.iterator = events.iterator();
+        }
+
+        @Override
+        public XMLEvent nextEvent() throws ParsingException {
+            return iterator.next();
+        }
+
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public void close() throws XMLStreamException {
+        }
+    }
+
+    private static class ParserStreamMockBuilder {
+        public static final QName ELEMENT_NAME = new QName("foo");
+        private XMLEventFactory xmlEventFactory = XMLEventFactory.newFactory();
+        private List<XMLEvent> events = new ArrayList<XMLEvent>();
+
+        public ParserStreamMockBuilder addStartDocumentEvent() {
+            events.add(xmlEventFactory.createStartDocument());
+            return this;
+        }
+
+        public ParserStreamMockBuilder addEndDocumentEvent() {
+            events.add(xmlEventFactory.createEndDocument());
+            return this;
+        }
+
+        public ParserStreamMockBuilder addStartElementEvent() {
+            events.add(xmlEventFactory.createStartElement(ELEMENT_NAME, null, null));
+            return this;
+        }
+
+        public ParserStreamMockBuilder addEndElementEvent() {
+            events.add(xmlEventFactory.createEndElement(ELEMENT_NAME, null));
+            return this;
+        }
+
+        public ParserStreamMockBuilder addCharacters(String content) {
+            events.add(xmlEventFactory.createCharacters(content));
+            return this;
+        }
+
+        public ParserStreamMockBuilder addWhitespace() {
+            events.add(xmlEventFactory.createIgnorableSpace(" "));
+            return this;
+        }
+
+        public ParserStreamMock build() {
+            return new ParserStreamMock(events);
+        }
     }
 }

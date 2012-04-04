@@ -16,6 +16,7 @@
 package org.convx.schema;
 
 import org.convx.reader.FlatFileParser;
+import org.convx.reader.Parser;
 import org.convx.writer.FlatFileWriter;
 
 import javax.xml.stream.XMLEventReader;
@@ -35,7 +36,7 @@ public class Schema {
     }
 
     public XMLEventReader parser(Reader reader) {
-        return new FlatFileParser(this, reader);
+        return new FlatFileParser(new Parser(this, reader));
     }
 
     public XMLEventWriter writer(Writer writer) {

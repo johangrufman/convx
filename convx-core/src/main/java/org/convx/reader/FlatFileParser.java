@@ -15,61 +15,101 @@
  */
 package org.convx.reader;
 
-import org.convx.reader.elements.Element;
-import org.convx.reader.elements.MarkupElement;
-import org.convx.reader.elements.NodeElement;
-import org.convx.schema.Schema;
-
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.XMLEvent;
-import java.io.Reader;
 import java.util.NoSuchElementException;
-import java.util.Stack;
 
 /**
  * @author johan
  * @since 2011-05-21
  */
 public class FlatFileParser implements XMLEventReader {
-    private ParserContext context;
+    private ParserStream parserStream;
+    private XMLEvent currentEvent = null;
 
-    private Stack<Element> parserStack = new Stack<Element>();
-
-    ReaderNode rootReaderNode;
-
-    public FlatFileParser(Schema schema, Reader reader) {
-        rootReaderNode = schema.root().asReaderNode();
-        context = new ParserContext(reader, rootReaderNode.lookAhead());
-        init();
-    }
-
-    private void init() {
-        parserStack.push(MarkupElement.endDocument());
-        parserStack.push(new NodeElement(rootReaderNode));
-        parserStack.push(MarkupElement.startDocument());
+    public FlatFileParser(ParserStream parserStream) {
+        this.parserStream = parserStream;
     }
 
     public XMLEvent nextEvent() throws ParsingException {
-        if (parserStack.isEmpty()) {
-            throw new NoSuchElementException();
+        initCurrent();
+        XMLEvent returnEvent = currentEvent;
+        if (parserStream.hasNext()) {
+            currentEvent = parserStream.nextEvent();
+        } else {
+            currentEvent = null;
         }
-        Element element = parserStack.pop();
-        if (element instanceof MarkupElement) {
-            return ((MarkupElement) element).event();
-        }
-        ((NodeElement) element).parse(parserStack, context);
-        return nextEvent();
+        return returnEvent;
     }
 
-    public boolean hasConsumedAllInput() {
-        return !context.hasMoreCharacters();
+    private void initCurrent() throws ParsingException {
+        if (currentEvent == null) {
+            currentEvent = parserStream.nextEvent();
+        }
+        if (currentEvent == null) {
+            throw new NoSuchElementException();
+        }
     }
 
     public boolean hasNext() {
-        return !parserStack.isEmpty();
+        return currentEvent != null || parserStream.hasNext();
     }
 
+
+    public XMLEvent peek() throws XMLStreamException {
+        initCurrent();
+        return currentEvent;
+    }
+
+    public String getElementText() throws XMLStreamException {
+        initCurrent();
+        if (currentEvent == null || !currentEvent.isStartElement()) {
+            throw new XMLStreamException("Next event must be START_ELEMENT");
+        }
+        nextEvent();
+        StringBuilder sb = new StringBuilder();
+        while (hasNext()) {
+            if (currentEvent.isCharacters()) {
+                sb.append(currentEvent.asCharacters().getData());
+            } else if (currentEvent.isEndElement()) {
+                return sb.toString();
+            } else if (currentEvent.isStartElement()) {
+                throw new XMLStreamException("Unexpected start element event");
+            }
+            nextEvent();
+        }
+        throw new XMLStreamException("Unexpected end of document");
+    }
+
+    public XMLEvent nextTag() throws XMLStreamException {
+        initCurrent();
+        while (hasNext()) {
+            XMLEvent event = nextEvent();
+            if (event.isCharacters() && !event.asCharacters().isWhiteSpace()) {
+                throw new XMLStreamException("Non whitespace characters found");
+            }
+            if (event.isStartElement() || event.isEndElement()) {
+                return event;
+            }
+        }
+        throw new XMLStreamException("Unexpected end of document");
+    }
+
+    public Object getProperty(String name) throws IllegalArgumentException {
+        return XmlInputFactoryProperties.getProperty(name);
+    }
+
+
+    public void close() throws XMLStreamException {
+        parserStream.close();
+    }
+
+    /**
+     * *****************************************************************
+     * java.util.Iterator methods
+     * ******************************************************************
+     */
     public Object next() {
         try {
             return nextEvent();
@@ -80,34 +120,6 @@ public class FlatFileParser implements XMLEventReader {
 
     public void remove() {
         throw new UnsupportedOperationException();
-    }
-
-    public XMLEvent peek() throws XMLStreamException {
-        if (parserStack.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        Element element = parserStack.peek();
-        if (element instanceof MarkupElement) {
-            return ((MarkupElement) element).event();
-        }
-        ((NodeElement) element).parse(parserStack, context);
-        return nextEvent();
-    }
-
-    public String getElementText() throws XMLStreamException {
-        return null;
-    }
-
-    public XMLEvent nextTag() throws XMLStreamException {
-        return null;
-    }
-
-    public Object getProperty(String name) throws IllegalArgumentException {
-        throw new IllegalArgumentException();
-    }
-
-    public void close() throws XMLStreamException {
-
     }
 
 

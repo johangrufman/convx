@@ -87,4 +87,8 @@ public class ParserContext {
     public FlatFileLocation getFlatFileLocation() {
         return flatFileLocation;
     }
+
+    public void close() throws IOException {
+        reader.close();
+    }
 }
