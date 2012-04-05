@@ -16,6 +16,7 @@
 package org.convx.reader;
 
 import com.ibm.icu.text.UnicodeSet;
+import org.convx.format.Format;
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.MarkupElement;
 import org.convx.reader.elements.ParsingNodeState;
@@ -31,14 +32,17 @@ public class FieldReaderNode implements ReaderNode {
 
     private Character quoteCharacter;
 
+    private Format format;
+
     private Integer length;
 
     private boolean trim;
 
-    public FieldReaderNode(boolean trim, UnicodeSet characterSet, Integer length, Character quoteCharacter) {
+    public FieldReaderNode(boolean trim, UnicodeSet characterSet, Integer length, Character quoteCharacter, Format format) {
         this.trim = trim;
         this.characterSet = characterSet;
         this.quoteCharacter = quoteCharacter;
+        this.format = format;
         if (length != null) {
             this.length = length;
         } else {
@@ -81,6 +85,7 @@ public class FieldReaderNode implements ReaderNode {
         if (trim) {
             content = content.trim();
         }
+        content = format.parse(content);
         parserStack.push(MarkupElement.characters(content));
         return true;
     }

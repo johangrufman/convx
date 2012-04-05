@@ -16,6 +16,7 @@
 package org.convx.schema;
 
 import com.ibm.icu.text.UnicodeSet;
+import org.convx.format.IdentityFormat;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,7 +45,7 @@ public class ParserIntegrationTest {
     public void testParseOneDelimitedField() throws Exception {
 
         String elementName = "foo";
-        Schema schema = new Schema(new NamedSchemaNode(elementName, new FieldSchemaNode(true, allButAsterisk, null, null, null)));
+        Schema schema = new Schema(new NamedSchemaNode(elementName, new FieldSchemaNode(true, allButAsterisk, null, null, null, IdentityFormat.IDENTITY_FORMAT)));
         XMLEventReader flatFileParser = schema.parser(new StringReader("bar*"));
 
         assertStartOfDocument(flatFileParser);
@@ -65,7 +66,7 @@ public class ParserIntegrationTest {
     @Test
     public void testParseSequence() throws XMLStreamException {
         String elementName = "foo";
-        FieldSchemaNode delimitedNode = new FieldSchemaNode(true, allButAsterisk, null, null, null);
+        FieldSchemaNode delimitedNode = new FieldSchemaNode(true, allButAsterisk, null, null, null, IdentityFormat.IDENTITY_FORMAT);
         ConstantSchemaNode constantNode = new ConstantSchemaNode("*");
         SchemaNode root = new NamedSchemaNode("baz", SequenceSchemaNode.sequence().add(new NamedSchemaNode(elementName, delimitedNode)).add(constantNode).build());
         Schema schema = new Schema(root);

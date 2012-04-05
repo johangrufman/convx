@@ -30,6 +30,8 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
+import static org.convx.format.IdentityFormat.IDENTITY_FORMAT;
+
 /**
  * @author johan
  * @since 2011-05-22
@@ -67,7 +69,7 @@ public class SequenceSchemaNode extends SchemaNode {
             first = false;
         }
         if (line) {
-            subNodes.add(new FieldReaderNode(false, new UnicodeSet("[\\n\\r]"), null, null));
+            subNodes.add(new FieldReaderNode(false, new UnicodeSet("[\\n\\r]"), null, null, IDENTITY_FORMAT));
         }
         return new SequenceReaderNode(subNodes.toArray(new ReaderNode[subNodes.size()]));
     }

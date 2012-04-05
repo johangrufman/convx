@@ -64,11 +64,26 @@
     <xs:complexType name="Field">
         <xs:complexContent>
             <xs:extension base="fsd:ElementBase">
+                <xs:sequence>
+                    <xs:element ref="fsd:format" minOccurs="0"/>
+                </xs:sequence>
                 <xs:attribute name="length" type="xs:int"/>
                 <xs:attribute name="characterSet"/>
                 <xs:attribute name="quoteCharacter"/>
                 <xs:attribute name="defaultOutput"/>
                 <xs:attribute name="trim" type="xs:boolean"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:element name="format" type="fsd:Format"/>
+    <xs:complexType name="Format"/>
+
+    <xs:element name="date" type="fsd:DateFormat" substitutionGroup="fsd:format"/>
+    <xs:complexType name="DateFormat">
+        <xs:complexContent>
+            <xs:extension base="fsd:Format">
+                <xs:attribute name="format"/>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>

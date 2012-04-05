@@ -17,6 +17,7 @@ package org.convx.writer;
 
 import org.junit.Test;
 
+import static org.convx.format.IdentityFormat.IDENTITY_FORMAT;
 import static org.junit.Assert.*;
 
 /**
@@ -53,7 +54,7 @@ public class SequenceWriterNodeTest extends AbstractWriterTest {
     @Test
     public void testNamedSequenceOfOneDelimitedNodeAndOneConstantNode() {
         SequenceWriterNode sequenceWriterNode = new SequenceWriterNode();
-        sequenceWriterNode.addSubNode(new FieldWriterNode(null, null, null, null));
+        sequenceWriterNode.addSubNode(new FieldWriterNode(null, null, null, null, IDENTITY_FORMAT));
         sequenceWriterNode.addSubNode(new ConstantWriterNode("baz"));
         NamedWriterNode foo = new NamedWriterNode("foo", sequenceWriterNode);
         foo.init(context);
@@ -79,7 +80,7 @@ public class SequenceWriterNodeTest extends AbstractWriterTest {
     public void testNamedSequenceOfTwoConstantNodesAndWithOneDelimitedNodeBetween() {
         SequenceWriterNode sequenceWriterNode = new SequenceWriterNode();
         sequenceWriterNode.addSubNode(new ConstantWriterNode("baz"));
-        sequenceWriterNode.addSubNode(new FieldWriterNode(null, null, null, null));
+        sequenceWriterNode.addSubNode(new FieldWriterNode(null, null, null, null, IDENTITY_FORMAT));
         sequenceWriterNode.addSubNode(new ConstantWriterNode("baz"));
         NamedWriterNode foo = new NamedWriterNode("foo", sequenceWriterNode);
         foo.init(context);

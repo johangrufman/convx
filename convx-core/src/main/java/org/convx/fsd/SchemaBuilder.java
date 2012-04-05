@@ -17,6 +17,7 @@ package org.convx.fsd;
 
 import com.ibm.icu.text.UnicodeSet;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.convx.format.IdentityFormat;
 import org.convx.schema.*;
 import org.convx.util.CharacterUtil;
 
@@ -116,14 +117,27 @@ public class SchemaBuilder {
     }
 
 
-    private static SchemaNode buildFieldNode(Field elementBase) {
-        boolean doTrim = elementBase.isTrim() != null ? elementBase.isTrim() : true;
-        String characterSet = elementBase.getCharacterSet() == null ? "^" : elementBase.getCharacterSet();
+    private static SchemaNode buildFieldNode(Field field) {
+        boolean doTrim = field.isTrim() != null ? field.isTrim() : true;
+        String characterSet = field.getCharacterSet() == null ? "^" : field.getCharacterSet();
         return new FieldSchemaNode(doTrim,
                 new UnicodeSet("[" + characterSet + "]"),
-                elementBase.getLength(),
-                StringEscapeUtils.unescapeJava(elementBase.getDefaultOutput()),
-                fromEscapedStringToCharacter(elementBase.getQuoteCharacter()));
+                field.getLength(),
+                StringEscapeUtils.unescapeJava(field.getDefaultOutput()),
+                fromEscapedStringToCharacter(field.getQuoteCharacter()),
+                getFormat(field));
+    }
+
+    private static org.convx.format.Format getFormat(Field field) {
+        if (field.getFormat() == null) {
+            return IdentityFormat.IDENTITY_FORMAT;
+        }
+        String formatName = field.getFormat().getName().getLocalPart();
+        if (formatName.equals("date")) {
+            DateFormat format = (DateFormat) field.getFormat().getValue();
+            return new org.convx.format.DateFormat(format.getFormat());
+        }
+        throw new SchemaBuilderException("Unknown format: " + formatName);
     }
 
     static Character fromEscapedStringToCharacter(String escapedString) {

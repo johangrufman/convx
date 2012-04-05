@@ -24,8 +24,6 @@ import javax.xml.stream.XMLEventReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
 
 import static org.convx.examples.csv.ResourceUtil.getResource;
 
@@ -52,9 +50,7 @@ public class CsvParser {
     }
 
     private boolean bornInTheSeventies(Persons.Person person) throws ParseException {
-        GregorianCalendar dateOfBirth = new GregorianCalendar();
-        dateOfBirth.setTime(new SimpleDateFormat("dd/MM/yyyy").parse(person.getDateOfBirth()));
-        int year = dateOfBirth.get(GregorianCalendar.YEAR);
+        int year = person.getDateOfBirth().getYear();
         return year >= 1970 && year <= 1979;
     }
 

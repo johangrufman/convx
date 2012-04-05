@@ -17,6 +17,7 @@ package org.convx.writer;
 
 import com.ibm.icu.text.UnicodeSet;
 import org.apache.commons.lang3.StringUtils;
+import org.convx.format.Format;
 
 import javax.xml.stream.events.Characters;
 import javax.xml.stream.events.EndElement;
@@ -33,12 +34,14 @@ public class FieldWriterNode implements WriterNode {
 
     private UnicodeSet characterSet;
     private Character quoteCharacter;
+    private Format format;
 
-    public FieldWriterNode(Integer length, String defaultOutput, UnicodeSet characterSet, Character quoteCharacter) {
+    public FieldWriterNode(Integer length, String defaultOutput, UnicodeSet characterSet, Character quoteCharacter, Format format) {
         this.length = length;
         this.defaultOutput = defaultOutput;
         this.characterSet = characterSet;
         this.quoteCharacter = quoteCharacter;
+        this.format = format;
     }
 
     public void consumeStartElement(StartElement startElement, WriterContext context, NodeState state) {
@@ -47,6 +50,7 @@ public class FieldWriterNode implements WriterNode {
 
     public void consumeEndElement(EndElement endElement, WriterContext context, NodeState state) {
         String outputString = ((FieldWriterNodeState) state).buildString(length).toString();
+        outputString = format.write(outputString);
         if (quoteCharacter != null) {
             for (char c : outputString.toCharArray()) {
                 if (!characterSet.contains(c)) {

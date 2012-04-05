@@ -43,27 +43,45 @@
         <xsl:variable name="fieldNode" select="fsd:field"/>
         <xsl:choose>
             <xsl:when test="$fieldNode/@ref">
-                <xs:element name="{@name}" type="{$fieldNode/@ref}"/>
+                <xsl:element name="xs:element">
+                    <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
+                    <xsl:attribute name="type"><xsl:value-of select="$fieldNode/@ref"/></xsl:attribute>
+                </xsl:element>
+
             </xsl:when>
             <xsl:otherwise>
-                <xs:element name="{@name}" type="xs:string"/>
+                <xsl:element name="xs:element">
+                    <xsl:attribute name="name"><xsl:value-of select="$fieldNode/@name"/></xsl:attribute>
+                    <xsl:attribute name="type">xs:string</xsl:attribute>
+                </xsl:element>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
 
-    <xsl:template match="//fsd:element[@name]">
-        <xs:element name="{@name}" type="{@ref}"/>
+    <xsl:template match="//fsd:field[@name]">
+        <xsl:element name="xs:element">
+            <xsl:attribute name="name"><xsl:value-of select="@name"/></xsl:attribute>
+            <xsl:attribute name="type">
+                <xsl:choose>
+                    <xsl:when test="@ref"><xsl:value-of select="@ref"/></xsl:when>
+                    <xsl:otherwise>xs:string</xsl:otherwise>
+                </xsl:choose>
+            </xsl:attribute>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template match="/fsd:schema/fsd:field[@id]">
+        <xsl:variable name="type">
+            <xsl:choose>
+                <xsl:when test="fsd:date">xs:date</xsl:when>
+                <xsl:otherwise>xs:string</xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
         <xs:simpleType name="{@id}">
-            <xs:restriction base="xs:string">
+            <xs:restriction base="{$type}">
             </xs:restriction>
         </xs:simpleType>
     </xsl:template>
 
-    <xsl:template match="/fsd:schema/fsd:root//fsd:field[@name]">
-        <xs:element name="{@name}" type="xs:string"/>
-    </xsl:template>
 
 </xsl:stylesheet>

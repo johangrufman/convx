@@ -7,10 +7,13 @@
             <field name="lastName" ref="field"/>
             <field name="address" ref="field"/>
             <field name="city" ref="field"/>
-            <field name="dateOfBirth" ref="field"/>
+            <field name="dateOfBirth" ref="dateField"/>
         </line>
     </root>
 
     <field id="field" characterSet="^,\n\r" quoteCharacter='"'/>
+    <field id="dateField" characterSet="^,\n\r">
+        <date format="dd/MM/yyyy"/>
+    </field>
 
 </schema>

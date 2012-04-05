@@ -17,6 +17,7 @@ package org.convx.writer;
 
 import org.junit.Test;
 
+import static org.convx.format.IdentityFormat.IDENTITY_FORMAT;
 import static org.junit.Assert.assertEquals;
 
 
@@ -36,7 +37,7 @@ public class NamedWriterNodeTest extends AbstractWriterTest {
 
     @Test
     public void testSimpleNamedDelimitedNode() {
-        NamedWriterNode foo = new NamedWriterNode("foo", new FieldWriterNode(null, null, null, null));
+        NamedWriterNode foo = new NamedWriterNode("foo", new FieldWriterNode(null, null, null, null, IDENTITY_FORMAT));
         foo.init(context);
         pushStartElement("foo");
         assertEquals("", output());

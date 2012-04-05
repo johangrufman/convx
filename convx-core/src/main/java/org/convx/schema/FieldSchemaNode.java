@@ -16,6 +16,7 @@
 package org.convx.schema;
 
 import com.ibm.icu.text.UnicodeSet;
+import org.convx.format.Format;
 import org.convx.reader.FieldReaderNode;
 import org.convx.reader.ReaderNode;
 import org.convx.util.IndentationWriter;
@@ -38,22 +39,25 @@ public class FieldSchemaNode extends SchemaNode {
 
     private Character quoteCharacter;
 
-    public FieldSchemaNode(boolean trim, UnicodeSet characterSet, Integer length, String defaultOutput, Character quoteCharacter) {
+    private Format format;
+
+    public FieldSchemaNode(boolean trim, UnicodeSet characterSet, Integer length, String defaultOutput, Character quoteCharacter, Format format) {
         this.trim = trim;
         this.characterSet = characterSet;
         this.length = length;
         this.defaultOutput = defaultOutput;
         this.quoteCharacter = quoteCharacter;
+        this.format = format;
     }
 
     @Override
     public ReaderNode asReaderNode() {
-        return new FieldReaderNode(trim, characterSet, length, quoteCharacter);
+        return new FieldReaderNode(trim, characterSet, length, quoteCharacter, format);
     }
 
     @Override
     public WriterNode asWriterNode() {
-        return new FieldWriterNode(length, defaultOutput, characterSet, quoteCharacter);
+        return new FieldWriterNode(length, defaultOutput, characterSet, quoteCharacter, format);
     }
 
     @Override
