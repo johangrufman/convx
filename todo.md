@@ -18,6 +18,8 @@ Later
 * Get more real world examples
 * Implement "simple type"-handling, i.e. dates, decimal numbers
 * Finish hudson setup
+* Refactor out xml-part of readers and writers
+* Generalize "fields" in flat file schemas so that they can be declared locally and globally
 
 Done
 ----
