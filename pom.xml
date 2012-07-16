@@ -64,6 +64,9 @@
                         <year>2012</year>
                     </properties>
                     <encoding>UTF-8</encoding>
+                    <headerDefinitions>
+                        <headerDefinition>${basedir}/etc/java-header.xml</headerDefinition>
+                    </headerDefinitions>
                 </configuration>
                 <executions>
                     <execution>
