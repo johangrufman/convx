@@ -15,6 +15,8 @@
  */
 package org.convx.reader;
 
+import com.ibm.icu.text.UnicodeSet;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
@@ -29,13 +31,13 @@ public class PrefixMatcher {
     public static final PrefixMatcher ALL = new AllMatcher();
 
     private Set<String> prefixes = new HashSet<String>();
+    private Set<UnicodeSet> characterSets = new HashSet<UnicodeSet>();
 
     protected PrefixMatcher() {
     }
 
-    private PrefixMatcher(Set<String> prefixSet1, Set<String> prefixSet2) {
-        this.prefixes.addAll(prefixSet1);
-        this.prefixes.addAll(prefixSet2);
+    public PrefixMatcher(UnicodeSet characterSet) {
+        this.characterSets.add(characterSet);
     }
 
     public PrefixMatcher(String... prefixes) {
@@ -43,8 +45,16 @@ public class PrefixMatcher {
     }
 
     public boolean matches(String nextCharacters) {
+        if (nextCharacters.length() == 0) {
+            return false;
+        }
         for (String prefix : prefixes) {
             if (nextCharacters.startsWith(prefix)) {
+                return true;
+            }
+        }
+        for (UnicodeSet characterSet : characterSets) {
+            if (characterSet.contains(nextCharacters.charAt(0))) {
                 return true;
             }
         }
@@ -55,7 +65,12 @@ public class PrefixMatcher {
         if (this == ALL || prefixMatcher == ALL) {
             return ALL;
         }
-        return new PrefixMatcher(this.prefixes, prefixMatcher.prefixes);
+        PrefixMatcher combinedPrefixMatcher = new PrefixMatcher();
+        combinedPrefixMatcher.prefixes.addAll(prefixes);
+        combinedPrefixMatcher.prefixes.addAll(prefixMatcher.prefixes);
+        combinedPrefixMatcher.characterSets.addAll(characterSets);
+        combinedPrefixMatcher.characterSets.addAll(prefixMatcher.characterSets);
+        return combinedPrefixMatcher;
     }
 
     private static class AllMatcher extends PrefixMatcher {

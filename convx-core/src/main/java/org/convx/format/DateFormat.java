@@ -17,14 +17,12 @@ package org.convx.format;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 
 /**
  * @author johan
  * @since 2012-04-05
  */
 public class DateFormat implements Format {
-    private final static DateTimeFormatter isoFormatter = ISODateTimeFormat.date();
 
     private final DateTimeFormatter formatter;
 

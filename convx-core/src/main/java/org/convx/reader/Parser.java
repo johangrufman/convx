@@ -21,6 +21,7 @@ import org.convx.reader.elements.NodeElement;
 import org.convx.schema.Schema;
 
 import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.events.EndDocument;
 import javax.xml.stream.events.XMLEvent;
 import java.io.IOException;
 import java.io.Reader;
@@ -56,7 +57,11 @@ public class Parser implements ParserStream {
         }
         Element element = parserStack.pop();
         if (element instanceof MarkupElement) {
-            return ((MarkupElement) element).event();
+            XMLEvent event = ((MarkupElement) element).event();
+            if (event instanceof EndDocument && context.hasMoreCharacters()) {
+                throw new ParsingException("Unparsed flat file content remains in stream at end of document.", context.getFlatFileLocation());
+            }
+            return event;
         }
         ((NodeElement) element).parse(parserStack, context);
         return nextEvent();

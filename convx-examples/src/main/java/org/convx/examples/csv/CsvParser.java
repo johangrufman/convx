@@ -23,9 +23,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLEventReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.PrintWriter;
 import java.text.ParseException;
 
-import static org.convx.examples.csv.ResourceUtil.getResource;
+import static org.convx.examples.ResourceUtil.getResource;
 
 /**
  * Reads a csv file with personal data for a bunch of people and prints the name of each person that is born in the
@@ -38,13 +39,13 @@ import static org.convx.examples.csv.ResourceUtil.getResource;
  */
 public class CsvParser {
 
-    public void readCsv() throws Exception {
+    public void readCsv(PrintWriter writer) throws Exception {
         Schema schema = SchemaBuilder.build(getResource("csv.fsd"));
         XMLEventReader parser = schema.parser(new FileReader(getResource("csv.txt")));
         Persons persons = unmarshal(parser);
         for (Persons.Person person : persons.getPerson()) {
             if (bornInTheSeventies(person)) {
-                printPerson(person);
+                printPerson(person, writer);
             }
         }
     }
@@ -54,8 +55,8 @@ public class CsvParser {
         return year >= 1970 && year <= 1979;
     }
 
-    private void printPerson(Persons.Person person) {
-        System.out.println(String.format("Name: %s %s", person.getFirstName(), person.getLastName()));
+    private void printPerson(Persons.Person person, PrintWriter writer) {
+        writer.println(String.format("Name: %s %s", person.getFirstName(), person.getLastName()));
     }
 
     private Persons unmarshal(XMLEventReader xmlEventReader) throws JAXBException, FileNotFoundException {
@@ -65,6 +66,6 @@ public class CsvParser {
 
 
     public static void main(String[] args) throws Exception {
-        new CsvParser().readCsv();
+        new CsvParser().readCsv(new PrintWriter(System.out));
     }
 }

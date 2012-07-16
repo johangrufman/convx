@@ -34,7 +34,8 @@ public class FieldReaderNode implements ReaderNode {
 
     private Format format;
 
-    private Integer length;
+    private int minLength;
+    private int maxLength;
 
     private boolean trim;
 
@@ -44,16 +45,18 @@ public class FieldReaderNode implements ReaderNode {
         this.quoteCharacter = quoteCharacter;
         this.format = format;
         if (length != null) {
-            this.length = length;
+            this.minLength = length;
+            this.maxLength = length;
         } else {
-            this.length = Integer.MAX_VALUE;
+            this.minLength = 0;
+            this.maxLength = Integer.MAX_VALUE;
         }
     }
 
-    public String consume(ParserContext context) {
+    public String consume(ParserContext context) throws ParsingException {
         StringBuilder sb = new StringBuilder();
         boolean quoted = false;
-        while (context.hasMoreCharacters() && sb.length() < length) {
+        while (context.hasMoreCharacters() && sb.length() < maxLength) {
             if (quoted) {
                 if (context.nextCharacter() == quoteCharacter) {
                     quoted = false;
@@ -72,6 +75,9 @@ public class FieldReaderNode implements ReaderNode {
             }
             context.advance(1);
         }
+        if (sb.length() < minLength) {
+            throw new ParsingException("Could not reach minimum length of field: " + minLength, context.getFlatFileLocation());
+        }
         return sb.toString();
     }
 
@@ -80,7 +86,7 @@ public class FieldReaderNode implements ReaderNode {
         return 1;
     }
 
-    public boolean parse(Stack<Element> parserStack, ParserContext context, ParsingNodeState state) {
+    public boolean parse(Stack<Element> parserStack, ParserContext context, ParsingNodeState state) throws ParsingException {
         String content = consume(context);
         if (trim) {
             content = content.trim();
@@ -91,7 +97,7 @@ public class FieldReaderNode implements ReaderNode {
     }
 
     public PrefixMatcher prefixes() {
-        return PrefixMatcher.ALL;
+        return new PrefixMatcher(characterSet);
     }
 
     public boolean isOptional() {

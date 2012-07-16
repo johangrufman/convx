@@ -13,7 +13,7 @@
     See the License for the specific language governing permissions and
     limitations under the License.
 */
-package org.convx.examples.csv;
+package org.convx.examples;
 
 import java.io.File;
 import java.net.URL;

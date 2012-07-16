@@ -47,7 +47,16 @@ public class ConstantReaderNode implements ReaderNode {
             context.advance(constant.length());
             return true;
         } else {
-            throw new ParsingException("Unexpected input: " + CharacterUtil.escapeCharacters(context.nextCharacters().toString()), context.getFlatFileLocation());
+            throw new ParsingException(errorMessage(context), context.getFlatFileLocation());
+        }
+    }
+
+    private String errorMessage(ParserContext context) {
+        String expectation = "Expecting constant \"" + constant + "\"";
+        if (context.hasMoreCharacters()) {
+            return "Unexpected input: " + CharacterUtil.escapeCharacters(context.nextCharacters().toString()) + ". " + expectation;
+        } else {
+            return "Unexpected end of file. " + expectation;
         }
     }
 

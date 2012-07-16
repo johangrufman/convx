@@ -15,11 +15,16 @@
 */
 package org.convx.format;
 
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
+
 /**
  * @author johan
  * @since 2012-04-05
  */
 public interface Format {
+    DateTimeFormatter isoFormatter = ISODateTimeFormat.date();
+
     String parse(String text);
     String write(String xmlText);
 }
