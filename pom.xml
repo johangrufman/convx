@@ -17,6 +17,7 @@
     <modules>
         <module>convx-core</module>
         <module>convx-examples</module>
+        <module>convx-test-util</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

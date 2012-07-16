@@ -17,6 +17,8 @@ package org.convx.acceptance;
 
 import org.convx.fsd.SchemaBuilder;
 import org.convx.schema.Schema;
+import org.convx.test.TestUtil;
+import org.convx.util.XmlUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.xml.sax.SAXException;
@@ -98,7 +100,7 @@ public abstract class AcceptanceTest {
     protected void parseFlatFileAndValidateResult(File flatFile) throws XMLStreamException, IOException {
         XMLEventReader flatFileReader = flatFileSchema.parser(new FileReader(flatFile));
         XMLEventReader xmlFileReader = XMLInputFactory.newFactory().createXMLEventReader(new FileInputStream(xmlFile));
-        assertEquals(flatFile.getName() + " converted to incorrectly to xml", TestUtil.serialize(xmlFileReader), TestUtil
+        assertEquals(flatFile.getName() + " converted to incorrectly to xml", XmlUtil.serialize(xmlFileReader), XmlUtil
                 .serialize(flatFileReader));
     }
 

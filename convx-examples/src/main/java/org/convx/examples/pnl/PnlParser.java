@@ -17,19 +17,12 @@ package org.convx.examples.pnl;
 
 import org.convx.fsd.SchemaBuilder;
 import org.convx.schema.Schema;
-import org.w3c.dom.Document;
+import org.convx.util.XmlUtil;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLEventWriter;
-import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
-import javax.xml.transform.dom.DOMResult;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.StringWriter;
 
 import static org.convx.examples.ResourceUtil.getResource;
 
@@ -41,32 +34,7 @@ public class PnlParser {
     public void parsePnl() throws IOException, XMLStreamException {
         Schema schema = SchemaBuilder.build(getResource("pnl.fsd"));
         XMLEventReader parser = schema.parser(new FileReader(getResource("pnl.txt")));
-        System.out.println(serialize(parser));
-    }
-
-    public static Document buildDom(XMLEventReader eventReader) throws XMLStreamException {
-        try {
-            XMLOutputFactory xof = XMLOutputFactory.newInstance();
-            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-            DocumentBuilder db = dbf.newDocumentBuilder();
-
-            Document doc = db.newDocument();
-            XMLEventWriter writer = xof.createXMLEventWriter(new DOMResult(doc));
-            writer.add(eventReader);
-            writer.close();
-            return doc;
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @SuppressWarnings("deprecation")
-    public static String serialize(XMLEventReader flatFileReader) throws XMLStreamException, IOException {
-        Document flatFileDoc = buildDom(flatFileReader);
-        StringWriter flatFileXml = new StringWriter();
-        new org.apache.xml.serialize.XMLSerializer(flatFileXml,
-                new org.apache.xml.serialize.OutputFormat((String) null, null, true)).serialize(flatFileDoc);
-        return flatFileXml.toString();
+        System.out.println(XmlUtil.serialize(parser));
     }
 
     public static void main(String args[]) throws XMLStreamException, IOException {

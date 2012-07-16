@@ -33,22 +33,15 @@ import java.io.StringWriter;
  * @since 2012-07-16
  */
 public class XmlUtil {
-//    public static String serialize(XMLEventReader reader) throws XMLStreamException {
-//        try {
-//            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-//            transformerFactory.setAttribute("indent-number", 4);
-//            Transformer transformer = transformerFactory.newTransformer();
-//            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-//            StreamResult result = new StreamResult(new StringWriter());
-//            transformer.transform(new StAXSource(reader), result);
-//            return result.getWriter().toString();
-//        } catch (TransformerException e) {
-//            if (e.getCause() instanceof XMLStreamException) {
-//                throw (XMLStreamException)e.getCause();
-//            }
-//            throw new RuntimeException(e);
-//        }
-//    }
+
+    @SuppressWarnings("deprecation")
+    public static String serialize(XMLEventReader flatFileReader) throws XMLStreamException, IOException {
+        Document flatFileDoc = buildDom(flatFileReader);
+        StringWriter flatFileXml = new StringWriter();
+        new org.apache.xml.serialize.XMLSerializer(flatFileXml,
+                new org.apache.xml.serialize.OutputFormat((String) null, null, true)).serialize(flatFileDoc);
+        return flatFileXml.toString();
+    }
 
     private static Document buildDom(XMLEventReader eventReader) throws XMLStreamException {
         try {
@@ -65,15 +58,5 @@ public class XmlUtil {
             throw new RuntimeException(e);
         }
     }
-
-    @SuppressWarnings("deprecation")
-    public static String serialize(XMLEventReader flatFileReader) throws XMLStreamException, IOException {
-        Document flatFileDoc = buildDom(flatFileReader);
-        StringWriter flatFileXml = new StringWriter();
-        new org.apache.xml.serialize.XMLSerializer(flatFileXml,
-                new org.apache.xml.serialize.OutputFormat((String) null, null, true)).serialize(flatFileDoc);
-        return flatFileXml.toString();
-    }
-
 
 }
