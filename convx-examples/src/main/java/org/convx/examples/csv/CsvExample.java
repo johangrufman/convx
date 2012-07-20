@@ -37,11 +37,11 @@ import static org.convx.examples.ResourceUtil.getResource;
  * @author johan
  * @since 2012-02-26
  */
-public class CsvParser {
+public class CsvExample {
 
     public void readCsv(PrintWriter writer) throws Exception {
-        Schema schema = SchemaBuilder.build(getResource("csv.fsd"));
-        XMLEventReader parser = schema.parser(new FileReader(getResource("csv.txt")));
+        Schema schema = SchemaBuilder.build(getResource("csv/csv.fsd"));
+        XMLEventReader parser = schema.parser(new FileReader(getResource("csv/csv.txt")));
         Persons persons = unmarshal(parser);
         for (Persons.Person person : persons.getPerson()) {
             if (bornInTheSeventies(person)) {
@@ -66,6 +66,6 @@ public class CsvParser {
 
 
     public static void main(String[] args) throws Exception {
-        new CsvParser().readCsv(new PrintWriter(System.out));
+        new CsvExample().readCsv(new PrintWriter(System.out));
     }
 }

@@ -42,7 +42,7 @@ import static org.junit.Assert.assertEquals;
  * @author johan
  * @since 2012-07-08
  */
-public class CsvParserTest {
+public class CsvExampleTest {
     private static final String EXPECTED_OUTPUT = "Name: Timon Mckinney\n" +
             "Name: Basil Mitchell\n" +
             "Name: Dane Bishop\n" +
@@ -51,7 +51,7 @@ public class CsvParserTest {
     @Test
     public void csvParsing() throws Exception {
         StringWriter stringWriter = new StringWriter();
-        new CsvParser().readCsv(new PrintWriter(stringWriter));
+        new CsvExample().readCsv(new PrintWriter(stringWriter));
         assertEquals(EXPECTED_OUTPUT, stringWriter.toString());
     }
 }

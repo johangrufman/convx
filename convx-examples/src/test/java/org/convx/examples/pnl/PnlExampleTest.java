@@ -15,29 +15,33 @@
 */
 package org.convx.examples.pnl;
 
-import org.convx.fsd.SchemaBuilder;
-import org.convx.schema.Schema;
-import org.convx.util.XmlUtil;
-
-import javax.xml.stream.XMLEventReader;
-import javax.xml.stream.XMLStreamException;
-import java.io.FileReader;
-import java.io.IOException;
+import org.junit.Before;
+import org.junit.Test;
 
 import static org.convx.examples.ResourceUtil.getResource;
+import static org.convx.test.TestUtil.readFile;
+import static org.junit.Assert.assertEquals;
 
 /**
  * @author johan
- * @since 2012-07-08
+ * @since 2012-07-20
  */
-public class PnlParser {
-    public void parsePnl() throws IOException, XMLStreamException {
-        Schema schema = SchemaBuilder.build(getResource("pnl.fsd"));
-        XMLEventReader parser = schema.parser(new FileReader(getResource("pnl.txt")));
-        System.out.println(XmlUtil.serialize(parser));
+public class PnlExampleTest {
+
+    private PnlExample pnlExample;
+
+    @Before
+    public void setUp() throws Exception {
+        pnlExample = new PnlExample();
     }
 
-    public static void main(String args[]) throws XMLStreamException, IOException {
-        new PnlParser().parsePnl();
+    @Test
+    public void testParsePnl() throws Exception {
+        assertEquals(readFile(getResource("pnl/pnl.xml")), pnlExample.parsePnl());
+    }
+
+    @Test
+    public void testWritePnl() throws Exception {
+        assertEquals(readFile(getResource("pnl/pnl.txt")), pnlExample.writePnl());
     }
 }

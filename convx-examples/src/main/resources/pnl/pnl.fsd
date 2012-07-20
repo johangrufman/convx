@@ -1,0 +1,62 @@
+<schema xmlns="http://www.convx.org/schemas/1.0/fsd">
+    <root name="pnl">
+        <line>
+            <constant value="PNL"/>
+        </line>
+        <line>
+            <sequence name="flight">
+                <field name="flightNumber" characterSet="^/"/>
+                <constant value="/"/>
+                <sequence name="departureDate">
+                    <field name="day" characterSet="0-9" length="2"/>
+                    <field name="month" characterSet=":Lu:" length="3"/>
+                </sequence>
+                <constant value=" "/>
+                <field name="boardingAirport" characterSet=":Lu:" length="3"/>
+            </sequence>
+            <constant value=" PART"/>
+            <field name="startOfPart" characterSet="0-9"/>
+        </line>
+        <sequence name="passengersByDestinationAndClass" maxOccurs="unbounded">
+            <line name="totalsByDestination">
+                <constant value="-"/>
+                <field name="destinationAirport" characterSet=":Lu:" length="3"/>
+                <field name="totalNumberOfPassengers" characterSet="0-9"/>
+                <field name="compartmentOrFareClass" characterSet=":Lu:" length="1"/>
+                <constant value="-"/>
+                <constant value="PAD"/>
+                <field name="numberOfPAD" characterSet="0-9"/>
+            </line>
+            <sequence name="passengerGroup" maxOccurs="unbounded">
+                <line name="passengerNames">
+                    <field name="numberOfPassengers" characterSet="0-9" length="1"/>
+                    <field name="surName" characterSet=":Lu:"/>
+                    <sequence name="firstName" minOccurs="1" maxOccurs="unbounded">
+                        <constant value="/"/>
+                        <field characterSet=":Lu:"/>
+                    </sequence>
+                </line>
+                <line name="remark" minOccurs="0" maxOccurs="unbounded">
+                    <constant value=".R/"/>
+                    <field name="ssrCode" characterSet=":Lu:" length="4"/>
+                </line>
+                <line name="automatedPnrAddress" minOccurs="0" maxOccurs="unbounded">
+                    <constant value=".L/"/>
+                    <field name="pnrAddress" characterSet="^/"/>
+                    <constant value="/"/>
+                    <field name="airlineCode" characterSet=":Lu:"/>
+                </line>
+            </sequence>
+        </sequence>
+        <line name="endOfPart">
+            <constant value="ENDPART"/>
+            <field characterSet="0-9"/>
+        </line>
+        <line>
+            <constant value="ENDPNL"/>
+        </line>
+    </root>
+
+    <field id="airportCode" characterSet=":Lu:" length="3"/>
+
+</schema>

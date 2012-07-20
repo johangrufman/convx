@@ -38,11 +38,17 @@ public class SequenceWriterNode implements WriterNode {
                 context.consumeStartElement(startElement);
                 return;
             } else if (!currentSubNode(sequenceNodeState).isOptional()) {
-                throw new RuntimeException("Mandatory element");
+                throw new RuntimeException("Mandatory element missing");
             }
+            sequenceNodeState.moveOn();
         }
-        sequenceNodeState.increaseIndex();
-        throw new RuntimeException("Unexpected start element: " + startElement.getName());
+        handleNodesNotTriggeredByEvents(context, sequenceNodeState);
+        if (isSatisfied((SequenceNodeState) state)) {
+            context.pop();
+            context.consumeStartElement(startElement);
+        } else {
+            throw new RuntimeException("Unexpected start element: " + startElement.getName());
+        }
     }
 
     private WriterNode currentSubNode(SequenceNodeState sequenceNodeState) {
@@ -109,11 +115,18 @@ public class SequenceWriterNode implements WriterNode {
     }
 
     public void init(WriterContext context) {
-        context.push(new SequenceNodeState(this));
+        SequenceNodeState nodeState = new SequenceNodeState(this);
+        handleNodesNotTriggeredByEvents(context, nodeState);
+        context.push(nodeState);
     }
 
     public boolean isTriggeredByEvent() {
-        return true;
+        for (WriterNode subWriterNode : subWriterNodes) {
+            if (subWriterNode.isTriggeredByEvent()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     static class SequenceNodeState extends NodeState {
