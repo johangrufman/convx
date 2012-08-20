@@ -40,6 +40,7 @@ import static org.convx.examples.ResourceUtil.getResource;
  */
 public class CsvExample {
 
+    // START SNIPPET: csv-example
     public void readCsv(PrintWriter writer) throws Exception {
         File schemaFile = getResource("csv/csv.fsd");
         File csvFile = getResource("csv/csv.txt");
@@ -57,6 +58,7 @@ public class CsvExample {
         int year = person.getDateOfBirth().getYear();
         return year >= 1970 && year <= 1979;
     }
+    // END SNIPPET: csv-example
 
     private void printPerson(Persons.Person person, PrintWriter writer) {
         writer.println(String.format("Name: %s %s", person.getFirstName(), person.getLastName()));
