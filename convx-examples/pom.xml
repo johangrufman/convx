@@ -97,7 +97,7 @@
                         <transformationSet>
                             <dir>src/main/resources/</dir>
                             <includes>
-                                <include>*.fsd</include>
+                                <include>**/*.fsd</include>
                             </includes>
                             <stylesheet>${project.build.directory}/dependency-sources/xsl/xsd-gen.xsl</stylesheet>
                             <fileMappers>
@@ -125,7 +125,7 @@
                     <generatePackage>org.convx.examples.csv</generatePackage>
                     <schemaDirectory>${project.build.directory}/generated-resources/xml/xslt</schemaDirectory>
                     <includeSchemas>
-                        <includeSchema>csv.xsd</includeSchema>
+                        <includeSchema>csv/csv.xsd</includeSchema>
                     </includeSchemas>
                     <includeBindings>
                         <includeBinding>*.xjb</includeBinding>

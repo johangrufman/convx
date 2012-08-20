@@ -13,5 +13,4 @@
     <field id="dateField" characterSet="^,\n\r">
         <date format="dd/MM/yyyy"/>
     </field>
-
 </schema>

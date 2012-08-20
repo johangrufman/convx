@@ -21,6 +21,7 @@ import org.convx.schema.Schema;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLEventReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.PrintWriter;
@@ -40,8 +41,10 @@ import static org.convx.examples.ResourceUtil.getResource;
 public class CsvExample {
 
     public void readCsv(PrintWriter writer) throws Exception {
-        Schema schema = SchemaBuilder.build(getResource("csv/csv.fsd"));
-        XMLEventReader parser = schema.parser(new FileReader(getResource("csv/csv.txt")));
+        File schemaFile = getResource("csv/csv.fsd");
+        File csvFile = getResource("csv/csv.txt");
+        Schema schema = SchemaBuilder.build(schemaFile);
+        XMLEventReader parser = schema.parser(new FileReader(csvFile));
         Persons persons = unmarshal(parser);
         for (Persons.Person person : persons.getPerson()) {
             if (bornInTheSeventies(person)) {
