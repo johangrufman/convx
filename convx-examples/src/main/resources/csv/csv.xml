@@ -1,4 +1,5 @@
 <?xml version="1.0"?>
+<!-- START SNIPPET: csv-example -->
 <persons>
     <person>
         <firstName>Timon</firstName>
@@ -14,6 +15,7 @@
         <city>Malibu</city>
         <dateOfBirth>12/11/1973</dateOfBirth>
     </person>
+    <!-- END SNIPPET: csv-example -->
     <person>
         <firstName>Elizabeth</firstName>
         <lastName>Byrd</lastName>
