@@ -15,8 +15,7 @@
  */
 package org.convx.acceptance;
 
-import org.convx.fsd.SchemaBuilder;
-import org.convx.schema.Schema;
+import org.convx.Schema;
 import org.convx.test.TestUtil;
 import org.convx.util.XmlUtil;
 import org.junit.Assert;
@@ -68,7 +67,7 @@ public abstract class AcceptanceTest {
         xmlFile = testFile(name + ".xml");
         schemaFile = testFile(name + ".fsd");
         try {
-            flatFileSchema = SchemaBuilder.build(schemaFile);
+            flatFileSchema = Schema.build(schemaFile);
         } catch (RuntimeException e) {
             System.out.println("Error parsing " + schemaFile);
             throw e;

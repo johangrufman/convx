@@ -15,6 +15,7 @@
  */
 package org.convx.schema;
 
+import org.convx.Schema;
 import org.junit.Test;
 
 import javax.xml.stream.XMLEventReader;
@@ -34,7 +35,7 @@ public class FlatFileWriterTest {
     @Test
     public void writeDocumentWithSingleElement() throws XMLStreamException {
         SchemaNode root = new NamedSchemaNode("foo", new ConstantSchemaNode("bar"));
-        Schema schema = new Schema(root);
+        Schema schema = new SchemaImpl(root);
         String xmlInput = "<foo>bar</foo>";
         String expectedFlatFileContent = "bar";
         verifyXmlToFlatFileConversion(schema, xmlInput, expectedFlatFileContent);

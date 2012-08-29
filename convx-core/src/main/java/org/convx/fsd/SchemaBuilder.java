@@ -34,7 +34,7 @@ import java.io.File;
 public class SchemaBuilder {
 
 
-    public static org.convx.schema.Schema build(File schemaFile) {
+    public static SchemaNode build(File schemaFile) {
         Schema schema;
         try {
             JAXBContext jc = JAXBContext.newInstance("org.convx.fsd");
@@ -47,8 +47,7 @@ public class SchemaBuilder {
         for (JAXBElement<? extends ElementBase> jaxbElement : schema.getElementBase()) {
             symbolTable.addElement(jaxbElement.getValue());
         }
-        SchemaNode root = buildNode(schema.getRoot(), symbolTable);
-        return new org.convx.schema.Schema(root);
+        return buildNode(schema.getRoot(), symbolTable);
     }
 
     private static SchemaNode buildNode(ElementBase elementBase, SymbolTable symbolTable) {

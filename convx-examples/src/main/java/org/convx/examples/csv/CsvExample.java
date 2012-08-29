@@ -15,8 +15,7 @@
 */
 package org.convx.examples.csv;
 
-import org.convx.fsd.SchemaBuilder;
-import org.convx.schema.Schema;
+import org.convx.Schema;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -44,7 +43,7 @@ public class CsvExample {
     public void readCsv(PrintWriter writer) throws Exception {
         File schemaFile = getResource("csv/csv.fsd");
         File csvFile = getResource("csv/csv.txt");
-        Schema schema = SchemaBuilder.build(schemaFile);
+        Schema schema = Schema.build(schemaFile);
         XMLEventReader parser = schema.parser(new FileReader(csvFile));
         Persons persons = unmarshal(parser);
         for (Persons.Person person : persons.getPerson()) {

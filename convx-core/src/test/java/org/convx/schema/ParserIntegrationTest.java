@@ -16,6 +16,7 @@
 package org.convx.schema;
 
 import com.ibm.icu.text.UnicodeSet;
+import org.convx.Schema;
 import org.convx.format.IdentityFormat;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +44,7 @@ public class ParserIntegrationTest {
     @Test
     public void testParseOneConstantField() throws Exception {
 
-        Schema schema = new Schema(new ConstantSchemaNode("*"));
+        Schema schema = new SchemaImpl(new ConstantSchemaNode("*"));
         XMLEventReader flatFileParser = schema.parser(new StringReader("*"));
 
         assertStartOfDocument(flatFileParser);
@@ -56,7 +57,7 @@ public class ParserIntegrationTest {
         FieldSchemaNode delimitedNode = new FieldSchemaNode(true, allButAsterisk, null, null, null, IdentityFormat.IDENTITY_FORMAT);
         ConstantSchemaNode constantNode = new ConstantSchemaNode("*");
         SchemaNode root = new NamedSchemaNode("baz", SequenceSchemaNode.sequence().add(new NamedSchemaNode(elementName, delimitedNode)).add(constantNode).build());
-        Schema schema = new Schema(root);
+        Schema schema = new SchemaImpl(root);
         XMLEventReader flatFileParser = schema.parser(new StringReader("bar*"));
 
         assertStartOfDocument(flatFileParser);

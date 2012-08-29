@@ -15,7 +15,8 @@
  */
 package org.convx.writer;
 
-import org.convx.schema.Schema;
+import org.convx.Schema;
+import org.convx.schema.SchemaImpl;
 
 import javax.xml.namespace.NamespaceContext;
 import javax.xml.stream.XMLEventReader;
@@ -37,7 +38,7 @@ public class FlatFileWriter implements XMLEventWriter {
 
     public FlatFileWriter(Schema schema, Writer writer) {
         this.writerContext = new WriterContext(writer);
-        new RootWriterNode(schema.root().asWriterNode()).init(writerContext);
+        new RootWriterNode(((SchemaImpl)schema).root().asWriterNode()).init(writerContext);
     }
 
     public void add(XMLEvent event) throws XMLStreamException {

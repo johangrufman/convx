@@ -18,7 +18,8 @@ package org.convx.reader;
 import org.convx.reader.elements.Element;
 import org.convx.reader.elements.MarkupElement;
 import org.convx.reader.elements.NodeElement;
-import org.convx.schema.Schema;
+import org.convx.Schema;
+import org.convx.schema.SchemaImpl;
 
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.EndDocument;
@@ -39,7 +40,7 @@ public class Parser implements ParserStream {
     private ReaderNode rootReaderNode;
 
     public Parser(Schema schema, Reader reader) {
-        rootReaderNode = schema.root().asReaderNode();
+        rootReaderNode = ((SchemaImpl)schema).root().asReaderNode();
         context = new ParserContext(reader, rootReaderNode.lookAhead());
         init();
     }

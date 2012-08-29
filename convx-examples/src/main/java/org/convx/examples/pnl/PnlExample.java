@@ -15,8 +15,7 @@
 */
 package org.convx.examples.pnl;
 
-import org.convx.fsd.SchemaBuilder;
-import org.convx.schema.Schema;
+import org.convx.Schema;
 import org.convx.util.XmlUtil;
 
 import javax.xml.stream.XMLEventReader;
@@ -36,7 +35,7 @@ import static org.convx.examples.ResourceUtil.getResource;
  */
 public class PnlExample {
 
-    private final Schema pnlSchema = SchemaBuilder.build(getResource("pnl/pnl.fsd"));
+    private final Schema pnlSchema = Schema.build(getResource("pnl/pnl.fsd"));
 
     public String parsePnl() throws IOException, XMLStreamException {
         XMLEventReader parser = pnlSchema.parser(new FileReader(getResource("pnl/pnl.txt")));
